@@ -1,0 +1,13 @@
+{
+  "name": "Chronodeck Study OS",
+  "short_name": "Chronodeck",
+  "description": "Your syllabus, daily plan, focus timer and study progress in one place.",
+  "start_url": "/today",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#17171b",
+  "theme_color": "#17171b",
+  "icons": [
+    { "src": "/favicon.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
