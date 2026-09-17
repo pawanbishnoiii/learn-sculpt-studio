@@ -1,0 +1,17 @@
+{
+  "source": "https://github.com/pawanbishnoiii/bs20",
+  "capabilities": [
+    {"capability":"application code and routes","source":"GitHub main branch","outcome":"preserve and enhance","status":"inspected","next_action":"transplant source into current TanStack project"},
+    {"capability":"database schema","source":"uploaded PostgreSQL backup plus repository migrations","outcome":"recreate in Lovable Cloud","status":"inspected","next_action":"apply reconstructed public schema, policies, functions, and triggers"},
+    {"capability":"existing records","source":"bs555_260917.backup","outcome":"import only records linked to a@a.a plus required shared catalog/settings","status":"inspected","next_action":"stage safe inserts in dependency order"},
+    {"capability":"authentication identity","source":"old auth user a@a.a","outcome":"replace with first-signup activation while preserving data ownership","status":"decision approved","next_action":"implement one-time claim flow and enable email auth"},
+    {"capability":"profiles and preferences","source":"public profile/settings tables","outcome":"preserve","status":"decision approved","next_action":"attach imported profile and settings on claim"},
+    {"capability":"Today analytics","source":"Today page and user request","outcome":"replace question/test metrics with day-first timing and output analytics","status":"specified","next_action":"implement first start, last exit, focused duration, and output cards"},
+    {"capability":"draggable dashboard","source":"uploaded draggable widget component","outcome":"integrate responsively with persisted order","status":"specified","next_action":"port component and connect to live data"},
+    {"capability":"mobile navigation","source":"uploaded Liquid Morph Floating Menu snippet","outcome":"replace existing mobile bottom navigation","status":"specified","next_action":"rebuild complete accessible working component"},
+    {"capability":"Rive animation","source":"27832-52591-animojis.riv","outcome":"use across suitable basic-icon and empty states","status":"specified","next_action":"upload asset and integrate responsibly"},
+    {"capability":"visual system","source":"three uploaded design references","outcome":"bold pastel clay-inspired education UI","status":"specified","next_action":"apply responsive design tokens, typography, and motion"},
+    {"capability":"external providers","source":"source app","outcome":"preserve Google auth, AI, notifications where configuration exists","status":"pending","next_action":"verify linked runtime configuration after transplant"},
+    {"capability":"verification","source":"target app","outcome":"desktop and mobile production checks","status":"pending","next_action":"verify login, data claim, Today, drag, navigation, and critical pages"}
+  ]
+}
