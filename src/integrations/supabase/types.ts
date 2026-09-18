@@ -607,6 +607,42 @@ export type Database = {
         }
         Relationships: []
       }
+      email_settings: {
+        Row: {
+          from_email: string | null
+          from_name: string | null
+          id: boolean
+          provider: string
+          smtp_host: string | null
+          smtp_password: string | null
+          smtp_port: number | null
+          smtp_user: string | null
+          updated_at: string
+        }
+        Insert: {
+          from_email?: string | null
+          from_name?: string | null
+          id?: boolean
+          provider?: string
+          smtp_host?: string | null
+          smtp_password?: string | null
+          smtp_port?: number | null
+          smtp_user?: string | null
+          updated_at?: string
+        }
+        Update: {
+          from_email?: string | null
+          from_name?: string | null
+          id?: boolean
+          provider?: string
+          smtp_host?: string | null
+          smtp_password?: string | null
+          smtp_port?: number | null
+          smtp_user?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       legacy_user_claims: {
         Row: {
           claimed_at: string | null
@@ -898,6 +934,48 @@ export type Database = {
           sittings?: number
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      scheduled_notifications: {
+        Row: {
+          action_path: string | null
+          audience: string
+          body: string | null
+          created_at: string
+          created_by: string | null
+          error: string | null
+          id: string
+          image_url: string | null
+          send_at: string
+          status: string
+          title: string
+        }
+        Insert: {
+          action_path?: string | null
+          audience?: string
+          body?: string | null
+          created_at?: string
+          created_by?: string | null
+          error?: string | null
+          id?: string
+          image_url?: string | null
+          send_at?: string
+          status?: string
+          title: string
+        }
+        Update: {
+          action_path?: string | null
+          audience?: string
+          body?: string | null
+          created_at?: string
+          created_by?: string | null
+          error?: string | null
+          id?: string
+          image_url?: string | null
+          send_at?: string
+          status?: string
+          title?: string
         }
         Relationships: []
       }
@@ -1568,6 +1646,22 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_export_user: { Args: { _user_id: string }; Returns: Json }
+      admin_import_user: {
+        Args: { _payload: Json; _user_id: string }
+        Returns: number
+      }
+      admin_user_detail: { Args: { _user_id: string }; Returns: Json }
+      chapter_pace: {
+        Args: never
+        Returns: {
+          avg_chapter_minutes: number
+          avg_reading_minutes: number
+          avg_revision_minutes: number
+          chapters_completed: number
+          chapters_tracked: number
+        }[]
+      }
       ensure_my_subject_targets: { Args: never; Returns: number }
       has_role: {
         Args: {
@@ -1597,6 +1691,10 @@ export type Database = {
         }
       }
       refresh_my_study_plan: { Args: { p_plan_date?: string }; Returns: number }
+      schedule_my_daily_plan: {
+        Args: { p_plan_date: string }
+        Returns: undefined
+      }
       set_plan_item_status: {
         Args: { _item_id: string; _status: string }
         Returns: number
