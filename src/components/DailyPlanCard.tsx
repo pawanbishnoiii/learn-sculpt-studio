@@ -19,8 +19,7 @@ import {
 } from "@/lib/plan";
 import { fmtHM, startOfToday, type Session } from "@/lib/study";
 import { ActivityArtwork } from "@/components/study-ui";
-import { RivePlayer } from "@/components/ui/rive-player";
-import loadingRive from "@/assets/loading-snake.riv.asset.json";
+import owlIdle from "@/assets/owl-idle.png";
 
 const STATUS_STYLE: Record<PlanStatus, { label: string; cls: string }> = {
   complete: { label: "Complete", cls: "bg-[var(--mint-soft)] text-emerald-800" },
@@ -132,9 +131,9 @@ export function DailyPlanCard({ sessions, title = "Your plan", onStart }: { sess
       </div>
 
       {plan.isLoading ? (
-        <div className="mt-5 flex items-center gap-4 rounded-2xl bg-secondary p-3"><RivePlayer src={loadingRive.url} className="size-20 shrink-0" /><p className="text-sm font-semibold text-muted-foreground">Building today's syllabus plan…</p></div>
+        <div className="mt-5 flex items-center gap-4 rounded-2xl bg-secondary p-3"><img src={owlIdle} alt="" className="size-16 shrink-0 object-contain float-soft" /><p className="text-sm font-semibold text-muted-foreground">Building today's syllabus plan…</p></div>
       ) : rows.length === 0 ? (
-        <div className="mt-5 flex items-center gap-4 rounded-2xl bg-secondary p-3"><RivePlayer src={loadingRive.url} className="size-20 shrink-0" /><p className="text-sm text-muted-foreground">No plan yet. Add subjects with chapters and press Regenerate.</p></div>
+        <div className="mt-5 flex items-center gap-4 rounded-2xl bg-secondary p-3"><img src={owlIdle} alt="" className="size-16 shrink-0 object-contain" /><p className="text-sm text-muted-foreground">No plan yet. Add subjects with chapters and press Regenerate.</p></div>
       ) : (
         <ul className="mt-5 space-y-3">
           {rows.map(({ item, minutes, status }) => {
