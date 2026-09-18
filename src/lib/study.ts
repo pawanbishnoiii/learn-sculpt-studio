@@ -428,7 +428,7 @@ export async function saveSettings(patch: Partial<Settings>) {
   const user_id = await uid();
   const { error } = await supabase
     .from("user_settings")
-    .update({ ...patch, updated_at: new Date().toISOString() })
+    .update({ ...(patch as Record<string, any>), updated_at: new Date().toISOString() })
     .eq("user_id", user_id);
   if (error) throw error;
 }
@@ -929,40 +929,36 @@ export async function logEvent(event: string, path?: string, metadata: Record<st
   });
 }
 
-export type AdminOverview = {
-  total_users: number;
-  onboarded_users: number;
-  active_today: number;
-  active_week: number;
-  sessions_today: number;
-  minutes_today: number;
-  minutes_week: number;
-  total_subjects: number;
-  events_today: number;
-};
+import {
+  adminOverview,
+  adminUsers,
+  adminSetRole,
+  pushStats,
+  pushSubscribers,
+  notificationHistory,
+} from "@/lib/admin.functions";
+import type {
+  AdminOverview,
+  AdminUser,
+  PushStats,
+  PushSubscriber,
+  NotificationSend,
+} from "@/lib/admin.functions";
+
+export type {
+  AdminOverview,
+  AdminUser,
+  PushStats,
+  PushSubscriber,
+  NotificationSend,
+} from "@/lib/admin.functions";
 
 export async function fetchAdminOverview(): Promise<AdminOverview> {
-  const { data, error } = await supabase.rpc("admin_overview");
-  if (error) throw error;
-  return data as unknown as AdminOverview;
+  return adminOverview();
 }
 
-export type AdminUser = {
-  id: string;
-  display_name: string | null;
-  email: string | null;
-  avatar_url: string | null;
-  onboarded: boolean;
-  last_seen_at: string | null;
-  created_at: string;
-  total_minutes: number;
-  session_count: number;
-};
-
 export async function fetchAdminUsers(limit = 100): Promise<AdminUser[]> {
-  const { data, error } = await supabase.rpc("admin_users", { _limit: limit });
-  if (error) throw error;
-  return (data ?? []) as unknown as AdminUser[];
+  return adminUsers({ data: { limit } });
 }
 
 /** "2m ago", "5h ago", "3d ago" — for admin last-seen columns */
@@ -1036,58 +1032,20 @@ export function targetProgress(target: Target, sessions: Session[]): TargetProgr
 
 /* ---------------- admin: push + notifications ---------------- */
 
-export type PushStats = {
-  devices: number;
-  subscribers: number;
-  total_users: number;
-  web: number;
-  android: number;
-  sent_today: number;
-};
-
 export async function fetchPushStats(): Promise<PushStats> {
-  const { data, error } = await supabase.rpc("admin_push_stats");
-  if (error) throw error;
-  return data as unknown as PushStats;
+  return pushStats();
 }
-
-export type PushSubscriber = {
-  user_id: string;
-  display_name: string | null;
-  email: string | null;
-  avatar_url: string | null;
-  platforms: string | null;
-  devices: number;
-  last_seen_at: string | null;
-};
 
 export async function fetchPushSubscribers(limit = 200): Promise<PushSubscriber[]> {
-  const { data, error } = await supabase.rpc("admin_push_subscribers", { _limit: limit });
-  if (error) throw error;
-  return (data ?? []) as unknown as PushSubscriber[];
+  return pushSubscribers({ data: { limit } });
 }
 
-export type NotificationSend = {
-  title: string;
-  body: string | null;
-  kind: string | null;
-  image_url: string | null;
-  action_path: string | null;
-  audience: string | null;
-  recipients: number;
-  read_count: number;
-  sent_at: string;
-};
-
 export async function fetchNotificationHistory(limit = 50): Promise<NotificationSend[]> {
-  const { data, error } = await supabase.rpc("admin_notification_history", { _limit: limit });
-  if (error) throw error;
-  return (data ?? []) as unknown as NotificationSend[];
+  return notificationHistory({ data: { limit } });
 }
 
 export async function setUserRole(userId: string, role: "admin" | "moderator" | "user") {
-  const { error } = await supabase.rpc("admin_set_role", { _user_id: userId, _role: role });
-  if (error) throw error;
+  await adminSetRole({ data: { userId, role } });
 }
 
 /**

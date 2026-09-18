@@ -1,27 +1,22 @@
-import { supabase } from "@/integrations/supabase/client";
+import {
+  exportUser,
+  userDetail,
+  importUser,
+} from "@/lib/admin.functions";
 
 /** Everything stored for one account, as a plain JSON object. */
 export async function exportUserData(userId: string): Promise<Record<string, unknown>> {
-  const { data, error } = await supabase.rpc("admin_export_user", { _user_id: userId });
-  if (error) throw error;
-  return (data ?? {}) as Record<string, unknown>;
+  return exportUser({ data: { userId } });
 }
 
 /** A compact profile + activity preview for the admin user drawer. */
 export async function fetchUserDetail(userId: string): Promise<Record<string, unknown>> {
-  const { data, error } = await supabase.rpc("admin_user_detail", { _user_id: userId });
-  if (error) throw error;
-  return (data ?? {}) as Record<string, unknown>;
+  return userDetail({ data: { userId } });
 }
 
 /** Push a previously exported file back into an account. */
 export async function importUserData(userId: string, payload: unknown): Promise<number> {
-  const { data, error } = await supabase.rpc("admin_import_user", {
-    _user_id: userId,
-    _payload: payload as never,
-  });
-  if (error) throw error;
-  return (data as number) ?? 0;
+  return importUser({ data: { userId, payload: payload as Record<string, unknown> } });
 }
 
 /** Trigger a browser download of the export. */

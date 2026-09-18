@@ -37,7 +37,7 @@ export function TodayStudyAnalytics({
     const valid = savedLayout.filter((item): item is WidgetItem => {
       if (!item || typeof item !== "object") return false;
       const row = item as Record<string, unknown>;
-      return typeof row.id === "string" && ["sm", "wide", "tall", "lg"].includes(String(row.size));
+      return typeof row["id"] === "string" && ["sm", "wide", "tall", "lg"].includes(String(row["size"]));
     });
     const known = valid.filter((item) => DEFAULT_WIDGETS.some((widget) => widget.id === item.id));
     const missing = DEFAULT_WIDGETS.filter((widget) => !known.some((item) => item.id === widget.id));

@@ -25,13 +25,12 @@ import {
 } from "@/components/motion/gsap-bits";
 import { Mascot, mascotState } from "@/components/Mascot";
 import { Icon3D } from "@/components/Icon3D";
-import studentAnim from "@/assets/student-upload.json.asset.json";
-import { LottiePlayer } from "@/components/ui/lottie-player";
+import todayHeroArt from "@/assets/today-hero.png";
 import { StreakFlame } from "@/components/StreakFlame";
 import { ReadingHabitCard } from "@/components/ReadingHabitCard";
 import { DailyPlanCard } from "@/components/DailyPlanCard";
-import { StatsCard, type ChartDataItem } from "@/components/ui/stats-card";
 import { fetchAttempts, subjectPerformance } from "@/lib/plan";
+import { TodayStudyAnalytics } from "@/components/TodayStudyAnalytics";
 
 import {
   DAYS,
@@ -92,7 +91,7 @@ function TodayPage() {
   const navigate = useNavigate();
   const [startOpen, setStartOpen] = useState(false);
   const [saveOpen, setSaveOpen] = useState(false);
-  const [scope, setScope] = useState<"day" | "week" | "month">("week");
+  const [scope, setScope] = useState<"day" | "week" | "month">("day");
   const [subjScope, setSubjScope] = useState<"1D" | "1W" | "1M">("1D");
   const [editSubject, setEditSubject] = useState<{
     id: string;
@@ -217,22 +216,6 @@ function TodayPage() {
     [subjects.data, all, attempts.data, subjWindow],
   );
 
-  /** Question-level totals for the analytics stat cards, from real attempts. */
-  const qStats = useMemo(() => {
-    const attempted = perf.reduce((a, s) => a + s.attempted, 0);
-    const correct = perf.reduce((a, s) => a + s.correct, 0);
-    const chart: ChartDataItem[] = (perf.length ? perf : []).slice(0, 8).map((s) => ({
-      name: s.name,
-      value: s.attempted > 0 ? s.accuracy : s.pct,
-    }));
-    return {
-      attempted,
-      correct,
-      incorrect: Math.max(0, attempted - correct),
-      accuracy: attempted > 0 ? Math.round((correct / attempted) * 100) : 0,
-      chart: chart.length ? chart : [{ name: "No data", value: 6 }],
-    };
-  }, [perf]);
 
 
   const saveSubjectTarget = useMutation({
@@ -385,7 +368,11 @@ function TodayPage() {
               </div>
             </div>
             <div className="today-hero-motion pointer-events-none mx-auto w-36 shrink-0 select-none sm:w-48 lg:w-56">
-              <LottiePlayer src={studentAnim.url} className="aspect-square h-full w-full" />
+              <img
+                src={todayHeroArt}
+                alt=""
+                className="aspect-square h-full w-full object-contain float-soft"
+              />
             </div>
           </div>
         </section>
@@ -445,42 +432,13 @@ function TodayPage() {
             </div>
           </div>
 
-          {/* Real question-level performance, pulled from recorded attempts */}
-          <div className="mt-4 grid grid-cols-2 gap-3 xl:grid-cols-4">
-            <StatsCard
-              title="Attempted"
-              currentValue={qStats.attempted}
-              description="Questions attempted across all subjects"
-              chartData={qStats.chart}
-              tone="lavender"
-            />
-            <StatsCard
-              title="Correct"
-              currentValue={qStats.correct}
-              description="Answers you got right"
-              chartData={qStats.chart}
-              tone="mint"
-            />
-            <StatsCard
-              title="Incorrect"
-              currentValue={qStats.incorrect}
-              description="Worth a revision pass"
-              chartData={qStats.chart}
-              tone="coral"
-            />
-            <StatsCard
-              title="Average"
-              currentValue={qStats.accuracy}
-              valuePostfix="%"
-              description="Overall accuracy"
-              chartData={qStats.chart}
-              tone="sky"
-            />
-          </div>
-
-          <p className="num mt-4 text-3xl font-semibold">
-            {fmtHM(scope === "day" ? todayMin : scope === "week" ? weekMin : monthMin)}
-          </p>
+          {/* Live day analytics — real study output, no test-style metrics */}
+          <TodayStudyAnalytics
+            sessions={all}
+            breaks={breaks.data ?? []}
+            liveFocusMinutes={Math.floor(liveFocusSeconds / 60)}
+            savedLayout={settings.data?.widget_layout}
+          />
 
           <div className="mt-5 h-44">
             <ResponsiveContainer width="100%" height="100%">
