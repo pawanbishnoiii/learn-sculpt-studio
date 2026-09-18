@@ -25,8 +25,7 @@ import {
 } from "@/components/motion/gsap-bits";
 import { Mascot, mascotState } from "@/components/Mascot";
 import { Icon3D } from "@/components/Icon3D";
-import studentAnim from "@/assets/student-upload.json.asset.json";
-import { LottiePlayer } from "@/components/ui/lottie-player";
+import todayHeroArt from "@/assets/today-hero.png";
 import { StreakFlame } from "@/components/StreakFlame";
 import { ReadingHabitCard } from "@/components/ReadingHabitCard";
 import { DailyPlanCard } from "@/components/DailyPlanCard";
@@ -369,7 +368,11 @@ function TodayPage() {
               </div>
             </div>
             <div className="today-hero-motion pointer-events-none mx-auto w-36 shrink-0 select-none sm:w-48 lg:w-56">
-              <LottiePlayer src={studentAnim.url} className="aspect-square h-full w-full" />
+              <img
+                src={todayHeroArt}
+                alt=""
+                className="aspect-square h-full w-full object-contain motion-safe:animate-[hero-float_4s_ease-in-out_infinite]"
+              />
             </div>
           </div>
         </section>
