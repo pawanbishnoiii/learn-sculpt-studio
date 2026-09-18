@@ -104,14 +104,15 @@
   --input: rgb(20 21 26 / 0.12);
   --ring: oklch(0.62 0.19 258 / 0.55);
   --overlay: oklch(0.18 0.01 286 / 0.42);
-  --lavender: oklch(0.82 0.082 300);
-  --lavender-soft: oklch(0.94 0.035 300);
-  --blue: oklch(0.81 0.084 257);
-  --blue-soft: oklch(0.94 0.035 257);
-  --pink: oklch(0.86 0.073 322);
-  --yellow: oklch(0.91 0.09 93);
-  --mint: oklch(0.89 0.064 158);
-  --peach: oklch(0.87 0.064 60);
+  /* Bold pastel clay palette — day mode is deliberately colourful. */
+  --lavender: oklch(0.74 0.155 300);
+  --lavender-soft: oklch(0.91 0.072 300);
+  --blue: oklch(0.72 0.152 254);
+  --blue-soft: oklch(0.91 0.068 254);
+  --pink: oklch(0.78 0.148 348);
+  --yellow: oklch(0.88 0.155 92);
+  --mint: oklch(0.83 0.126 162);
+  --peach: oklch(0.83 0.125 52);
   --dark-card: oklch(0.24 0.018 270);
 }
 
@@ -121,11 +122,34 @@
   transform: translateZ(0);
 }
 
-.analytics-widget { background: var(--panel); }
-.analytics-lavender { background: var(--lavender-soft); }
-.analytics-mint { background: var(--mint); }
-.analytics-peach { background: var(--peach); }
-.analytics-sky { background: var(--blue-soft); }
+/* Clay widgets: soft inner highlight + coloured drop shadow. */
+.analytics-widget {
+  background: var(--panel);
+  border-radius: 24px;
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, white 70%, transparent),
+    0 14px 30px -22px color-mix(in oklab, var(--foreground) 70%, transparent);
+}
+.analytics-lavender {
+  background: linear-gradient(150deg, var(--lavender-soft), color-mix(in oklab, var(--lavender) 34%, var(--panel)));
+}
+.analytics-mint {
+  background: linear-gradient(150deg, color-mix(in oklab, var(--mint) 45%, var(--panel)), color-mix(in oklab, var(--mint) 82%, var(--panel)));
+}
+.analytics-peach {
+  background: linear-gradient(150deg, color-mix(in oklab, var(--peach) 45%, var(--panel)), color-mix(in oklab, var(--peach) 82%, var(--panel)));
+}
+.analytics-sky {
+  background: linear-gradient(150deg, var(--blue-soft), color-mix(in oklab, var(--blue) 34%, var(--panel)));
+}
+
+/* Multicolour clay headline text. */
+.clay-gradient-text {
+  background: linear-gradient(96deg, var(--blue), var(--lavender) 38%, var(--pink) 68%, var(--peach));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
 
 @layer base {
   * {
