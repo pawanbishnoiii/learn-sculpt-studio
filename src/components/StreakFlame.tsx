@@ -1,6 +1,7 @@
-import flame from "@/assets/flame-clay.png";
+import fireAnim from "@/assets/fire-streak.json.asset.json";
+import { LottiePlayer } from "@/components/ui/lottie-player";
 
-/** Snapchat-style animated streak flame with the day count next to it. */
+/** Animated streak flame with the day count next to it. */
 export function StreakFlame({
   days,
   size = 26,
@@ -22,7 +23,7 @@ export function StreakFlame({
         className="grid shrink-0 place-items-center overflow-hidden"
         style={{ width: size, height: size }}
       >
-        <img src={flame} alt="" className="h-full w-full object-contain float-soft" />
+        <LottiePlayer src={fireAnim.url} className="h-full w-full" />
       </span>
       {showCount ? <span className="num text-[11px] font-bold">{days}</span> : null}
     </span>
