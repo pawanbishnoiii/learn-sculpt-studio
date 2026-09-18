@@ -69,6 +69,7 @@ export type Settings = {
   ai_tone: string;
   ai_autopilot: boolean;
   week_starts_monday: boolean;
+  widget_layout: unknown;
 };
 
 export const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];

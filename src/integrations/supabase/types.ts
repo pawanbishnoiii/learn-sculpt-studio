@@ -1596,6 +1596,7 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      refresh_my_study_plan: { Args: { p_plan_date?: string }; Returns: number }
       set_plan_item_status: {
         Args: { _item_id: string; _status: string }
         Returns: number
