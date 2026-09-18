@@ -342,7 +342,7 @@ export const updateEmailSettingsRow = createServerFn({ method: "POST" })
   )
   .handler(async ({ data, context }) => {
     const db = await requireAdmin(context);
-    const { error } = await db.from("email_settings").update(data).eq("id", true);
+    const { error } = await db.from("email_settings").update(data as never).eq("id", true);
     if (error) throw new Error(error.message);
     return { ok: true };
   });
@@ -358,7 +358,7 @@ export const exportUser = createServerFn({ method: "GET" })
     const db = await requireAdmin(context);
     const { data: profile } = await db.from("profiles").select("*").eq("id", data.userId).maybeSingle();
 
-    const result: Record<string, unknown> = {
+    const result: Record<string, any> = {
       exported_at: new Date().toISOString(),
       user_id: data.userId,
       profile: profile ?? null,
