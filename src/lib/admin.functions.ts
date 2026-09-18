@@ -297,7 +297,7 @@ export const notificationHistory = createServerFn({ method: "GET" })
         read_count: r.read ? 1 : 0,
         sent_at: r.created_at,
       });
-et      if (groups.size >= data.limit) break;
+      if (groups.size >= data.limit) break;
     }
     return [...groups.values()].slice(0, data.limit);
   });
