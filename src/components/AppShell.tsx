@@ -32,7 +32,7 @@ import {
   logEvent,
 } from "@/lib/study";
 import { CinematicThemeSwitcher } from "@/components/ui/cinematic-theme-switcher";
-import { LimelightNav } from "@/components/ui/limelight-nav";
+import { LiquidMorphFloatingMenu } from "@/components/ui/liquid-morph-floating-menu";
 import { PushPrompt } from "@/components/PushPrompt";
 import { NotificationBell } from "@/components/NotificationBell";
 import { StreakFlame } from "@/components/StreakFlame";
@@ -302,47 +302,15 @@ export function AppShell({ children }: { children: ReactNode }) {
                className="pointer-events-none fixed inset-x-0 bottom-0 z-50 px-3 pb-[max(0.5rem,env(safe-area-inset-bottom))] lg:hidden"
               style={{ position: "fixed" }}
             >
-              <LimelightNav
-               className="pointer-events-auto mx-auto max-w-md border-border bg-panel shadow-xl"
-                activeIndex={Math.max(
-                  0,
-                  NAV.findIndex((n) => n.to === pathname),
-                )}
-                onTabChange={(i) => {
-                  const target = NAV[i];
-                  if (target) navigate({ to: target.to });
-                }}
-                items={NAV.map(({ to, label, Icon, ...rest }) => {
-                  const active = pathname === to;
-                  const center = "center" in rest && rest.center;
-                  return {
-                    id: to,
-                    label,
-                    icon: <Icon />,
-                    center,
-                    content: center ? (
-                      <>
-                        <motion.span
-                          whileTap={{ scale: 0.9 }}
-                          className={`grid size-12 -translate-y-3 place-items-center rounded-2xl transition-colors duration-300 ${
-                             active
-                               ? "bg-foreground text-background shadow-lg"
-                               : "bg-secondary text-foreground ring-1 ring-border"
-                          }`}
-                        >
-                          <Icon className="size-5" />
-                        </motion.span>
-                        <span
-                          className={`-mt-2 text-[10px] font-medium transition-colors ${
-                            active ? "text-brand" : "text-muted-foreground"
-                          }`}
-                        >
-                          {label}
-                        </span>
-                      </>
-                    ) : undefined,
-                  };
-                })}
+              <LiquidMorphFloatingMenu
+                activeId={pathname}
+                onSelect={(to) => navigate({ to })}
+                items={NAV.map(({ to, label, Icon, ...rest }) => ({
+                  id: to,
+                  label,
+                  icon: <Icon />,
+                  center: "center" in rest && rest.center,
+                }))}
               />
             </nav>,
             document.body,
