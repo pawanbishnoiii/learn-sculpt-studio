@@ -30,8 +30,8 @@ import { LottiePlayer } from "@/components/ui/lottie-player";
 import { StreakFlame } from "@/components/StreakFlame";
 import { ReadingHabitCard } from "@/components/ReadingHabitCard";
 import { DailyPlanCard } from "@/components/DailyPlanCard";
-import { StatsCard, type ChartDataItem } from "@/components/ui/stats-card";
 import { fetchAttempts, subjectPerformance } from "@/lib/plan";
+import { TodayStudyAnalytics } from "@/components/TodayStudyAnalytics";
 
 import {
   DAYS,

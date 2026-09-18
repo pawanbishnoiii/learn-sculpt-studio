@@ -1646,12 +1646,6 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      admin_export_user: { Args: { _user_id: string }; Returns: Json }
-      admin_import_user: {
-        Args: { _payload: Json; _user_id: string }
-        Returns: number
-      }
-      admin_user_detail: { Args: { _user_id: string }; Returns: Json }
       chapter_pace: {
         Args: never
         Returns: {
@@ -1662,6 +1656,7 @@ export type Database = {
           chapters_tracked: number
         }[]
       }
+      close_stale_sessions: { Args: never; Returns: undefined }
       ensure_my_subject_targets: { Args: never; Returns: number }
       has_role: {
         Args: {
