@@ -115,23 +115,43 @@ export function TodayStudyAnalytics({
       <div className="mb-4 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
         <div className="min-w-0">
           <p className="section-label">Live day analytics</p>
-          <h2 className="mt-1 truncate text-xl font-extrabold">From first entry to last exit</h2>
+          <h2 className="font-heading clay-gradient-text mt-1 truncate text-xl font-extrabold">
+            From first entry to last exit
+          </h2>
         </div>
         <Link to="/history" className="inline-flex min-h-11 shrink-0 items-center gap-1 rounded-full border border-border bg-panel px-3 text-xs font-bold">
           Edit entries <ArrowUpRight className="size-4" />
         </Link>
       </div>
-      <div className="mb-3 flex items-center gap-2 text-xs text-muted-foreground"><Grip className="size-4" /> Press and hold to rearrange</div>
-      <DraggableWidgetGrid
-        key={widgets.map((item) => `${item.id}:${item.size}`).join("|")}
-        items={widgets}
-        onChange={(next) => persist.mutate(next)}
-        renderItem={(item) => render(item)}
-        maxColumns={4}
-        cellSize={190}
-        gap={12}
-        radius={24}
-      />
+
+      {/* Phones get a simple, always-scrollable stack; the drag-and-drop board
+          is a desktop affordance where a pointer makes reordering practical. */}
+      <div className="grid grid-cols-2 gap-3 lg:hidden">
+        {widgets.map((item) => (
+          <div
+            key={item.id}
+            className={item.size === "sm" ? "col-span-1 min-h-40" : "col-span-2 min-h-40"}
+          >
+            {render(item)}
+          </div>
+        ))}
+      </div>
+
+      <div className="hidden lg:block">
+        <div className="mb-3 flex items-center gap-2 text-xs text-muted-foreground">
+          <Grip className="size-4" /> Drag a card to rearrange your board
+        </div>
+        <DraggableWidgetGrid
+          key={widgets.map((item) => `${item.id}:${item.size}`).join("|")}
+          items={widgets}
+          onChange={(next) => persist.mutate(next)}
+          renderItem={(item) => render(item)}
+          maxColumns={4}
+          cellSize={190}
+          gap={12}
+          radius={24}
+        />
+      </div>
     </section>
   );
 }

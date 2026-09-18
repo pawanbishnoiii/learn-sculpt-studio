@@ -104,14 +104,15 @@
   --input: rgb(20 21 26 / 0.12);
   --ring: oklch(0.62 0.19 258 / 0.55);
   --overlay: oklch(0.18 0.01 286 / 0.42);
-  --lavender: oklch(0.82 0.082 300);
-  --lavender-soft: oklch(0.94 0.035 300);
-  --blue: oklch(0.81 0.084 257);
-  --blue-soft: oklch(0.94 0.035 257);
-  --pink: oklch(0.86 0.073 322);
-  --yellow: oklch(0.91 0.09 93);
-  --mint: oklch(0.89 0.064 158);
-  --peach: oklch(0.87 0.064 60);
+  /* Bold pastel clay palette — day mode is deliberately colourful. */
+  --lavender: oklch(0.74 0.155 300);
+  --lavender-soft: oklch(0.91 0.072 300);
+  --blue: oklch(0.72 0.152 254);
+  --blue-soft: oklch(0.91 0.068 254);
+  --pink: oklch(0.78 0.148 348);
+  --yellow: oklch(0.88 0.155 92);
+  --mint: oklch(0.83 0.126 162);
+  --peach: oklch(0.83 0.125 52);
   --dark-card: oklch(0.24 0.018 270);
 }
 
@@ -121,11 +122,34 @@
   transform: translateZ(0);
 }
 
-.analytics-widget { background: var(--panel); }
-.analytics-lavender { background: var(--lavender-soft); }
-.analytics-mint { background: var(--mint); }
-.analytics-peach { background: var(--peach); }
-.analytics-sky { background: var(--blue-soft); }
+/* Clay widgets: soft inner highlight + coloured drop shadow. */
+.analytics-widget {
+  background: var(--panel);
+  border-radius: 24px;
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, white 70%, transparent),
+    0 14px 30px -22px color-mix(in oklab, var(--foreground) 70%, transparent);
+}
+.analytics-lavender {
+  background: linear-gradient(150deg, var(--lavender-soft), color-mix(in oklab, var(--lavender) 34%, var(--panel)));
+}
+.analytics-mint {
+  background: linear-gradient(150deg, color-mix(in oklab, var(--mint) 45%, var(--panel)), color-mix(in oklab, var(--mint) 82%, var(--panel)));
+}
+.analytics-peach {
+  background: linear-gradient(150deg, color-mix(in oklab, var(--peach) 45%, var(--panel)), color-mix(in oklab, var(--peach) 82%, var(--panel)));
+}
+.analytics-sky {
+  background: linear-gradient(150deg, var(--blue-soft), color-mix(in oklab, var(--blue) 34%, var(--panel)));
+}
+
+/* Multicolour clay headline text. */
+.clay-gradient-text {
+  background: linear-gradient(96deg, var(--blue), var(--lavender) 38%, var(--pink) 68%, var(--peach));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
 
 @layer base {
   * {
@@ -658,32 +682,48 @@ body {
   --muted-foreground: #a3a3ad;
   --accent: #262232;
   --accent-foreground: #e6dcfb;
-  --destructive: #f08a5d;
+  --destructive: #ff8f6b;
   --destructive-foreground: #14151a;
-  --border: #2e2e38;
+  --border: #32323e;
   --input: rgb(255 255 255 / 0.12);
-  --ring: rgb(59 130 246 / 0.5);
+  --ring: rgb(129 140 248 / 0.55);
 
-  --bg-base: #1a1a20;
-  --bg-elevated: #24242c;
-  --border-subtle: #2e2e38;
+  /* Night mode keeps the pastel identity but deepens and saturates it. */
+  --lavender: oklch(0.7 0.17 300);
+  --lavender-soft: oklch(0.34 0.09 300);
+  --blue: oklch(0.7 0.16 254);
+  --blue-soft: oklch(0.33 0.085 254);
+  --pink: oklch(0.72 0.16 348);
+  --yellow: oklch(0.82 0.15 92);
+  --mint: oklch(0.42 0.1 162);
+  --peach: oklch(0.44 0.105 52);
+
+  --bg-base: #17171e;
+  --bg-elevated: #24242e;
+  --border-subtle: #32323e;
   --accent-start: #f7f4ef;
   --accent-end: #cfcbc4;
-  --accent-active: #6f9dff;
-  --accent-ai: #b6a0ef;
+  --accent-active: #7fa9ff;
+  --accent-ai: #c3aef5;
   --activity-reading: #3b5680;
-  --activity-revision: #453a66;
-  --activity-class: #1e4a3c;
-  --activity-test: #544515;
-  --state-hit: #6fc79c;
-  --state-partial: #e3c55f;
-  --state-missed: #e09ab8;
+  --activity-revision: #4c3f72;
+  --activity-class: #1f5245;
+  --activity-test: #5c4a16;
+  --state-hit: #74d3a6;
+  --state-partial: #ecd06a;
+  --state-missed: #eda0bd;
   --text-primary: #f7f4ef;
-  --text-muted: #a3a3ad;
+  --text-muted: #a8a8b4;
 
   --shadow-card: 0 1px 2px rgb(0 0 0 / 0.5), 0 12px 32px -18px rgb(0 0 0 / 0.8);
   --shadow-hover: 0 2px 8px rgb(0 0 0 / 0.55), 0 20px 40px -20px rgb(0 0 0 / 0.9);
-  --shadow-glow: 0 0 0 6px rgb(59 130 246 / 0.24);
+  --shadow-glow: 0 0 0 6px rgb(129 140 248 / 0.26);
+}
+
+.dark .analytics-widget {
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, white 10%, transparent),
+    0 18px 38px -26px rgb(0 0 0 / 0.9);
 }
 
 .dark .app-backdrop {
