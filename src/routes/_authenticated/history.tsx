@@ -225,26 +225,33 @@ function HistoryPage() {
   return (
     <>
       <div className="space-y-6 px-4 py-6 sm:px-5">
-        <header className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4">
+        <header className="analytics-widget analytics-lavender grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 p-5">
           <div className="min-w-0">
-            <p className="font-mono text-[10px] tracking-[0.3em] text-brand uppercase">Archive</p>
-            <h1 className="truncate text-2xl font-semibold tracking-tight">History</h1>
-            <p className="mt-1 text-xs text-muted-foreground">
+            <p className="font-mono text-[10px] tracking-[0.3em] text-foreground/60 uppercase">Archive</p>
+            <h1 className="font-heading clay-gradient-text truncate text-3xl font-extrabold tracking-tight">
+              History
+            </h1>
+            <p className="mt-1 text-xs text-foreground/70">
               Tap a row for full detail, edit or delete.
             </p>
           </div>
-          <Icon3D name="magazine" size={48} priority />
+          <img
+            src={historyArt}
+            alt=""
+            className="float-soft size-20 shrink-0 object-contain drop-shadow-lg"
+            loading="lazy"
+          />
         </header>
 
         <section className="grid grid-cols-3 gap-2 sm:gap-3">
           {[
-            { l: "Sessions", v: String(rows.length) },
-            { l: "Study", v: fmtHM(totalMinutes) },
-            { l: "Breaks", v: fmtHM(breakMinutes) },
+            { l: "Sessions", v: String(rows.length), tone: "analytics-sky" },
+            { l: "Study", v: fmtHM(totalMinutes), tone: "analytics-mint" },
+            { l: "Breaks", v: fmtHM(breakMinutes), tone: "analytics-peach" },
           ].map((s) => (
-            <div key={s.l} className="glass-panel p-3 sm:p-4">
-              <p className="font-mono text-lg leading-none font-semibold">{s.v}</p>
-              <p className="mt-1 text-[10px] tracking-wide text-muted-foreground uppercase">
+            <div key={s.l} className={`analytics-widget ${s.tone} p-3 sm:p-4`}>
+              <p className="num text-lg leading-none font-extrabold">{s.v}</p>
+              <p className="mt-1 text-[10px] tracking-wide text-foreground/65 uppercase">
                 {s.l}
               </p>
             </div>
