@@ -440,7 +440,7 @@ function TodayPage() {
             savedLayout={settings.data?.widget_layout}
           />
 
-          <div className="mt-5">
+          <div className="mt-5 h-44">
             <ResponsiveContainer width="100%" height="100%">
               <ScopeChart
                 scope={scope}
