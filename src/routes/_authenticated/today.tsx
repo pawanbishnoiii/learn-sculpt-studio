@@ -440,11 +440,7 @@ function TodayPage() {
             savedLayout={settings.data?.widget_layout}
           />
 
-          <p className="num mt-4 text-3xl font-semibold">
-            {fmtHM(scope === "day" ? todayMin : scope === "week" ? weekMin : monthMin)}
-          </p>
-
-          <div className="mt-5 h-44">
+          <div className="mt-5">
             <ResponsiveContainer width="100%" height="100%">
               <ScopeChart
                 scope={scope}
