@@ -937,6 +937,13 @@ import {
   pushSubscribers,
   notificationHistory,
 } from "@/lib/admin.functions";
+import type {
+  AdminOverview,
+  AdminUser,
+  PushStats,
+  PushSubscriber,
+  NotificationSend,
+} from "@/lib/admin.functions";
 
 export type {
   AdminOverview,
