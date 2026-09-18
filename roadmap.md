@@ -15,3 +15,9 @@
 - [x] Vibrant day-mode palette and a deeper, richer night mode
 - [x] Clay artwork and clay cards on the History page
 - [x] Draggable widget board on desktop, simple stacked cards on phones
+- [ ] Rebuild Classes as a clay bento workspace using supplied student animations
+- [ ] Replace mobile navigation with the supplied touch-first Liquid Morph interaction
+- [ ] Add the supplied responsive Dashboard Sidebar to the multi-page admin area
+- [ ] Add admin activity, data transfer, and routable user-detail pages
+- [ ] Add complete user history, last seen, sign-in count, device and event views
+- [ ] Validate supplied error animation and all upgraded screens on phone and desktop
