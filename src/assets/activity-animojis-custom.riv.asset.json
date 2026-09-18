@@ -1,11 +1,11 @@
 {
-  "version": 1,
   "asset_id": "25551b56-2d6c-42aa-9c52-b5e299694281",
-  "project_id": "184d47df-7a20-4736-9b06-726ce904d8b3",
-  "url": "/__l5e/assets-v1/25551b56-2d6c-42aa-9c52-b5e299694281/activity-animojis-custom.riv",
-  "r2_key": "a/v1/184d47df-7a20-4736-9b06-726ce904d8b3/25551b56-2d6c-42aa-9c52-b5e299694281/activity-animojis-custom.riv",
-  "original_filename": "activity-animojis-custom.riv",
-  "size": 2442768,
   "content_type": "application/octet-stream",
-  "created_at": "2026-09-17T17:56:22Z"
+  "created_at": "2026-09-17T17:56:22Z",
+  "original_filename": "activity-animojis-custom.riv",
+  "project_id": "d7770f93-6c3d-42f1-b7e4-b07fa05186b4",
+  "r2_key": "a/v1/d7770f93-6c3d-42f1-b7e4-b07fa05186b4/25551b56-2d6c-42aa-9c52-b5e299694281/activity-animojis-custom.riv",
+  "size": 2442768,
+  "url": "/__l5e/assets-v1/25551b56-2d6c-42aa-9c52-b5e299694281/activity-animojis-custom.riv",
+  "version": 1
 }
