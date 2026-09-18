@@ -95,6 +95,11 @@ export function AppShell({ children }: { children: ReactNode }) {
   // One platform ping per app load so admins can see web vs Android app usage.
   useEffect(() => {
     void logEvent("platform", window.location.pathname, clientContext()).catch(() => {});
+    const key = "chronodeck-session-event";
+    if (!window.sessionStorage.getItem(key)) {
+      window.sessionStorage.setItem(key, "1");
+      void logEvent("sign_in", window.location.pathname, clientContext()).catch(() => {});
+    }
   }, []);
 
   // Keep this device's push token registered/refreshed on every app start.

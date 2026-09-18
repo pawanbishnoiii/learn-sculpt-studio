@@ -1,11 +1,11 @@
 {
-  "asset_id": "616f91ed-736b-4ebf-be10-824f17d01b9a",
-  "content_type": "application/json",
-  "created_at": "2026-09-03T14:08:04Z",
+  "version": 1,
+  "asset_id": "2640af76-1467-417e-865e-4dc2d5f02fed",
+  "project_id": "d7770f93-6c3d-42f1-b7e4-b07fa05186b4",
+  "url": "/__l5e/assets-v1/2640af76-1467-417e-865e-4dc2d5f02fed/girl-with-books.json",
+  "r2_key": "a/v1/d7770f93-6c3d-42f1-b7e4-b07fa05186b4/2640af76-1467-417e-865e-4dc2d5f02fed/girl-with-books.json",
   "original_filename": "girl-with-books.json",
-  "project_id": "f7f79d22-ccc1-4071-844a-af66bcf965de",
-  "r2_key": "a/v1/f7f79d22-ccc1-4071-844a-af66bcf965de/616f91ed-736b-4ebf-be10-824f17d01b9a/girl-with-books.json",
   "size": 281873,
-  "url": "/__l5e/assets-v1/616f91ed-736b-4ebf-be10-824f17d01b9a/girl-with-books.json",
-  "version": 1
+  "content_type": "application/json",
+  "created_at": "2026-09-18T03:52:19Z"
 }
