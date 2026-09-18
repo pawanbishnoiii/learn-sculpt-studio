@@ -371,7 +371,7 @@ function TodayPage() {
               <img
                 src={todayHeroArt}
                 alt=""
-                className="aspect-square h-full w-full object-contain motion-safe:animate-[hero-float_4s_ease-in-out_infinite]"
+                className="aspect-square h-full w-full object-contain float-soft"
               />
             </div>
           </div>

@@ -22,7 +22,7 @@ export function StreakFlame({
         className="grid shrink-0 place-items-center overflow-hidden"
         style={{ width: size, height: size }}
       >
-        <img src={flame} alt="" className="h-full w-full object-contain motion-safe:animate-[flame-flicker_1.6s_ease-in-out_infinite]" />
+        <img src={flame} alt="" className="h-full w-full object-contain float-soft" />
       </span>
       {showCount ? <span className="num text-[11px] font-bold">{days}</span> : null}
     </span>
