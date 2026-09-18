@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { Icon3D } from "@/components/Icon3D";
+import historyArt from "@/assets/owl-sleepy.png";
 import { ListSkeleton } from "@/components/ui/skeletons";
 import {
   createManualBreak,
