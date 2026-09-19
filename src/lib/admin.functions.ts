@@ -400,6 +400,58 @@ export const userDetail = createServerFn({ method: "GET" })
     };
   });
 
+export type AdminEvent = {
+  id: string;
+  user_id: string;
+  display_name: string | null;
+  email: string | null;
+  event: string | null;
+  path: string | null;
+  platform: string | null;
+  created_at: string;
+};
+
+/** Sign-in / app-open / page-view history with user and time-window filters. */
+export const adminEvents = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((raw: unknown) =>
+    z
+      .object({
+        userId: z.string().uuid().nullable().optional(),
+        days: z.number().int().min(1).max(90).default(14),
+        limit: z.number().int().min(10).max(1000).default(300),
+      })
+      .parse(raw),
+  )
+  .handler(async ({ data, context }) => {
+    const db = await requireAdmin(context);
+    const since = new Date(Date.now() - data.days * 864e5).toISOString();
+
+    let q = db
+      .from("app_events")
+      .select("id,user_id,event,path,platform,created_at,profiles(display_name,email)")
+      .gte("created_at", since)
+      .order("created_at", { ascending: false })
+      .limit(data.limit);
+    if (data.userId) q = q.eq("user_id", data.userId);
+    const { data: rows, error } = await q;
+    if (error) throw new Error(error.message);
+
+    return (rows ?? []).map<AdminEvent>((r) => {
+      const p = (r as { profiles?: { display_name: string | null; email: string | null } | null }).profiles ?? null;
+      return {
+        id: r.id,
+        user_id: r.user_id,
+        display_name: p?.display_name ?? null,
+        email: p?.email ?? null,
+        event: r.event,
+        path: r.path,
+        platform: r.platform,
+        created_at: r.created_at,
+      };
+    });
+  });
+
 export const importUser = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((raw: unknown) =>
