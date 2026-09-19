@@ -32,6 +32,9 @@ export type StreakInfo = {
   /** Next milestone (7 / 14 / 30 / 60 / 100 …) and progress towards it. */
   milestone: number;
   milestonePct: number;
+  shieldActive: boolean;
+  shieldDaysLeft: number;
+  weightedProgress: number;
 };
 
 const MILESTONES = [3, 7, 14, 21, 30, 50, 75, 100, 150, 200, 365];
@@ -55,20 +58,47 @@ export function dailyHitStreak(sessions: Session[], dailyGoalHours: number) {
  */
 export function studyStreak(sessions: Session[], dailyGoalHours: number): StreakInfo {
   const perDay = dailyMinutes(sessions);
+  const progressByDay: Record<string, number> = {};
+  for (const session of sessions) {
+    if (session.is_running || !session.duration_minutes) continue;
+    const rate = session.kind === "revision" ? 25 : session.kind === "class" ? 15 : 20;
+    const day = key(new Date(session.started_at));
+    progressByDay[day] = Math.min(100, (progressByDay[day] ?? 0) + (session.duration_minutes / 60) * rate);
+  }
   const goal = goalFor(dailyGoalHours);
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const todayMinutes = perDay[key(today)] ?? 0;
-  const todayDone = todayMinutes >= goal;
+  const weightedProgress = Math.min(100, Math.round(progressByDay[key(today)] ?? 0));
+  const todayDone = weightedProgress >= 100;
 
   // Current run — today counts when finished, otherwise start at yesterday.
   const cursor = new Date(today);
   if (!todayDone) cursor.setDate(cursor.getDate() - 1);
   let current = 0;
-  while ((perDay[key(cursor)] ?? 0) >= goal) {
-    current += 1;
-    cursor.setDate(cursor.getDate() - 1);
+  let shieldDays = 0;
+  let shieldWeek = "";
+  while (current < 400) {
+    const day = key(cursor);
+    const done = (progressByDay[day] ?? 0) >= 100;
+    const weekStart = new Date(cursor);
+    weekStart.setDate(weekStart.getDate() - ((weekStart.getDay() + 6) % 7));
+    const weekKey = key(weekStart);
+    if (done) {
+      current += 1;
+      shieldDays = 0;
+      cursor.setDate(cursor.getDate() - 1);
+      continue;
+    }
+    if (shieldDays < 3 && (!shieldWeek || shieldWeek === weekKey)) {
+      shieldDays += 1;
+      shieldWeek = weekKey;
+      current += 1;
+      cursor.setDate(cursor.getDate() - 1);
+      continue;
+    }
+    break;
   }
 
   // Personal best across everything we loaded.
@@ -77,7 +107,7 @@ export function studyStreak(sessions: Session[], dailyGoalHours: number): Streak
   let run = 0;
   let prev: number | null = null;
   for (const d of days) {
-    if ((perDay[d] ?? 0) < goal) {
+    if ((progressByDay[d] ?? 0) < 100) {
       run = 0;
       prev = Date.parse(d);
       continue;
@@ -98,8 +128,8 @@ export function studyStreak(sessions: Session[], dailyGoalHours: number): Streak
       key: key(d),
       label: LABELS[d.getDay()] ?? "",
       minutes,
-      done: minutes >= goal,
-      partial: minutes > 0 && minutes < goal,
+      done: (progressByDay[key(d)] ?? 0) >= 100,
+      partial: (progressByDay[key(d)] ?? 0) > 0 && (progressByDay[key(d)] ?? 0) < 100,
       today: i === 0,
     });
   }
@@ -119,5 +149,8 @@ export function studyStreak(sessions: Session[], dailyGoalHours: number): Streak
     week,
     milestone,
     milestonePct: milestone > 0 ? Math.min(100, Math.round((current / milestone) * 100)) : 0,
+    shieldActive: shieldDays > 0,
+    shieldDaysLeft: Math.max(0, 3 - shieldDays),
+    weightedProgress,
   };
 }
