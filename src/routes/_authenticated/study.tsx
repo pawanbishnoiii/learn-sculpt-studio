@@ -176,8 +176,13 @@ function StudySetupPage() {
   );
 
   const goNext = () => {
+    if ("vibrate" in navigator) navigator.vibrate(10);
     if (step === 1 && subjectChosen) setStep(2);
     else if (step === 2 && focusChosen) setStep(3);
+  };
+
+  const hapticSelect = () => {
+    if ("vibrate" in navigator) navigator.vibrate(8);
   };
 
   return (
@@ -255,7 +260,18 @@ function StudySetupPage() {
                         Manage subjects
                       </Button>
                     </div>
-                    <label className="relative mt-4 block">
+                    {subjectChosen ? (
+                      <div className="mt-4 flex items-center gap-3 rounded-[22px] border-2 border-foreground bg-lavender-soft p-4">
+                        <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-panel text-lg font-extrabold">
+                          {(activeSubject?.name ?? form.subject_name).slice(0, 1).toUpperCase()}
+                        </span>
+                        <span className="min-w-0 flex-1">
+                          <span className="block truncate text-sm font-extrabold">{activeSubject?.name ?? form.subject_name}</span>
+                          <span className="text-xs text-muted-foreground">Selected subject</span>
+                        </span>
+                        <Button variant="outline" size="sm" onClick={() => setForm({ ...form, subject_id: "", subject_name: "", chapter: "", topic: "" })}>Change</Button>
+                      </div>
+                    ) : <><label className="relative mt-4 block">
                       <Search className="absolute top-1/2 left-4 size-4 -translate-y-1/2 text-muted-foreground" />
                       <span className="sr-only">Search subjects</span>
                       <input
@@ -285,7 +301,7 @@ function StudySetupPage() {
                             key={x.id}
                             type="button"
                             whileTap={{ scale: 0.95 }}
-                            onClick={() => setForm({ ...form, subject_id: x.id, subject_name: x.name, chapter: "" })}
+                            onClick={() => { hapticSelect(); setForm({ ...form, subject_id: x.id, subject_name: x.name, chapter: "" }); }}
                             aria-pressed={on}
                             className={`flex min-h-24 items-center gap-3 rounded-[22px] border-2 p-4 text-left transition ${
                               on
@@ -307,7 +323,7 @@ function StudySetupPage() {
                           </motion.button>
                         );
                       })}
-                    </div>
+                    </div></>}
                   </motion.div>
                 ) : null}
 
@@ -320,7 +336,13 @@ function StudySetupPage() {
                         : "Type what you will study in this session."}
                     </p>
 
-                    {activeSubject && activeSubject.chapters.length > 0 ? (
+                    {form.chapter ? (
+                      <div className="mt-4 flex items-center gap-3 rounded-2xl bg-foreground p-4 text-background">
+                        <Check className="size-5 shrink-0" />
+                        <span className="min-w-0 flex-1 truncate text-sm font-bold">{form.chapter}</span>
+                        <Button variant="outline" size="sm" className="border-background/25 bg-transparent text-background" onClick={() => setForm({ ...form, chapter: "", topic: "" })}>Change</Button>
+                      </div>
+                    ) : activeSubject && activeSubject.chapters.length > 0 ? (
                       <div className="mt-4 grid gap-2 sm:grid-cols-2">
                         {activeSubject.chapters.map((c) => {
                           const on = form.chapter === c;
@@ -329,9 +351,7 @@ function StudySetupPage() {
                               key={c}
                               type="button"
                               whileTap={{ scale: 0.95 }}
-                              onClick={() =>
-                                setForm({ ...form, chapter: on ? "" : c, topic: on ? "" : form.topic || c })
-                              }
+                              onClick={() => { hapticSelect(); setForm({ ...form, chapter: c, topic: form.topic || c }); }}
                               aria-pressed={on}
                               className={`flex min-h-12 items-center gap-2 rounded-2xl border px-3 text-left text-sm font-semibold transition ${
                                 on
@@ -372,22 +392,25 @@ function StudySetupPage() {
                     </div>
                     <p className="mt-1 text-sm text-muted-foreground">Activity kind and planned end — then start.</p>
 
-                    <div className="mt-4 grid grid-cols-2 gap-3 lg:grid-cols-4">
-                      {SESSION_KINDS.map((o) => {
+                    <div className={`mt-4 grid gap-3 ${form.kind ? "grid-cols-1" : "grid-cols-2 lg:grid-cols-4"}`}>
+                      {SESSION_KINDS.filter((o) => !form.kind || o.k === form.kind).map((o) => {
                         const on = form.kind === o.k;
                         return (
                           <motion.button
                             key={o.k}
                             type="button"
                             whileTap={{ scale: 0.98 }}
-                            onClick={() => setForm({ ...form, kind: o.k })}
+                            onClick={() => { hapticSelect(); setForm({ ...form, kind: o.k }); }}
                             aria-pressed={on}
                             className={`min-w-0 overflow-hidden rounded-[24px] border-2 p-3 text-left transition ${
                               on ? "border-foreground shadow-md" : "border-transparent bg-secondary hover:border-border"
                             }`}
                           >
                             <ActivityArtwork kind={o.k as ActivityKind} className={`h-24 rounded-[18px] ${o.tint}`} />
-                            <span className="mt-3 block text-sm font-bold">{o.l}</span>
+                            <span className="mt-3 flex items-center justify-between gap-2 text-sm font-bold">
+                              {o.l}
+                              {on ? <Button variant="outline" size="sm" onClick={(event) => { event.stopPropagation(); setForm({ ...form, kind: "" }); }}>Change</Button> : null}
+                            </span>
                             <span className="mt-0.5 block text-xs leading-5 text-muted-foreground">{o.d}</span>
                           </motion.button>
                         );
@@ -450,20 +473,7 @@ function StudySetupPage() {
                 <dd className="font-semibold">{form.planned_end_at || "Open-ended"}</dd>
               </div>
             </dl>
-            <Button
-              onClick={() => start.mutate()}
-              disabled={start.isPending || step !== 3}
-              className="mt-6 w-full bg-white text-foreground hover:bg-white/90"
-            >
-              <Clock3 />
-              {step !== 3 ? "Finish the steps first" : start.isPending ? "Starting…" : "Start session"}
-            </Button>
-            <button
-              onClick={() => navigate({ to: "/today" })}
-              className="mt-3 min-h-11 w-full text-sm font-semibold text-white/60 hover:text-white"
-            >
-              Back to home
-            </button>
+            <Button variant="ghost" onClick={() => navigate({ to: "/today" })} className="mt-4 w-full text-primary-foreground/70 hover:text-primary-foreground">Back to home</Button>
           </aside>
         </div>
 
