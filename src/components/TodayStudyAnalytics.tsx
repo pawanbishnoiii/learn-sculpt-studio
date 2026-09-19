@@ -4,9 +4,7 @@ import { motion } from "framer-motion";
 import { ArrowUpRight, BookOpen, Clock3, Coffee, Grip, Sparkles } from "lucide-react";
 import { useMemo } from "react";
 import { toast } from "sonner";
-import activityRive from "@/assets/activity-animojis-custom.riv.asset.json";
 import { DraggableWidgetGrid, type WidgetItem } from "@/components/ui/draggable-widget-grid";
-import { RivePlayer } from "@/components/ui/rive-player";
 import { saveSettings, startOfToday, type Break, type Session } from "@/lib/study";
 
 const DEFAULT_WIDGETS: WidgetItem[] = [
@@ -101,7 +99,9 @@ export function TodayStudyAnalytics({
       <WidgetShell icon={<Sparkles />} label="Output" tone="sky">
         <div className="flex items-start justify-between gap-3">
           <Metric value={String(metrics.topics.length)} label="Topics covered" />
-          <RivePlayer src={activityRive.url} className="-mt-3 size-20 shrink-0" />
+          <span className="grid size-12 shrink-0 place-items-center rounded-2xl bg-panel/65 text-blue shadow-sm">
+            <Sparkles className="size-5" />
+          </span>
         </div>
         <p className="mt-auto line-clamp-2 text-xs font-semibold text-muted-foreground">
           {metrics.topics.length ? metrics.topics.join(" · ") : "Complete a session and add its topic to see real output."}

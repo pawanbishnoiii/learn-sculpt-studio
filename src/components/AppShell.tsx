@@ -150,12 +150,12 @@ export function AppShell({ children }: { children: ReactNode }) {
     (profile.data?.last_name?.[0] ?? "T");
 
   return (
-    <div className="app-backdrop min-h-screen text-foreground lg:grid lg:grid-cols-[232px_minmax(0,1fr)]">
+    <div className={`app-backdrop min-h-screen text-foreground ${hideNav ? "" : "lg:grid lg:grid-cols-[232px_minmax(0,1fr)]"}`}>
       {!hideNav ? (
         <aside className="sticky top-0 hidden h-screen flex-col border-r border-border bg-panel px-4 py-6 lg:flex">
           <Link to="/today" className="flex items-center gap-3 px-2">
-            <img src={appLogo} alt="Chronodeck" width={1024} height={1024} className="size-11 rounded-2xl object-contain" />
-            <span><span className="font-heading block text-lg font-extrabold">Chronodeck</span><span className="text-xs text-muted-foreground">Study OS</span></span>
+            <img src={appLogo} alt="Bnoy Study" width={1024} height={1024} className="size-11 rounded-2xl object-contain" />
+            <span><span className="font-heading block text-lg font-extrabold">Bnoy Study</span><span className="text-xs text-muted-foreground">Study OS</span></span>
           </Link>
           <nav aria-label="Primary" className="mt-10 grid gap-2">
             {NAV.map(({ to, label, Icon }) => (
@@ -179,7 +179,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         <Link to="/today" className="flex min-w-0 items-center gap-3 lg:hidden">
           <img
             src={appLogo}
-            alt="Chronodeck"
+             alt="Bnoy Study"
             width={1024}
             height={1024}
             loading="lazy"
@@ -187,7 +187,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           />
           <span className="min-w-0">
             <span className="font-heading block truncate text-sm leading-none font-extrabold tracking-tight">
-              Chronodeck
+               Bnoy Study
             </span>
             <span className="mt-1 block font-mono text-[10px] tracking-[0.25em] text-muted-foreground uppercase">
               Study OS

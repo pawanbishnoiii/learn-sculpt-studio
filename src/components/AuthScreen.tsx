@@ -158,13 +158,13 @@ export function AuthScreen() {
         <div className="flex items-center gap-2.5">
           <img
             src={appLogo}
-            alt="Chronodeck"
+             alt="Bnoy Study"
             width={1024}
             height={1024}
             className="size-9 rounded-2xl object-contain shadow-lg"
           />
           <span className="font-heading text-[18px] leading-none font-extrabold text-foreground">
-            Chronodeck
+             Bnoy Study
           </span>
         </div>
         <Link
@@ -255,7 +255,7 @@ export function AuthScreen() {
             >
               <div className="mx-auto mb-4 h-1.5 w-12 rounded-full bg-border md:hidden" />
               <p className="mb-2 hidden text-sm font-semibold text-primary md:block">
-                Welcome to Chronodeck
+                 Welcome to Bnoy Study
               </p>
 
               {confirmationEmail ? (

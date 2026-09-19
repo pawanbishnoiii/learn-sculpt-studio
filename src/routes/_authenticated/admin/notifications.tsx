@@ -5,9 +5,9 @@ export const Route = createFileRoute("/_authenticated/admin/notifications")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "Notifications — Chronodeck Admin" },
-      { name: "description", content: "Compose, schedule and review push notifications sent to Chronodeck students." },
-      { property: "og:title", content: "Notifications — Chronodeck Admin" },
+       { title: "Notifications — Bnoy Study Admin" },
+       { name: "description", content: "Compose, schedule and review push notifications sent to Bnoy Study students." },
+       { property: "og:title", content: "Notifications — Bnoy Study Admin" },
       { property: "og:description", content: "Send and schedule push notifications with audience targeting." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

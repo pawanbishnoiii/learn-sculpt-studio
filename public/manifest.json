@@ -1,6 +1,6 @@
 {
-  "name": "Chronodeck Study OS",
-  "short_name": "Chronodeck",
+  "name": "Bnoy Study",
+  "short_name": "Bnoy Study",
   "description": "Your syllabus, daily plan, focus timer and study progress in one place.",
   "start_url": "/today",
   "scope": "/",
