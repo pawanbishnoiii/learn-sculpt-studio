@@ -67,18 +67,20 @@ import type { Block, Target } from "@/lib/study";
 export const Route = createFileRoute("/_authenticated/today")({
   head: () => ({
     meta: [
-      { title: "Today — Chronodeck Study OS" },
+       { title: "Today — Bnoy Study" },
       {
         name: "description",
         content:
           "Live focus timer, weekly progress charts, calendar analytics, targets and AI coaching in one study dashboard.",
       },
-      { property: "og:title", content: "Today — Chronodeck Study OS" },
+       { property: "og:title", content: "Today — Bnoy Study" },
       {
         property: "og:description",
         content:
           "Run the focus timer, log breaks, track hours against your daily and weekly targets.",
       },
+       { property: "og:type", content: "website" },
+       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: TodayPage,

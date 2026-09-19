@@ -34,10 +34,10 @@ function SidebarBody({
     <div className="flex h-full flex-col bg-panel p-3">
       <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 px-1 py-2">
         <div className="flex min-w-0 items-center gap-3">
-          <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-primary text-primary-foreground shadow-sm">C</span>
+          <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-primary text-primary-foreground shadow-sm">B</span>
           {!collapsed ? (
             <div className="min-w-0">
-              <p className="truncate font-heading text-sm font-bold">Chronodeck</p>
+              <p className="truncate font-heading text-sm font-bold">Bnoy Study</p>
               <p className="text-[10px] font-bold tracking-[0.18em] text-muted-foreground uppercase">Admin OS</p>
             </div>
           ) : null}

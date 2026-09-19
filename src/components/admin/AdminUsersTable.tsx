@@ -71,7 +71,7 @@ export function AdminUsersTable() {
     setBusy(u.id);
     try {
       const payload = await exportUserData(u.id);
-      downloadJson(`chronodeck-${(u.display_name ?? u.email ?? u.id).replace(/\W+/g, "-").toLowerCase()}.json`, payload);
+       downloadJson(`bnoy-study-${(u.display_name ?? u.email ?? u.id).replace(/\W+/g, "-").toLowerCase()}.json`, payload);
       toast.success("Account data downloaded");
     } catch (err) {
       toast.error((err as Error).message);

@@ -84,13 +84,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Chronodeck — AI Study OS" },
+       { title: "Bnoy Study — AI Study OS" },
       {
         name: "description",
         content:
           "Focus timer, weekly timetable, targets and an AI coach that reads your real study data.",
       },
-      { name: "author", content: "Chronodeck" },
+       { name: "author", content: "Bnoy Study" },
       {
         name: "google-site-verification",
         content: "40HcqSBZtxG7G-vu_6XtBvicin58SshO_EGNl19BscM",
@@ -98,7 +98,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "theme-color", content: "#17171b" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
-      { property: "og:title", content: "Chronodeck — AI Study OS" },
+       { property: "og:title", content: "Bnoy Study — AI Study OS" },
       {
         property: "og:description",
         content:
@@ -106,7 +106,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Chronodeck" },
     ],
     links: [
       {

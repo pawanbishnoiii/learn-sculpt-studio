@@ -11,10 +11,10 @@ export const Route = createFileRoute("/_authenticated/admin/data")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "Data transfer — Chronodeck Admin" },
+       { title: "Data transfer — Bnoy Study Admin" },
       { name: "description", content: "Export a full account to a file, or restore an export into an account." },
-      { property: "og:title", content: "Data transfer — Chronodeck Admin" },
-      { property: "og:description", content: "Export and import complete Chronodeck accounts." },
+       { property: "og:title", content: "Data transfer — Bnoy Study Admin" },
+       { property: "og:description", content: "Export and import complete Bnoy Study accounts." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -74,7 +74,7 @@ function AdminDataPage() {
       const u = (users.data ?? []).find((x) => x.id === userId);
       if (!u) throw new Error("Pehle user chuno");
       const payload = await exportUserData(u.id);
-      downloadJson(`chronodeck-${(u.display_name || u.email || u.id).replace(/\W+/g, "-").toLowerCase()}.json`, payload);
+       downloadJson(`bnoy-study-${(u.display_name || u.email || u.id).replace(/\W+/g, "-").toLowerCase()}.json`, payload);
       return u;
     },
     onSuccess: (u) => toast.success(`Export ready — ${(u.display_name || u.email) ?? "account"}`),

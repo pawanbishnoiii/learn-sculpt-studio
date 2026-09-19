@@ -7,10 +7,10 @@ export const Route = createFileRoute("/_authenticated/admin/")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "Admin overview — Chronodeck Study OS" },
-      { name: "description", content: "Live usage, study minutes and subject load across every Chronodeck account." },
-      { property: "og:title", content: "Admin overview — Chronodeck" },
-      { property: "og:description", content: "Live usage and study analytics for the Chronodeck study platform." },
+       { title: "Admin overview — Bnoy Study" },
+       { name: "description", content: "Live usage, study minutes and subject load across every Bnoy Study account." },
+       { property: "og:title", content: "Admin overview — Bnoy Study" },
+       { property: "og:description", content: "Live usage and study analytics for the Bnoy Study platform." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -32,7 +32,7 @@ function AdminOverview() {
         <p className="font-mono text-[10px] tracking-[0.3em] text-brand uppercase">Console</p>
         <h1 className="font-heading text-3xl font-extrabold tracking-tight">Overview</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Everything happening across Chronodeck right now.
+           Everything happening across Bnoy Study right now.
         </p>
       </header>
 

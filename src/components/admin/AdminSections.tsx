@@ -113,7 +113,7 @@ export function UsageInsights() {
     setBusy(id);
     try {
       const payload = await exportUserData(id);
-      downloadJson(`chronodeck-${label.replace(/\W+/g, "-").toLowerCase()}.json`, payload);
+       downloadJson(`bnoy-study-${label.replace(/\W+/g, "-").toLowerCase()}.json`, payload);
       sonner.success("History downloaded");
     } catch (err) {
       sonner.error((err as Error).message);
