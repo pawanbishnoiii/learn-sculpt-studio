@@ -1,26 +1,14 @@
-# Migration roadmap
+# Chronodeck production upgrade roadmap
 
-- [x] Transplant the complete main-branch Chronodeck application
-- [x] Recreate the database schema, access rules, functions, and triggers
-- [x] Implement secure login for the restored a@a.a identity
-- [x] Add the missing daily study-plan refresh function
-- [x] Replace Today question/test analytics with day-first study timing and output analytics
-- [x] Integrate the responsive draggable widget dashboard with saved layout
-- [x] Replace the phone bottom navigation with the Liquid Morph Floating Menu
-- [x] Integrate Rive/clay-style artwork (animated owl+flame inlined; missing foreign assets replaced)
-- [x] Apply a bolder pastel education design system and smoother motion
-- [x] Verify critical flows on phone and desktop
-- [x] Re-import the old a@a.a study data from the backup (subjects, sessions, breaks, targets, reading logs, plan, activity)
-- [x] Animated fire streak icon from the supplied Fire animation
-- [x] Vibrant day-mode palette and a deeper, richer night mode
-- [x] Clay artwork and clay cards on the History page
-- [x] Draggable widget board on desktop, simple stacked cards on phones
-- [x] Classes: chapter PDF notes panel (multi-PDF per topic, ordered, preview/download) wired onto the Classes page
-- [x] Study page as a 3-step wizard (subject → chapter/topic → session) with prefill jump to step 3
-- [x] Profile: personal export/import (ZIP with PDFs) via DataTransferCard
-- [x] Admin sidebar with real Chronodeck routes and mobile drawer
-- [x] Admin Activity page (sign-in/app-open/page-view history with filters)
-- [x] Admin Data transfer page (per-account export/import with preview and confirmation)
-- [x] Hide decorative Today animations on phones (kept on desktop)
-- [ ] Restore a@a.a study data + login — BLOCKED: post-remix backend has no auth users and no data; old backup file no longer available in chat
-- [ ] Full authenticated phone/desktop verification — BLOCKED on the same: needs at least one signed-up account
+- [ ] Restore uploaded backup data for UID 984c3007-36da-4b40-abce-b95566c246a6
+- [ ] Add authoritative weighted progress and weekly three-day streak shield
+- [ ] Add offline study cache, queued sync, published-app service worker, and status UI
+- [ ] Upgrade mobile Liquid Morph navigation and haptics
+- [ ] Refine Study selections into compact one-choice controls and weekly topic editing
+- [ ] Upgrade Classes subject → chapter → material workflow and offline downloads
+- [ ] Harden Profile ZIP import/export with progress and reports
+- [ ] Upgrade Today analytics, hero illustration, and page performance
+- [ ] Make all admin pages desktop-friendly with complete user/login detail
+- [ ] Add secure server-side login telemetry with IP and device context
+- [ ] Apply layered clay visual system, supplied animations, and generated illustration assets
+- [ ] Verify phone, desktop, offline recovery, data counts, and checks
