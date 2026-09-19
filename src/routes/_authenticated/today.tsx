@@ -25,12 +25,12 @@ import {
 } from "@/components/motion/gsap-bits";
 import { Mascot, mascotState } from "@/components/Mascot";
 import { Icon3D } from "@/components/Icon3D";
-import todayHeroArt from "@/assets/today-hero.png";
+import todayHeroArt from "@/assets/chronodeck-clay-study-hero.jpg";
 import { StreakFlame } from "@/components/StreakFlame";
 import { ReadingHabitCard } from "@/components/ReadingHabitCard";
 import { DailyPlanCard } from "@/components/DailyPlanCard";
-import { fetchAttempts, subjectPerformance } from "@/lib/plan";
 import { TodayStudyAnalytics } from "@/components/TodayStudyAnalytics";
+import { studyStreak } from "@/lib/streak";
 
 import {
   DAYS,
@@ -176,10 +176,8 @@ function TodayPage() {
   const monthly = useMemo(() => monthlyHistory(all, weeklyGoal), [all, weeklyGoal]);
   const perDay = useMemo(() => dailyMinutes(all), [all]);
   const ctaRef = useIdleGlow<HTMLButtonElement>();
-  const streakAlive =
-    !xp.data?.last_streak_at ||
-    Date.now() - new Date(xp.data.last_streak_at).getTime() <= 48 * 60 * 60 * 1000;
-  const streak = streakAlive ? (xp.data?.streak ?? 0) : 0;
+  const streakInfo = useMemo(() => studyStreak(all, dailyGoal), [all, dailyGoal]);
+  const streak = Math.max(streakInfo.current, xp.data?.streak ?? 0);
   const heroMood = mascotState({ goalHit: todayMin >= dailyGoal * 60, streak });
 
   const activeTargets = (targets.data ?? []).filter((t) => t.is_active);
@@ -202,21 +200,6 @@ function TodayPage() {
     () => subjectProgress(all, subjects.data ?? [], subjWindow.since, subjWindow.scale),
     [all, subjects.data, subjWindow],
   );
-
-  const attempts = useQuery({ queryKey: ["attempts"], queryFn: () => fetchAttempts() });
-  const perf = useMemo(
-    () =>
-      subjectPerformance(
-        subjects.data ?? [],
-        all,
-        attempts.data ?? [],
-        subjWindow.since,
-        subjWindow.scale,
-      ),
-    [subjects.data, all, attempts.data, subjWindow],
-  );
-
-
 
   const saveSubjectTarget = useMutation({
     mutationFn: async (v: { id: string; hours: number }) =>
@@ -343,9 +326,11 @@ function TodayPage() {
                   {streak === 1 ? "1 day streak" : `${streak} day streak`}
                 </span>
                 <span className="rounded-full bg-panel/70 px-3 py-1.5 text-xs font-semibold text-muted-foreground">
-                  {streak > 0
-                    ? "48-hour streak window active"
-                    : "Finish a session to start your streak"}
+                  {streakInfo.shieldActive
+                    ? `${streakInfo.shieldDaysLeft} lifeline days left`
+                    : streak > 0
+                      ? "Weekly 3-day lifeline ready"
+                      : "Reach 100% to start your streak"}
                 </span>
               </div>
 
@@ -370,8 +355,10 @@ function TodayPage() {
             <div className="today-hero-motion pointer-events-none mx-auto w-36 shrink-0 select-none sm:w-48 lg:w-56">
               <img
                 src={todayHeroArt}
-                alt=""
-                className="aspect-square h-full w-full object-contain float-soft"
+                alt="Student reading with a laptop, calendar and focus clock"
+                width={1280}
+                height={960}
+                className="aspect-[4/3] h-full w-full object-contain float-soft"
               />
             </div>
           </div>
@@ -453,55 +440,6 @@ function TodayPage() {
 
           <MonthGrid perDay={perDay} dailyGoal={dailyGoal} />
 
-          {/* Subject-wise performance against each subject's target */}
-          <div className="mt-6">
-            <p className="section-label">Subject performance · {subjWindow.label}</p>
-            {perf.length === 0 ? (
-              <p className="mt-3 text-sm text-muted-foreground">
-                Add subjects to see how each one is performing.
-              </p>
-            ) : (
-              <ul className="mt-3 space-y-3">
-                {perf.slice(0, 8).map((s) => (
-                  <li key={s.id} className="grid gap-2 rounded-2xl bg-secondary/60 p-3">
-                    <div className="flex items-baseline justify-between gap-3">
-                      <span className="truncate text-sm font-semibold">{s.name}</span>
-                      <span className="shrink-0 text-xs font-semibold tabular-nums text-muted-foreground">
-                        {fmtHM(s.minutes)} / {fmtHM(s.targetMinutes)}
-                      </span>
-                    </div>
-                    <span className="h-2.5 overflow-hidden rounded-full bg-muted">
-                      <span
-                        className="block h-full rounded-full transition-[width] duration-700 ease-out"
-                        style={{
-                          width: `${s.pct}%`,
-                          background: s.color,
-                        }}
-                      />
-                    </span>
-                    <div className="grid grid-cols-4 gap-2 text-center text-[11px]">
-                      <span>
-                        <b className="block text-sm">
-                          {s.topicsDone}/{s.topicsTotal}
-                        </b>
-                        topics
-                      </span>
-                      <span>
-                        <b className="block text-sm">{s.attempted}</b>attempted
-                      </span>
-                      <span>
-                        <b className="block text-sm text-[var(--success)]">{s.correct}</b>correct
-                      </span>
-                      <span>
-                        <b className="block text-sm text-destructive">{s.incorrect}</b>incorrect
-                      </span>
-                    </div>
-                    <p className="text-xs font-bold">Average accuracy {s.accuracy}%</p>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
         </Reveal>
 
         {/* Hourly heatmap */}
