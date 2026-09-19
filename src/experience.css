@@ -28,6 +28,14 @@
 [data-page="today"] .daily-motion-card {
   contain: layout paint;
 }
+/* Decorative animations stay on desktop only — phones keep the dashboard fast. */
+@media (max-width: 767px) {
+  [data-page="today"] .today-hero-motion,
+  [data-page="today"] .today-analytics-motion,
+  [data-page="today"] .daily-motion-card {
+    display: none;
+  }
+}
 [data-page="today"] .surface-card,
 .route-experience .glass-panel {
   transition:

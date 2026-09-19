@@ -15,9 +15,12 @@
 - [x] Vibrant day-mode palette and a deeper, richer night mode
 - [x] Clay artwork and clay cards on the History page
 - [x] Draggable widget board on desktop, simple stacked cards on phones
-- [ ] Rebuild Classes as a clay bento workspace using supplied student animations
-- [ ] Replace mobile navigation with the supplied touch-first Liquid Morph interaction
-- [ ] Add the supplied responsive Dashboard Sidebar to the multi-page admin area
-- [ ] Add admin activity, data transfer, and routable user-detail pages
-- [ ] Add complete user history, last seen, sign-in count, device and event views
-- [ ] Validate supplied error animation and all upgraded screens on phone and desktop
+- [x] Classes: chapter PDF notes panel (multi-PDF per topic, ordered, preview/download) wired onto the Classes page
+- [x] Study page as a 3-step wizard (subject → chapter/topic → session) with prefill jump to step 3
+- [x] Profile: personal export/import (ZIP with PDFs) via DataTransferCard
+- [x] Admin sidebar with real Chronodeck routes and mobile drawer
+- [x] Admin Activity page (sign-in/app-open/page-view history with filters)
+- [x] Admin Data transfer page (per-account export/import with preview and confirmation)
+- [x] Hide decorative Today animations on phones (kept on desktop)
+- [ ] Restore a@a.a study data + login — BLOCKED: post-remix backend has no auth users and no data; old backup file no longer available in chat
+- [ ] Full authenticated phone/desktop verification — BLOCKED on the same: needs at least one signed-up account

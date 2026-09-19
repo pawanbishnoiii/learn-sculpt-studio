@@ -26,8 +26,10 @@ import { Route as AuthenticatedTimerRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedTimetableRouteImport } from './routes/_authenticated/timetable'
 import { Route as AuthenticatedTodayRouteImport } from './routes/_authenticated/today'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
+import { Route as AuthenticatedAdminActivityRouteImport } from './routes/_authenticated/admin/activity'
 import { Route as AuthenticatedAdminAndroidRouteImport } from './routes/_authenticated/admin/android'
 import { Route as AuthenticatedAdminBrandingRouteImport } from './routes/_authenticated/admin/branding'
+import { Route as AuthenticatedAdminDataRouteImport } from './routes/_authenticated/admin/data'
 import { Route as AuthenticatedAdminNotificationsRouteImport } from './routes/_authenticated/admin/notifications'
 import { Route as AuthenticatedAdminScheduleRouteImport } from './routes/_authenticated/admin/schedule'
 import { Route as AuthenticatedAdminSettingsRouteImport } from './routes/_authenticated/admin/settings'
@@ -118,6 +120,12 @@ const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthenticatedAdminRouteRoute,
 } as any)
+const AuthenticatedAdminActivityRoute =
+  AuthenticatedAdminActivityRouteImport.update({
+    id: '/activity',
+    path: '/activity',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
 const AuthenticatedAdminAndroidRoute =
   AuthenticatedAdminAndroidRouteImport.update({
     id: '/android',
@@ -130,6 +138,11 @@ const AuthenticatedAdminBrandingRoute =
     path: '/branding',
     getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
+const AuthenticatedAdminDataRoute = AuthenticatedAdminDataRouteImport.update({
+  id: '/data',
+  path: '/data',
+  getParentRoute: () => AuthenticatedAdminRouteRoute,
+} as any)
 const AuthenticatedAdminNotificationsRoute =
   AuthenticatedAdminNotificationsRouteImport.update({
     id: '/notifications',
@@ -175,8 +188,10 @@ export interface FileRoutesByFullPath {
   '/timer': typeof AuthenticatedTimerRoute
   '/timetable': typeof AuthenticatedTimetableRoute
   '/today': typeof AuthenticatedTodayRoute
+  '/admin/activity': typeof AuthenticatedAdminActivityRoute
   '/admin/android': typeof AuthenticatedAdminAndroidRoute
   '/admin/branding': typeof AuthenticatedAdminBrandingRoute
+  '/admin/data': typeof AuthenticatedAdminDataRoute
   '/admin/notifications': typeof AuthenticatedAdminNotificationsRoute
   '/admin/schedule': typeof AuthenticatedAdminScheduleRoute
   '/admin/settings': typeof AuthenticatedAdminSettingsRoute
@@ -199,8 +214,10 @@ export interface FileRoutesByTo {
   '/timer': typeof AuthenticatedTimerRoute
   '/timetable': typeof AuthenticatedTimetableRoute
   '/today': typeof AuthenticatedTodayRoute
+  '/admin/activity': typeof AuthenticatedAdminActivityRoute
   '/admin/android': typeof AuthenticatedAdminAndroidRoute
   '/admin/branding': typeof AuthenticatedAdminBrandingRoute
+  '/admin/data': typeof AuthenticatedAdminDataRoute
   '/admin/notifications': typeof AuthenticatedAdminNotificationsRoute
   '/admin/schedule': typeof AuthenticatedAdminScheduleRoute
   '/admin/settings': typeof AuthenticatedAdminSettingsRoute
@@ -226,8 +243,10 @@ export interface FileRoutesById {
   '/_authenticated/timer': typeof AuthenticatedTimerRoute
   '/_authenticated/timetable': typeof AuthenticatedTimetableRoute
   '/_authenticated/today': typeof AuthenticatedTodayRoute
+  '/_authenticated/admin/activity': typeof AuthenticatedAdminActivityRoute
   '/_authenticated/admin/android': typeof AuthenticatedAdminAndroidRoute
   '/_authenticated/admin/branding': typeof AuthenticatedAdminBrandingRoute
+  '/_authenticated/admin/data': typeof AuthenticatedAdminDataRoute
   '/_authenticated/admin/notifications': typeof AuthenticatedAdminNotificationsRoute
   '/_authenticated/admin/schedule': typeof AuthenticatedAdminScheduleRoute
   '/_authenticated/admin/settings': typeof AuthenticatedAdminSettingsRoute
@@ -253,8 +272,10 @@ export interface FileRouteTypes {
     | '/timer'
     | '/timetable'
     | '/today'
+    | '/admin/activity'
     | '/admin/android'
     | '/admin/branding'
+    | '/admin/data'
     | '/admin/notifications'
     | '/admin/schedule'
     | '/admin/settings'
@@ -277,8 +298,10 @@ export interface FileRouteTypes {
     | '/timer'
     | '/timetable'
     | '/today'
+    | '/admin/activity'
     | '/admin/android'
     | '/admin/branding'
+    | '/admin/data'
     | '/admin/notifications'
     | '/admin/schedule'
     | '/admin/settings'
@@ -303,8 +326,10 @@ export interface FileRouteTypes {
     | '/_authenticated/timer'
     | '/_authenticated/timetable'
     | '/_authenticated/today'
+    | '/_authenticated/admin/activity'
     | '/_authenticated/admin/android'
     | '/_authenticated/admin/branding'
+    | '/_authenticated/admin/data'
     | '/_authenticated/admin/notifications'
     | '/_authenticated/admin/schedule'
     | '/_authenticated/admin/settings'
@@ -443,6 +468,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
       parentRoute: typeof AuthenticatedAdminRouteRoute
     }
+    '/_authenticated/admin/activity': {
+      id: '/_authenticated/admin/activity'
+      path: '/activity'
+      fullPath: '/admin/activity'
+      preLoaderRoute: typeof AuthenticatedAdminActivityRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
     '/_authenticated/admin/android': {
       id: '/_authenticated/admin/android'
       path: '/android'
@@ -455,6 +487,13 @@ declare module '@tanstack/react-router' {
       path: '/branding'
       fullPath: '/admin/branding'
       preLoaderRoute: typeof AuthenticatedAdminBrandingRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/data': {
+      id: '/_authenticated/admin/data'
+      path: '/data'
+      fullPath: '/admin/data'
+      preLoaderRoute: typeof AuthenticatedAdminDataRouteImport
       parentRoute: typeof AuthenticatedAdminRouteRoute
     }
     '/_authenticated/admin/notifications': {
@@ -496,8 +535,10 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedAdminRouteRouteChildren {
+  AuthenticatedAdminActivityRoute: typeof AuthenticatedAdminActivityRoute
   AuthenticatedAdminAndroidRoute: typeof AuthenticatedAdminAndroidRoute
   AuthenticatedAdminBrandingRoute: typeof AuthenticatedAdminBrandingRoute
+  AuthenticatedAdminDataRoute: typeof AuthenticatedAdminDataRoute
   AuthenticatedAdminNotificationsRoute: typeof AuthenticatedAdminNotificationsRoute
   AuthenticatedAdminScheduleRoute: typeof AuthenticatedAdminScheduleRoute
   AuthenticatedAdminSettingsRoute: typeof AuthenticatedAdminSettingsRoute
@@ -507,8 +548,10 @@ interface AuthenticatedAdminRouteRouteChildren {
 
 const AuthenticatedAdminRouteRouteChildren: AuthenticatedAdminRouteRouteChildren =
   {
+    AuthenticatedAdminActivityRoute: AuthenticatedAdminActivityRoute,
     AuthenticatedAdminAndroidRoute: AuthenticatedAdminAndroidRoute,
     AuthenticatedAdminBrandingRoute: AuthenticatedAdminBrandingRoute,
+    AuthenticatedAdminDataRoute: AuthenticatedAdminDataRoute,
     AuthenticatedAdminNotificationsRoute: AuthenticatedAdminNotificationsRoute,
     AuthenticatedAdminScheduleRoute: AuthenticatedAdminScheduleRoute,
     AuthenticatedAdminSettingsRoute: AuthenticatedAdminSettingsRoute,
