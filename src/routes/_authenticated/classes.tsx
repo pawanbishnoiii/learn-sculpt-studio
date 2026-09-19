@@ -14,6 +14,7 @@ import {
 } from "@/lib/classes";
 import { fetchSubjects } from "@/lib/study";
 import { EmptyState, PageHeader, ResponsiveSheet } from "@/components/study-ui";
+import { ChapterNotesPanel } from "@/components/ChapterNotesPanel";
 import { Button } from "@/components/ui/button";
 import emptyCalendar from "@/assets/chronodeck-empty-calendar.png";
 
@@ -254,6 +255,9 @@ function ClassesPage() {
           </ul>
         )}
       </section>
+
+      {/* Chapter PDFs — upload, order, preview and download notes per chapter */}
+      <ChapterNotesPanel />
 
       {open ? (
         <ResponsiveSheet open title="Add online class" onClose={() => setOpen(false)}>

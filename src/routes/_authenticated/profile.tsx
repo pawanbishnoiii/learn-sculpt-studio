@@ -6,6 +6,7 @@ import { Icon3D } from "@/components/Icon3D";
 import { AvatarPicker } from "@/components/AvatarPicker";
 import { PushToggle } from "@/components/PushToggle";
 import { PageHeader } from "@/components/study-ui";
+import { DataTransferCard } from "@/components/DataTransferCard";
 import { Button } from "@/components/ui/button";
 import { FormSkeleton, Skeleton, SoftCard, StatsSkeleton } from "@/components/ui/skeletons";
 
@@ -227,6 +228,9 @@ function ProfilePage() {
           {save.isPending ? "Saving…" : dirty ? "Save profile" : "Saved"}
         </Button>
       </section>
+
+      {/* Personal data transfer — export everything you own, import another export */}
+      <DataTransferCard />
     </div>
   );
 }
