@@ -275,6 +275,69 @@ export type Database = {
           },
         ]
       }
+      chapter_notes: {
+        Row: {
+          chapter_id: string | null
+          chapter_name: string | null
+          created_at: string
+          file_size: number
+          id: string
+          mime_type: string
+          position: number
+          storage_path: string
+          subject_id: string | null
+          title: string
+          topic: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          chapter_id?: string | null
+          chapter_name?: string | null
+          created_at?: string
+          file_size?: number
+          id?: string
+          mime_type?: string
+          position?: number
+          storage_path: string
+          subject_id?: string | null
+          title: string
+          topic?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          chapter_id?: string | null
+          chapter_name?: string | null
+          created_at?: string
+          file_size?: number
+          id?: string
+          mime_type?: string
+          position?: number
+          storage_path?: string
+          subject_id?: string | null
+          title?: string
+          topic?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chapter_notes_chapter_id_fkey"
+            columns: ["chapter_id"]
+            isOneToOne: false
+            referencedRelation: "chapters"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "chapter_notes_subject_id_fkey"
+            columns: ["subject_id"]
+            isOneToOne: false
+            referencedRelation: "subjects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       chapter_subtopics: {
         Row: {
           chapter_id: string
