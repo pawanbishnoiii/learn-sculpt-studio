@@ -429,7 +429,7 @@ export const adminEvents = createServerFn({ method: "GET" })
 
     let q = db
       .from("app_events")
-      .select("id,user_id,event,path,platform,created_at,profiles(display_name,email)")
+      .select("id,user_id,event,path,platform,created_at")
       .gte("created_at", since)
       .order("created_at", { ascending: false })
       .limit(data.limit);
@@ -437,11 +437,19 @@ export const adminEvents = createServerFn({ method: "GET" })
     const { data: rows, error } = await q;
     if (error) throw new Error(error.message);
 
-    return (rows ?? []).map<AdminEvent>((r) => {
-      const p = (r as { profiles?: { display_name: string | null; email: string | null } | null }).profiles ?? null;
+    const events = (rows ?? []).filter((r) => !!r.user_id);
+    const ownerIds = [...new Set(events.map((r) => r.user_id as string))];
+    const { data: owners } = await db
+      .from("profiles")
+      .select("id,display_name,email")
+      .in("id", ownerIds);
+    const ownerMap = new Map((owners ?? []).map((p) => [p.id, p]));
+
+    return events.map<AdminEvent>((r) => {
+      const p = ownerMap.get(r.user_id as string);
       return {
         id: r.id,
-        user_id: r.user_id,
+        user_id: r.user_id as string,
         display_name: p?.display_name ?? null,
         email: p?.email ?? null,
         event: r.event,

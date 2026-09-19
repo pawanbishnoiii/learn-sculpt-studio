@@ -102,7 +102,7 @@ function AdminDataPage() {
       toast.success(`Import complete — ${inserted} rows restored into ${imported.label}`);
       setImported(null);
       void qc.invalidateQueries({ queryKey: ["admin-users"] });
-etq: void qc.invalidateQueries({ queryKey: ["admin-overview"] });
+      void qc.invalidateQueries({ queryKey: ["admin-overview"] });
     } catch (e) {
       toast.error((e as Error).message);
     } finally {
