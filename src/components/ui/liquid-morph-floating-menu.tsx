@@ -32,7 +32,7 @@ export function LiquidMorphFloatingMenu({ items, activeId, onSelect }: { items: 
             {active ? <motion.span layoutId="liquid-nav-active" className="absolute inset-0 rounded-[18px] bg-dark-card shadow-lg" transition={reduceMotion ? { duration: 0 } : { type: "spring", stiffness: 340, damping: 30 }} /> : null}
             {item.center && !active ? <span aria-hidden className="absolute inset-0 rounded-[18px] bg-peach shadow-md" /> : null}
             <span className={`relative z-10 flex min-w-0 flex-col items-center gap-1 transition-colors ${active ? "text-primary-foreground" : "text-foreground/65"}`}>
-              <motion.span animate={active && !reduceMotion ? { y: [0, -2, 0] } : undefined} className="[&_svg]:size-5">{item.icon}</motion.span>
+              <motion.span animate={active && !reduceMotion ? { y: [0, -2, 0] } : { y: 0 }} className="[&_svg]:size-5">{item.icon}</motion.span>
               <span className="max-w-full truncate text-[9px] font-bold">{item.label}</span>
             </span>
           </Button>
