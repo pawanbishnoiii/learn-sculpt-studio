@@ -25,7 +25,7 @@ import {
 } from "@/components/motion/gsap-bits";
 import { Mascot, mascotState } from "@/components/Mascot";
 import { Icon3D } from "@/components/Icon3D";
-import todayHeroArt from "@/assets/chronodeck-clay-study-hero.jpg";
+import todayHeroArt from "@/assets/clay-study-hero.png";
 import { StreakFlame } from "@/components/StreakFlame";
 import { ReadingHabitCard } from "@/components/ReadingHabitCard";
 import { DailyPlanCard } from "@/components/DailyPlanCard";
