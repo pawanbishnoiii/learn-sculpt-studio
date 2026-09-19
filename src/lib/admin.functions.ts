@@ -409,6 +409,14 @@ export type AdminEvent = {
   path: string | null;
   platform: string | null;
   created_at: string;
+  ip: string | null;
+  device: string | null;
+  browser: string | null;
+  os: string | null;
+  screen: string | null;
+  lang: string | null;
+  standalone: boolean | null;
+  connection: string | null;
 };
 
 /** Sign-in / app-open / page-view history with user and time-window filters. */
@@ -429,7 +437,7 @@ export const adminEvents = createServerFn({ method: "GET" })
 
     let q = db
       .from("app_events")
-      .select("id,user_id,event,path,platform,created_at")
+      .select("id,user_id,event,path,platform,metadata,created_at")
       .gte("created_at", since)
       .order("created_at", { ascending: false })
       .limit(data.limit);
@@ -445,8 +453,12 @@ export const adminEvents = createServerFn({ method: "GET" })
       .in("id", ownerIds);
     const ownerMap = new Map((owners ?? []).map((p) => [p.id, p]));
 
+    const str = (m: Record<string, unknown>, key: string) =>
+      typeof m[key] === "string" ? (m[key] as string) : null;
+
     return events.map<AdminEvent>((r) => {
       const p = ownerMap.get(r.user_id as string);
+      const m = (r.metadata ?? {}) as Record<string, unknown>;
       return {
         id: r.id,
         user_id: r.user_id as string,
@@ -456,6 +468,14 @@ export const adminEvents = createServerFn({ method: "GET" })
         path: r.path,
         platform: r.platform,
         created_at: r.created_at,
+        ip: str(m, "ip"),
+        device: str(m, "device"),
+        browser: str(m, "browser"),
+        os: str(m, "os"),
+        screen: str(m, "screen"),
+        lang: str(m, "lang"),
+        standalone: typeof m["standalone"] === "boolean" ? (m["standalone"] as boolean) : null,
+        connection: str(m, "connection"),
       };
     });
   });
