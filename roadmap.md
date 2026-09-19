@@ -1,14 +1,19 @@
-# Chronodeck production upgrade roadmap
+# Roadmap
 
-- [ ] Restore uploaded backup data for UID 984c3007-36da-4b40-abce-b95566c246a6
-- [ ] Add authoritative weighted progress and weekly three-day streak shield
-- [ ] Add offline study cache, queued sync, published-app service worker, and status UI
-- [ ] Upgrade mobile Liquid Morph navigation and haptics
-- [ ] Refine Study selections into compact one-choice controls and weekly topic editing
-- [ ] Upgrade Classes subject → chapter → material workflow and offline downloads
-- [ ] Harden Profile ZIP import/export with progress and reports
-- [ ] Upgrade Today analytics, hero illustration, and page performance
-- [ ] Make all admin pages desktop-friendly with complete user/login detail
-- [ ] Add secure server-side login telemetry with IP and device context
-- [ ] Apply layered clay visual system, supplied animations, and generated illustration assets
-- [ ] Verify phone, desktop, offline recovery, data counts, and checks
+## Active request
+- [ ] Rename product to Bnoy Study and add app settings
+- [ ] Add export history with manage and download actions
+- [ ] Fix slow page loading and response paths; add smooth branded loaders
+- [ ] Remove sheet-like Rive analytics icons from Today
+- [ ] Rebuild all admin pages for desktop layouts
+- [ ] Add reusable animated drawers for popup workflows
+- [ ] Verify and refine Liquid Morph Floating Menu
+- [ ] Add resilient past-session login behavior
+- [ ] Connect admin users table and per-user management/import/export
+- [ ] Add offline study queue and reconnect sync
+- [ ] Upgrade Classes to subject/chapter folders and media uploads/previews
+- [ ] Verify a@a.a streak, lifeline, daily plan, and restored data
+- [ ] Add admin notifications, scheduled email, and plan/targets/timetable controls
+- [ ] Add revision/syllabus coverage suggestion engine and daily cron refresh
+- [ ] Add /doc product documentation page
+- [ ] Verify mobile and desktop production flows
