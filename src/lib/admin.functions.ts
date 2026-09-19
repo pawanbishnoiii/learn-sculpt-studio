@@ -409,6 +409,14 @@ export type AdminEvent = {
   path: string | null;
   platform: string | null;
   created_at: string;
+  ip: string | null;
+  device: string | null;
+  browser: string | null;
+  os: string | null;
+  screen: string | null;
+  lang: string | null;
+  standalone: boolean | null;
+  connection: string | null;
 };
 
 /** Sign-in / app-open / page-view history with user and time-window filters. */
