@@ -139,7 +139,7 @@ export function LiquidMorphFloatingMenu({
         }}
         style={{ cursor: isOpen ? "default" : "pointer" }}
         animate={{ width: isOpen ? 296 : 188, height: isOpen ? openHeight : 60, borderRadius: isOpen ? 34 : 72 }}
-        whileHover={isOpen || reduceMotion ? undefined : { scale: 1.04 }}
+        whileHover={isOpen || reduceMotion ? {} : { scale: 1.04 }}
         transition={
           reduceMotion
             ? { duration: 0 }
