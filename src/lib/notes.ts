@@ -1,6 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
 
-/** One PDF attached to a chapter/topic, kept in a fixed sequence. */
+/** One private study file attached to a chapter/topic, kept in a fixed sequence. */
 export type ChapterNote = {
   id: string;
   subject_id: string | null;
@@ -15,6 +15,10 @@ export type ChapterNote = {
 };
 
 const BUCKET = "chapter-pdfs";
+export const MAX_MEDIA_BYTES = 50 * 1024 * 1024;
+const ALLOWED_EXTENSIONS = new Set([
+  "pdf", "png", "jpg", "jpeg", "webp", "gif", "mp4", "webm", "mov", "doc", "docx", "ppt", "pptx", "xls", "xlsx", "txt", "csv",
+]);
 
 const COLUMNS =
   "id, subject_id, chapter_name, topic, title, storage_path, file_size, mime_type, position, created_at";
@@ -37,7 +41,23 @@ export async function fetchNotes(): Promise<ChapterNote[]> {
   return (data ?? []) as unknown as ChapterNote[];
 }
 
-/** Upload one PDF and append it at the end of that chapter's sequence. */
+export function mediaKind(mime: string, title = "") {
+  if (mime === "application/pdf" || title.toLowerCase().endsWith(".pdf")) return "pdf" as const;
+  if (mime.startsWith("image/")) return "image" as const;
+  if (mime.startsWith("video/")) return "video" as const;
+  return "document" as const;
+}
+
+function validateMedia(file: File | Blob, title: string) {
+  if (file.size <= 0) throw new Error(`${title}: file khaali hai`);
+  if (file.size > MAX_MEDIA_BYTES) throw new Error(`${title}: maximum size 50 MB hai`);
+  const extension = title.split(".").pop()?.toLowerCase() ?? "";
+  if (!ALLOWED_EXTENSIONS.has(extension)) {
+    throw new Error(`${title}: ye file format supported nahi hai`);
+  }
+}
+
+/** Upload one study file and append it at the end of that chapter's sequence. */
 export async function uploadNote(input: {
   file: File;
   subject_id: string | null;
@@ -46,13 +66,12 @@ export async function uploadNote(input: {
   existingCount: number;
 }) {
   const user = await uid();
-  if (input.file.type && input.file.type !== "application/pdf") {
-    throw new Error("Sirf PDF file upload kar sakte ho");
-  }
+  validateMedia(input.file, input.file.name);
+  const mime = input.file.type || "application/octet-stream";
   const safe = input.file.name.replace(/[^\w.\-]+/g, "_");
   const path = `${user}/${crypto.randomUUID()}-${safe}`;
   const up = await supabase.storage.from(BUCKET).upload(path, input.file, {
-    contentType: "application/pdf",
+    contentType: mime,
     upsert: false,
   });
   if (up.error) throw up.error;
@@ -65,7 +84,7 @@ export async function uploadNote(input: {
     title: input.file.name,
     storage_path: path,
     file_size: input.file.size,
-    mime_type: "application/pdf",
+    mime_type: mime,
     position: input.existingCount + 1,
   });
   if (error) {
@@ -74,7 +93,7 @@ export async function uploadNote(input: {
   }
 }
 
-/** Upload a PDF that came out of an import bundle. */
+/** Upload a study file that came out of an import bundle. */
 export async function restoreNote(input: {
   blob: Blob;
   title: string;
@@ -82,12 +101,15 @@ export async function restoreNote(input: {
   chapter_name: string | null;
   topic: string | null;
   position: number;
+  mime_type?: string;
 }) {
   const user = await uid();
+  validateMedia(input.blob, input.title);
+  const mime = input.mime_type || input.blob.type || "application/octet-stream";
   const safe = input.title.replace(/[^\w.\-]+/g, "_");
   const path = `${user}/${crypto.randomUUID()}-${safe}`;
   const up = await supabase.storage.from(BUCKET).upload(path, input.blob, {
-    contentType: "application/pdf",
+    contentType: mime,
     upsert: false,
   });
   if (up.error) throw up.error;
@@ -99,10 +121,13 @@ export async function restoreNote(input: {
     title: input.title,
     storage_path: path,
     file_size: input.blob.size,
-    mime_type: "application/pdf",
+    mime_type: mime,
     position: input.position,
   });
-  if (error) throw error;
+  if (error) {
+    await supabase.storage.from(BUCKET).remove([path]);
+    throw error;
+  }
 }
 
 /** A short-lived link used for both inline preview and download. */

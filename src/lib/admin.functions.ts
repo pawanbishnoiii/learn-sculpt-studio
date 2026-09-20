@@ -513,3 +513,62 @@ export const importUser = createServerFn({ method: "POST" })
     }
     return inserted;
   });
+
+const revisionSettingsSchema = z.object({
+  userId: z.string().uuid(),
+  minPasses: z.number().int().min(5).max(10).nullable(),
+  maxPasses: z.number().int().min(5).max(10).nullable(),
+  intervals: z.array(z.number().int().min(1).max(365)).min(1).max(10).nullable(),
+  dayMode: z.enum(["all", "odd", "even"]).nullable(),
+});
+
+export const adminSaveRevisionSettings = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((raw: unknown) => revisionSettingsSchema.parse(raw))
+  .handler(async ({ data, context }) => {
+    const db = await requireAdmin(context);
+    if (data.minPasses !== null && data.maxPasses !== null && data.minPasses > data.maxPasses) throw new Error("Minimum passes cannot exceed maximum passes");
+    const { error } = await db.from("user_revision_settings").upsert({
+      user_id: data.userId, min_passes: data.minPasses, max_passes: data.maxPasses,
+      intervals: data.intervals, default_day_mode: data.dayMode, updated_by: context.userId,
+    }, { onConflict: "user_id" });
+    if (error) throw new Error(error.message);
+  });
+
+export const adminRefreshUserPlan = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((raw: unknown) => z.object({ userId: z.string().uuid(), date: z.string().date() }).parse(raw))
+  .handler(async ({ data, context }) => {
+    const db = await requireAdmin(context);
+    const { data: count, error } = await db.rpc("refresh_user_study_plan", { p_user_id: data.userId, p_plan_date: data.date });
+    if (error) throw new Error(error.message);
+    return Number(count ?? 0);
+  });
+
+export const adminScheduledEmails = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const db = await requireAdmin(context);
+    const { data, error } = await db.from("scheduled_emails").select("*").order("send_at", { ascending: false }).limit(50);
+    if (error) throw new Error(error.message);
+    return data ?? [];
+  });
+
+export const adminScheduleEmail = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((raw: unknown) => z.object({ subject: z.string().min(1).max(160), body: z.string().min(1).max(20_000), audience: z.enum(["all", "active", "picked"]), userIds: z.array(z.string().uuid()).max(500), sendAt: z.string().datetime() }).parse(raw))
+  .handler(async ({ data, context }) => {
+    const db = await requireAdmin(context);
+    if (data.audience === "picked" && data.userIds.length === 0) throw new Error("Choose at least one user");
+    const { error } = await db.from("scheduled_emails").insert({ subject: data.subject, body: data.body, audience: data.audience, user_ids: data.userIds, send_at: data.sendAt, created_by: context.userId });
+    if (error) throw new Error(error.message);
+  });
+
+export const adminCancelScheduledEmail = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((raw: unknown) => z.object({ id: z.string().uuid() }).parse(raw))
+  .handler(async ({ data, context }) => {
+    const db = await requireAdmin(context);
+    const { error } = await db.from("scheduled_emails").update({ status: "cancelled" }).eq("id", data.id).eq("status", "pending");
+    if (error) throw new Error(error.message);
+  });

@@ -95,6 +95,9 @@ export type Database = {
           onboarding_require_subjects: boolean
           one_tap_enabled: boolean
           push_enabled: boolean
+          revision_intervals: number[]
+          revision_max_passes: number
+          revision_min_passes: number
           signup_enabled: boolean
           site_name: string
           support_email: string | null
@@ -124,6 +127,9 @@ export type Database = {
           onboarding_require_subjects?: boolean
           one_tap_enabled?: boolean
           push_enabled?: boolean
+          revision_intervals?: number[]
+          revision_max_passes?: number
+          revision_min_passes?: number
           signup_enabled?: boolean
           site_name?: string
           support_email?: string | null
@@ -153,6 +159,9 @@ export type Database = {
           onboarding_require_subjects?: boolean
           one_tap_enabled?: boolean
           push_enabled?: boolean
+          revision_intervals?: number[]
+          revision_max_passes?: number
+          revision_min_passes?: number
           signup_enabled?: boolean
           site_name?: string
           support_email?: string | null
@@ -706,6 +715,48 @@ export type Database = {
         }
         Relationships: []
       }
+      export_history: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          expires_at: string | null
+          file_name: string
+          id: string
+          size_bytes: number
+          status: string
+          storage_path: string | null
+          summary: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          expires_at?: string | null
+          file_name: string
+          id?: string
+          size_bytes?: number
+          status?: string
+          storage_path?: string | null
+          summary?: Json
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          expires_at?: string | null
+          file_name?: string
+          id?: string
+          size_bytes?: number
+          status?: string
+          storage_path?: string | null
+          summary?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       legacy_user_claims: {
         Row: {
           claimed_at: string | null
@@ -997,6 +1048,54 @@ export type Database = {
           sittings?: number
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      scheduled_emails: {
+        Row: {
+          attempts: number
+          audience: string
+          body: string
+          created_at: string
+          created_by: string | null
+          error: string | null
+          id: string
+          send_at: string
+          sent_count: number
+          status: string
+          subject: string
+          updated_at: string
+          user_ids: string[]
+        }
+        Insert: {
+          attempts?: number
+          audience?: string
+          body: string
+          created_at?: string
+          created_by?: string | null
+          error?: string | null
+          id?: string
+          send_at: string
+          sent_count?: number
+          status?: string
+          subject: string
+          updated_at?: string
+          user_ids?: string[]
+        }
+        Update: {
+          attempts?: number
+          audience?: string
+          body?: string
+          created_at?: string
+          created_by?: string | null
+          error?: string | null
+          id?: string
+          send_at?: string
+          sent_count?: number
+          status?: string
+          subject?: string
+          updated_at?: string
+          user_ids?: string[]
         }
         Relationships: []
       }
@@ -1320,6 +1419,7 @@ export type Database = {
           monthly_minutes: number
           monthly_questions: number
           monthly_topics: number
+          revision_day_mode: string
           subject_id: string
           updated_at: string
           user_id: string
@@ -1340,6 +1440,7 @@ export type Database = {
           monthly_minutes?: number
           monthly_questions?: number
           monthly_topics?: number
+          revision_day_mode?: string
           subject_id: string
           updated_at?: string
           user_id: string
@@ -1360,6 +1461,7 @@ export type Database = {
           monthly_minutes?: number
           monthly_questions?: number
           monthly_topics?: number
+          revision_day_mode?: string
           subject_id?: string
           updated_at?: string
           user_id?: string
@@ -1614,6 +1716,72 @@ export type Database = {
           },
         ]
       }
+      transfer_audit: {
+        Row: {
+          action: string
+          actor_user_id: string
+          created_at: string
+          error: string | null
+          id: string
+          status: string
+          summary: Json
+          target_user_id: string
+        }
+        Insert: {
+          action: string
+          actor_user_id: string
+          created_at?: string
+          error?: string | null
+          id?: string
+          status?: string
+          summary?: Json
+          target_user_id: string
+        }
+        Update: {
+          action?: string
+          actor_user_id?: string
+          created_at?: string
+          error?: string | null
+          id?: string
+          status?: string
+          summary?: Json
+          target_user_id?: string
+        }
+        Relationships: []
+      }
+      user_revision_settings: {
+        Row: {
+          created_at: string
+          default_day_mode: string | null
+          intervals: number[] | null
+          max_passes: number | null
+          min_passes: number | null
+          updated_at: string
+          updated_by: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          default_day_mode?: string | null
+          intervals?: number[] | null
+          max_passes?: number | null
+          min_passes?: number | null
+          updated_at?: string
+          updated_by?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          default_day_mode?: string | null
+          intervals?: number[] | null
+          max_passes?: number | null
+          min_passes?: number | null
+          updated_at?: string
+          updated_by?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -1640,7 +1808,12 @@ export type Database = {
           ai_autopilot: boolean
           ai_tone: string
           auto_stop_hours: number
+          background_style: string
           daily_goal_hours: number
+          timer_background_effects: boolean
+          timer_keep_awake: boolean
+          timer_show_details: boolean
+          timer_sounds_haptics: boolean
           updated_at: string
           user_id: string
           week_starts_monday: boolean
@@ -1651,7 +1824,12 @@ export type Database = {
           ai_autopilot?: boolean
           ai_tone?: string
           auto_stop_hours?: number
+          background_style?: string
           daily_goal_hours?: number
+          timer_background_effects?: boolean
+          timer_keep_awake?: boolean
+          timer_show_details?: boolean
+          timer_sounds_haptics?: boolean
           updated_at?: string
           user_id: string
           week_starts_monday?: boolean
@@ -1662,7 +1840,12 @@ export type Database = {
           ai_autopilot?: boolean
           ai_tone?: string
           auto_stop_hours?: number
+          background_style?: string
           daily_goal_hours?: number
+          timer_background_effects?: boolean
+          timer_keep_awake?: boolean
+          timer_show_details?: boolean
+          timer_sounds_haptics?: boolean
           updated_at?: string
           user_id?: string
           week_starts_monday?: boolean
@@ -1720,6 +1903,10 @@ export type Database = {
         }[]
       }
       close_stale_sessions: { Args: never; Returns: undefined }
+      complete_my_revision: {
+        Args: { p_kind: string; p_minutes?: number; p_state_id: string }
+        Returns: string
+      }
       ensure_my_subject_targets: { Args: never; Returns: number }
       has_role: {
         Args: {
@@ -1748,7 +1935,15 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      refresh_all_daily_plans: {
+        Args: { p_plan_date?: string }
+        Returns: number
+      }
       refresh_my_study_plan: { Args: { p_plan_date?: string }; Returns: number }
+      refresh_user_study_plan: {
+        Args: { p_plan_date?: string; p_user_id: string }
+        Returns: number
+      }
       schedule_my_daily_plan: {
         Args: { p_plan_date: string }
         Returns: undefined

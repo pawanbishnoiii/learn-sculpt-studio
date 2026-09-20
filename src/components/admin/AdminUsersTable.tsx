@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { ArrowDown, ArrowUp, Download, Upload, X } from "lucide-react";
 import { adminEvents, adminUsers, type AdminEvent, type AdminUser } from "@/lib/admin.functions";
-import { downloadJson, exportUserData, fetchUserDetail, importUserData } from "@/lib/admin-export";
+import { downloadJson, exportUserData, fetchUserDetail, importUserData, refreshUserPlan, saveUserRevisionSettings } from "@/lib/admin-export";
 import { fmtHM, relativeTime, setUserRole } from "@/lib/study";
 
 type SortKey = "name" | "email" | "last_seen_at" | "total_minutes" | "session_count" | "created_at";
@@ -123,7 +123,12 @@ export function AdminUsersTable() {
       ) : rows.length === 0 ? (
         <p className="p-5 text-sm text-muted-foreground">No accounts match this search.</p>
       ) : (
-        <div className="overflow-x-auto">
+        <><div className="grid gap-3 p-3 md:hidden">
+          {rows.map((u) => <button key={u.id} type="button" onClick={() => setSelected(u)} className="rounded-2xl border border-border bg-background p-4 text-left">
+            <span className="flex items-center gap-3"><span className="grid size-10 shrink-0 place-items-center rounded-full bg-brand/15 text-xs font-bold">{(u.display_name ?? u.email ?? "?").slice(0,1).toUpperCase()}</span><span className="min-w-0"><span className="block truncate text-sm font-bold">{u.display_name ?? "Unnamed"}</span><span className="block truncate text-xs text-muted-foreground">{u.email ?? "no email"}</span></span></span>
+            <span className="mt-3 grid grid-cols-3 gap-2 text-center text-xs"><span className="rounded-xl bg-secondary p-2">{fmtHM(u.total_minutes)}<small className="block text-muted-foreground">studied</small></span><span className="rounded-xl bg-secondary p-2">{u.session_count}<small className="block text-muted-foreground">sessions</small></span><span className="rounded-xl bg-secondary p-2">{relativeTime(u.last_seen_at)}<small className="block text-muted-foreground">seen</small></span></span>
+          </button>)}
+        </div><div className="hidden overflow-x-auto md:block">
           <table className="w-full min-w-[860px] text-sm">
             <thead className="sticky top-0 z-10 bg-panel/95 backdrop-blur">
               <tr className="border-b border-border">
@@ -219,7 +224,7 @@ export function AdminUsersTable() {
               ))}
             </tbody>
           </table>
-        </div>
+        </div></>
       )}
 
       {selected ? <UserDetailPanel user={selected} onClose={() => setSelected(null)} /> : null}
@@ -239,6 +244,7 @@ type Detail = {
 };
 
 function UserDetailPanel({ user, onClose }: { user: AdminUser; onClose: () => void }) {
+  const [revision, setRevision] = useState({ min: 5, max: 10, intervals: "1, 3, 7, 15, 30", mode: "all" as "all" | "odd" | "even" });
   const detail = useQuery({
     queryKey: ["admin-user-detail", user.id],
     queryFn: () => fetchUserDetail(user.id) as Promise<Detail>,
@@ -303,6 +309,20 @@ function UserDetailPanel({ user, onClose }: { user: AdminUser; onClose: () => vo
             <li>Sign-ins recorded: {str(profile["sign_in_count"])}</li>
             <li>Last seen: {user.last_seen_at ? new Date(user.last_seen_at).toLocaleString() : "never"}</li>
           </ul>
+        </section>
+
+        <section className="mt-4 rounded-2xl border border-border bg-panel p-4">
+          <h3 className="text-sm font-extrabold">Daily plan &amp; revision</h3>
+          <div className="mt-3 grid gap-2 sm:grid-cols-4">
+            <input aria-label="Minimum revisions" type="number" min={5} max={10} value={revision.min} onChange={(e) => setRevision({ ...revision, min: Number(e.target.value) })} className="input" />
+            <input aria-label="Maximum revisions" type="number" min={5} max={10} value={revision.max} onChange={(e) => setRevision({ ...revision, max: Number(e.target.value) })} className="input" />
+            <input aria-label="Revision intervals" value={revision.intervals} onChange={(e) => setRevision({ ...revision, intervals: e.target.value })} className="input" />
+            <select aria-label="Revision rotation" value={revision.mode} onChange={(e) => setRevision({ ...revision, mode: e.target.value as typeof revision.mode })} className="input"><option value="all">Every day</option><option value="odd">Odd days</option><option value="even">Even days</option></select>
+          </div>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <button type="button" onClick={() => saveUserRevisionSettings(user.id, { minPasses: revision.min, maxPasses: revision.max, intervals: revision.intervals.split(",").map(Number).filter((n) => n > 0), dayMode: revision.mode }).then(() => toast.success("Revision settings saved")).catch((e: Error) => toast.error(e.message))} className="rounded-xl bg-brand px-4 py-2 text-xs font-bold text-brand-foreground">Save rules</button>
+            <button type="button" onClick={() => refreshUserPlan(user.id).then((n) => toast.success(`Plan refreshed · ${n} items added`)).catch((e: Error) => toast.error(e.message))} className="rounded-xl border border-border px-4 py-2 text-xs font-bold">Refresh today’s plan</button>
+          </div>
         </section>
 
         <section className="mt-4 rounded-2xl border border-border bg-panel p-4">

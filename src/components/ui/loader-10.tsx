@@ -1,0 +1,1 @@
+export { GooeyLoader, type GooeyLoaderProps } from "@/components/ui/gooey-loader";

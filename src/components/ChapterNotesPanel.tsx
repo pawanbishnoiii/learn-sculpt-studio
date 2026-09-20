@@ -1,11 +1,12 @@
 import { useMemo, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { ArrowDown, ArrowUp, Download, Eye, FileText, Trash2, Upload } from "lucide-react";
+import { ArrowDown, ArrowUp, Download, Eye, FileImage, FileText, Film, Trash2, Upload } from "lucide-react";
 import {
   deleteNote,
   fetchNotes,
   groupByChapter,
+  mediaKind,
   noteUrl,
   swapNotePositions,
   uploadNote,
@@ -14,6 +15,7 @@ import {
 import { fetchSubjects } from "@/lib/study";
 import { Button } from "@/components/ui/button";
 import { ResponsiveSheet } from "@/components/study-ui";
+import { GooeyLoader } from "@/components/ui/loader-10";
 
 const inputCls =
   "h-11 w-full rounded-xl border border-border bg-background px-3 text-sm outline-none focus:border-brand/60";
@@ -21,13 +23,16 @@ const inputCls =
 const kb = (bytes: number) =>
   bytes > 1024 * 1024 ? `${(bytes / 1024 / 1024).toFixed(1)} MB` : `${Math.max(1, Math.round(bytes / 1024))} KB`;
 
-/** Upload, order, preview and download the PDFs that belong to a chapter. */
+type MediaFilter = "all" | "pdf" | "image" | "video" | "document";
+
+/** Upload, order, preview and download study media that belongs to a chapter. */
 export function ChapterNotesPanel() {
   const qc = useQueryClient();
   const fileRef = useRef<HTMLInputElement>(null);
   const [subjectId, setSubjectId] = useState("");
   const [chapter, setChapter] = useState("");
   const [topic, setTopic] = useState("");
+  const [filter, setFilter] = useState<MediaFilter>("all");
   const [preview, setPreview] = useState<{ note: ChapterNote; url: string } | null>(null);
 
   const subjects = useQuery({ queryKey: ["subjects"], queryFn: fetchSubjects });
@@ -47,21 +52,23 @@ export function ChapterNotesPanel() {
         (n) => (n.subject_id ?? "") === subjectId && (n.chapter_name ?? "") === chapter,
       );
       let count = current.length;
+      let uploaded = 0;
+      const failed: string[] = [];
       for (const file of Array.from(files)) {
-        await uploadNote({
-          file,
-          subject_id: subjectId || null,
-          chapter_name: chapter || null,
-          topic: topic.trim() || null,
-          existingCount: count,
-        });
-        count += 1;
+        try {
+          await uploadNote({ file, subject_id: subjectId || null, chapter_name: chapter || null, topic: topic.trim() || null, existingCount: count });
+          count += 1;
+          uploaded += 1;
+        } catch {
+          failed.push(file.name);
+        }
       }
-      return files.length;
+      return { uploaded, failed };
     },
-    onSuccess: (n) => {
+    onSuccess: ({ uploaded, failed }) => {
       void refresh();
-      toast.success(`${n} PDF upload ho gayi`);
+      if (uploaded) toast.success(`${uploaded} file upload ho gayi`);
+      if (failed.length) toast.error(`${failed.length} file upload nahi hui: ${failed.join(", ")}`);
     },
     onError: (e: Error) => toast.error(e.message),
   });
@@ -70,7 +77,7 @@ export function ChapterNotesPanel() {
     mutationFn: (note: ChapterNote) => deleteNote(note),
     onSuccess: () => {
       void refresh();
-      toast.success("PDF hata di");
+      toast.success("File hata di");
     },
     onError: (e: Error) => toast.error(e.message),
   });
@@ -104,9 +111,9 @@ export function ChapterNotesPanel() {
           <FileText className="size-5" aria-hidden="true" />
         </span>
         <div>
-          <h2 className="text-base font-extrabold tracking-tight">Chapter PDFs</h2>
+          <h2 className="text-base font-extrabold tracking-tight">Study media library</h2>
           <p className="text-[11px] text-muted-foreground">
-            Subject aur chapter chuno, ek topic me kitni bhi PDF upload karo — series wise.
+            Subject aur chapter ke andar PDF, image, video aur documents series wise rakho.
           </p>
         </div>
       </div>
@@ -155,7 +162,7 @@ export function ChapterNotesPanel() {
       <input
         ref={fileRef}
         type="file"
-        accept="application/pdf"
+        accept=".pdf,.png,.jpg,.jpeg,.webp,.gif,.mp4,.webm,.mov,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt,.csv"
         multiple
         className="hidden"
         onChange={(e) => {
@@ -169,45 +176,53 @@ export function ChapterNotesPanel() {
         onClick={() => fileRef.current?.click()}
       >
         <Upload className="size-4" />
-        {upload.isPending ? "Uploading…" : "Upload PDFs"}
+        {upload.isPending ? "Uploading…" : "Upload files"}
       </Button>
       {!chapter ? (
         <p className="mt-2 text-[11px] text-muted-foreground">Pehle chapter select karo, phir upload karo.</p>
       ) : null}
 
+      <div className="mt-5 flex gap-2 overflow-x-auto pb-1" aria-label="Filter media">
+        {(["all", "pdf", "image", "video", "document"] as const).map((kind) => (
+          <Button key={kind} type="button" size="sm" variant={filter === kind ? "default" : "outline"} onClick={() => setFilter(kind)} className="shrink-0 capitalize">
+            {kind}
+          </Button>
+        ))}
+      </div>
+
       {notes.isLoading ? (
-        <p className="mt-5 text-sm text-muted-foreground">Loading…</p>
+        <GooeyLoader className="mt-8" label="Loading media" />
       ) : groups.length === 0 ? (
-        <p className="mt-5 text-sm text-muted-foreground">Abhi koi PDF nahi. Upar se pehli PDF upload karo.</p>
+        <p className="mt-5 text-sm text-muted-foreground">Abhi koi file nahi. Upar se pehli file upload karo.</p>
       ) : (
         <div className="mt-5 space-y-4">
           {groups.map((group) => (
             <div key={group.key} className="rounded-2xl border border-border bg-panel p-3">
               <p className="text-sm font-extrabold">{group.chapter_name ?? "General"}</p>
               <p className="text-[11px] font-semibold text-muted-foreground">
-                {subjectName(group.subject_id)} · {group.notes.length} PDF
+                {subjectName(group.subject_id)} · {group.notes.length} files
               </p>
               <ul className="mt-3 space-y-2">
-                {group.notes.map((note, index) => (
+                {group.notes.filter((note) => filter === "all" || mediaKind(note.mime_type, note.title) === filter).map((note, index, visible) => (
                   <li
                     key={note.id}
-                    className="flex items-center gap-2 rounded-xl border border-border bg-background p-2.5"
+                    className="grid grid-cols-[auto_minmax(0,1fr)] gap-2 rounded-xl border border-border bg-background p-2.5 sm:grid-cols-[auto_minmax(0,1fr)_auto] sm:items-center"
                   >
                     <span className="num grid size-8 shrink-0 place-items-center rounded-full bg-secondary text-xs font-bold">
                       {index + 1}
                     </span>
-                    <span className="min-w-0 flex-1">
+                    <span className="min-w-0">
                       <span className="block truncate text-sm font-bold">{note.title}</span>
                       <span className="block truncate text-[11px] text-muted-foreground">
-                        {note.topic ? `${note.topic} · ` : ""}
-                        {kb(note.file_size)}
+                        {note.topic ? `${note.topic} · ` : ""}{mediaKind(note.mime_type, note.title)} · {kb(note.file_size)}
                       </span>
                     </span>
+                    <div className="col-span-2 flex flex-wrap justify-end gap-1 sm:col-span-1 sm:flex-nowrap">
                     <IconBtn
                       label="Move up"
                       disabled={index === 0 || move.isPending}
                       onClick={() => {
-                        const prev = group.notes[index - 1];
+                         const prev = visible[index - 1];
                         if (prev) move.mutate({ a: note, b: prev });
                       }}
                     >
@@ -215,23 +230,23 @@ export function ChapterNotesPanel() {
                     </IconBtn>
                     <IconBtn
                       label="Move down"
-                      disabled={index === group.notes.length - 1 || move.isPending}
+                       disabled={index === visible.length - 1 || move.isPending}
                       onClick={() => {
-                        const next = group.notes[index + 1];
+                         const next = visible[index + 1];
                         if (next) move.mutate({ a: note, b: next });
                       }}
                     >
                       <ArrowDown className="size-4" />
                     </IconBtn>
-                    <IconBtn label="Preview PDF" onClick={() => void open(note, false)}>
+                    <IconBtn label="Preview file" onClick={() => void open(note, false)}>
                       <Eye className="size-4" />
                     </IconBtn>
-                    <IconBtn label="Download PDF" onClick={() => void open(note, true)}>
+                    <IconBtn label="Download file" onClick={() => void open(note, true)}>
                       <Download className="size-4" />
                     </IconBtn>
-                    <IconBtn label="Delete PDF" danger onClick={() => remove.mutate(note)}>
+                    <IconBtn label="Delete file" danger onClick={() => remove.mutate(note)}>
                       <Trash2 className="size-4" />
-                    </IconBtn>
+                    </IconBtn></div>
                   </li>
                 ))}
               </ul>
@@ -242,14 +257,22 @@ export function ChapterNotesPanel() {
 
       {preview ? (
         <ResponsiveSheet open title={preview.note.title} onClose={() => setPreview(null)}>
-          <object data={preview.url} type="application/pdf" className="h-[70vh] w-full rounded-xl border border-border">
-            <a href={preview.url} target="_blank" rel="noreferrer" className="text-sm font-bold underline">
-              Open PDF in a new tab
-            </a>
-          </object>
+          <MediaPreview note={preview.note} url={preview.url} />
         </ResponsiveSheet>
       ) : null}
     </section>
+  );
+}
+
+function MediaPreview({ note, url }: { note: ChapterNote; url: string }) {
+  const kind = mediaKind(note.mime_type, note.title);
+  if (kind === "image") return <img src={url} alt={note.title} className="max-h-[70vh] w-full rounded-xl object-contain" />;
+  if (kind === "video") return <video src={url} controls playsInline className="max-h-[70vh] w-full rounded-xl bg-foreground" />;
+  if (kind === "pdf") return <object data={url} type="application/pdf" className="h-[70vh] w-full rounded-xl border border-border"><a href={url} target="_blank" rel="noreferrer">Open PDF</a></object>;
+  return (
+    <div className="grid min-h-64 place-items-center rounded-xl border border-border bg-secondary/40 p-6 text-center">
+      <div><FileText className="mx-auto size-10 text-muted-foreground" /><p className="mt-3 text-sm font-bold">Preview is not available for this format.</p><Button asChild className="mt-4"><a href={url} target="_blank" rel="noreferrer"><Download className="size-4" /> Download file</a></Button></div>
+    </div>
   );
 }
 

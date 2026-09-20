@@ -151,39 +151,28 @@
   color: transparent;
 }
 
-.gooey-loader {
+.gooey-loader-10 {
   position: relative;
-  width: 76px;
-  height: 30px;
-  filter: url("#none");
+  width: 84px;
+  height: 34px;
+  border-bottom: 2px solid var(--gooey-border-color);
+  filter: url("#gooey-loader-filter");
 }
 
-.gooey-loader span {
+.gooey-loader-10__ball {
   position: absolute;
-  top: 5px;
-  left: 5px;
-  width: 20px;
-  height: 20px;
+  bottom: 4px;
+  width: 24px;
+  height: 24px;
   border-radius: 999px;
-  background: var(--lavender);
-  animation: gooey-travel 1.35s var(--ease-in-out) infinite;
 }
-
-.gooey-loader span:nth-child(2) { background: var(--blue); animation-delay: -0.18s; }
-.gooey-loader span:nth-child(3) { background: var(--pink); animation-delay: -0.36s; }
-.gooey-loader span:nth-child(4) { background: var(--yellow); animation-delay: -0.54s; }
-
-@keyframes gooey-travel {
-  0%, 100% { transform: translateX(0) scale(0.78); opacity: 0.72; }
-  50% { transform: translateX(46px) scale(1); opacity: 1; }
-}
+.gooey-loader-10__ball--one { left: 16px; background: var(--gooey-primary-color); animation: gooey-cross-one 1.25s var(--ease-in-out) infinite; }
+.gooey-loader-10__ball--two { right: 16px; background: var(--gooey-secondary-color); animation: gooey-cross-two 1.25s var(--ease-in-out) infinite; }
+@keyframes gooey-cross-one { 50% { transform: translateX(28px) scale(1.12); } }
+@keyframes gooey-cross-two { 50% { transform: translateX(-28px) scale(0.88); } }
 
 @media (prefers-reduced-motion: reduce) {
-  .gooey-loader span { animation: none; }
-  .gooey-loader span:nth-child(1) { transform: translateX(0); }
-  .gooey-loader span:nth-child(2) { transform: translateX(16px); }
-  .gooey-loader span:nth-child(3) { transform: translateX(32px); }
-  .gooey-loader span:nth-child(4) { transform: translateX(48px); }
+  .gooey-loader-10__ball { animation: none; }
 }
 
 @layer base {
@@ -528,6 +517,25 @@
      mobile). Scrolling with the content is visually identical here and cheap. */
   background-attachment: scroll, scroll, scroll;
 }
+
+:root[data-background="clean"] .app-backdrop { background-image: none; }
+:root[data-background="grid"] .app-backdrop {
+  background-image: linear-gradient(to right, color-mix(in oklab, var(--blue) 9%, transparent) 1px, transparent 1px), linear-gradient(to bottom, color-mix(in oklab, var(--lavender) 8%, transparent) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+:root[data-background="colorful"] .app-backdrop {
+  background-image: linear-gradient(135deg, color-mix(in oklab, var(--blue-soft) 55%, transparent), transparent 42%), linear-gradient(315deg, color-mix(in oklab, var(--lavender-soft) 52%, transparent), transparent 48%);
+}
+
+.timer-ambient::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 35%, color-mix(in oklab, var(--blue) 22%, transparent), transparent 48%);
+  animation: timer-breathe 6s ease-in-out infinite alternate;
+}
+@keyframes timer-breathe { to { opacity: 0.45; transform: scale(1.08); } }
 
 /* Smooth-scroll baseline: momentum on iOS, no rubber-band chaining, and a hint
    to the compositor that the page scrolls. */
