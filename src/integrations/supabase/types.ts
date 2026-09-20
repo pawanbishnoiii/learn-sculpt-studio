@@ -1805,11 +1805,14 @@ export type Database = {
       }
       user_settings: {
         Row: {
+          accent_style: string
           ai_autopilot: boolean
           ai_tone: string
           auto_stop_hours: number
           background_style: string
           daily_goal_hours: number
+          gender_palette_suggested: boolean
+          theme_mode: string
           timer_background_effects: boolean
           timer_keep_awake: boolean
           timer_show_details: boolean
@@ -1821,11 +1824,14 @@ export type Database = {
           widget_layout: Json
         }
         Insert: {
+          accent_style?: string
           ai_autopilot?: boolean
           ai_tone?: string
           auto_stop_hours?: number
           background_style?: string
           daily_goal_hours?: number
+          gender_palette_suggested?: boolean
+          theme_mode?: string
           timer_background_effects?: boolean
           timer_keep_awake?: boolean
           timer_show_details?: boolean
@@ -1837,11 +1843,14 @@ export type Database = {
           widget_layout?: Json
         }
         Update: {
+          accent_style?: string
           ai_autopilot?: boolean
           ai_tone?: string
           auto_stop_hours?: number
           background_style?: string
           daily_goal_hours?: number
+          gender_palette_suggested?: boolean
+          theme_mode?: string
           timer_background_effects?: boolean
           timer_keep_awake?: boolean
           timer_show_details?: boolean

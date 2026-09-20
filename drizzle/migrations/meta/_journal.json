@@ -8,6 +8,13 @@
       "when": 1789904847738,
       "tag": "0000_secure_chapter_media_storage",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1789904879097,
+      "tag": "0001_add_personal_appearance_settings",
+      "breakpoints": true
     }
   ]
 }
