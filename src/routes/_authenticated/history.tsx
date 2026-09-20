@@ -7,7 +7,6 @@ import historyArt from "@/assets/owl-sleepy.png";
 import { ListSkeleton } from "@/components/ui/skeletons";
 import {
   createManualBreak,
-  createManualSession,
   deleteBreak,
   deleteSession,
   fetchAppSettings,
