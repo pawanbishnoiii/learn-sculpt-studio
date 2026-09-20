@@ -37,8 +37,12 @@ function SettingsPage() {
   const [name, setName] = useState("");
 
   useEffect(() => {
-    if (settings.data) setDraft(settings.data);
-  }, [settings.data]);
+    if (!settings.data) return;
+    setDraft(settings.data);
+    if (settings.data.theme_mode === "light" || settings.data.theme_mode === "dark") setTheme(settings.data.theme_mode);
+    if (["classic", "sky", "flame", "rose"].includes(settings.data.accent_style)) setAccentStyle(settings.data.accent_style as "classic" | "sky" | "flame" | "rose");
+    if (settings.data.background_style) setBackgroundStyle(settings.data.background_style);
+  }, [settings.data, setTheme, setAccentStyle, setBackgroundStyle]);
 
   useEffect(() => {
     if (profile.data?.display_name) setName(profile.data.display_name);

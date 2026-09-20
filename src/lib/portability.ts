@@ -122,7 +122,7 @@ export function saveBlob(filename: string, blob: Blob) {
 }
 
 export type ImportPreview = {
-  zip: JSZip;
+  zip: JSZip | null;
   manifest: Record<string, unknown>;
   summary: ExportSummary;
   exportedAt: string | null;
@@ -131,10 +131,16 @@ export type ImportPreview = {
 
 /** Read the uploaded ZIP and describe what it would add, before writing. */
 export async function readImportZip(file: File): Promise<ImportPreview> {
-  const zip = await JSZip.loadAsync(file);
-  const entry = zip.file("data.json");
-  if (!entry) throw new Error("Ye Bnoy Study export file nahi lag rahi");
-  const manifest = JSON.parse(await entry.async("string")) as Record<string, unknown>;
+  let zip: JSZip | null = null;
+  let manifest: Record<string, unknown>;
+  if (file.name.toLowerCase().endsWith(".json") || file.type === "application/json") {
+    manifest = JSON.parse(await file.text()) as Record<string, unknown>;
+  } else {
+    zip = await JSZip.loadAsync(file);
+    const entry = zip.file("data.json");
+    if (!entry) throw new Error("Ye Bnoy Study export file nahi lag rahi");
+    manifest = JSON.parse(await entry.async("string")) as Record<string, unknown>;
+  }
   if (!VALID_FORMATS.has(String(manifest["format"] ?? ""))) throw new Error("Ye valid Bnoy Study export nahi hai");
   const version = Number(manifest["version"] ?? 1);
   if (!Number.isFinite(version) || version < 1 || version > 2) throw new Error("Is export version ko app support nahi karti");
@@ -194,7 +200,7 @@ export async function applyImport(preview: ImportPreview, onProgress?: (label: s
     const row = preview.manifest["profile"] as Row;
     const allowed = ["first_name", "last_name", "display_name", "bio", "phone", "gender", "age", "timezone", "avatar_url", "avg_study_hours"];
     const patch = Object.fromEntries(allowed.filter((key) => key in row).map((key) => [key, row[key]]));
-    const { error } = await supabase.from("profiles").update(patch).eq("id", uid);
+    const { error } = await supabase.from("profiles").update(patch as never).eq("id", uid);
     if (error) failures.push(`Profile: ${error.message}`);
   }
 
@@ -276,7 +282,7 @@ export async function applyImport(preview: ImportPreview, onProgress?: (label: s
   let restored = 0;
   for (const row of list("chapter_notes")) {
     const id = String(row["id"]);
-    const file = preview.zip.file(new RegExp(`^(media/${id}\\.[^/]+|pdfs/${id}\\.pdf)$`, "i"))[0];
+    const file = preview.zip?.file(new RegExp(`^(media/${id}\\.[^/]+|pdfs/${id}\\.pdf)$`, "i"))[0];
     if (!file) continue;
     const blob = await file.async("blob");
     try {

@@ -78,7 +78,7 @@ export function DataTransferCard() {
         <input
           ref={fileRef}
           type="file"
-          accept=".zip,application/zip"
+          accept=".zip,.json,application/zip,application/json"
           className="hidden"
           onChange={(e) => {
             const file = e.target.files?.[0];
