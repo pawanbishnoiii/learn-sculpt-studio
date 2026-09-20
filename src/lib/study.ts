@@ -70,7 +70,10 @@ export type Settings = {
   ai_autopilot: boolean;
   week_starts_monday: boolean;
   widget_layout: unknown;
-  background_style: "clean" | "grid" | "colorful";
+  background_style: "clean" | "grid" | "colorful" | "bloom" | "focus" | "rose";
+  theme_mode: "light" | "dark";
+  accent_style: "classic" | "sky" | "flame" | "rose";
+  gender_palette_suggested: boolean;
   timer_background_effects: boolean;
   timer_show_details: boolean;
   timer_sounds_haptics: boolean;
@@ -442,14 +445,14 @@ export async function fetchProfile() {
   const user_id = await uid();
   const { data, error } = await supabase
     .from("profiles")
-    .select("id,display_name,avatar_url,timezone")
+    .select("id,display_name,avatar_url,timezone,gender")
     .eq("id", user_id)
     .maybeSingle();
   if (error) throw error;
   return data;
 }
 
-export async function saveProfile(patch: { display_name?: string; timezone?: string }) {
+export async function saveProfile(patch: { display_name?: string; timezone?: string; gender?: string }) {
   const user_id = await uid();
   const { error } = await supabase.from("profiles").upsert({ id: user_id, ...patch });
   if (error) throw error;

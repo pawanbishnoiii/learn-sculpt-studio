@@ -7,7 +7,7 @@ import { Menu, X, CalendarDays, Clock3, History, Target, ArrowRight, Check } fro
 import { useRef, useState } from "react";
 import * as Accordion from "@radix-ui/react-accordion";
 import { supabase } from "@/integrations/supabase/client";
-import appLogo from "@/assets/chronodeck-logo.png";
+import appLogo from "@/assets/bnoy-b-logo.png.asset.json";
 import pathArt from "@/assets/chronodeck-learning-path.png";
 import { ActivityArtwork, type ActivityKind } from "@/components/study-ui";
 import { ShaderBackground } from "@/components/ui/frorest-green";
