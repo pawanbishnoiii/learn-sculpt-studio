@@ -527,6 +527,16 @@
   background-image: linear-gradient(135deg, color-mix(in oklab, var(--blue-soft) 55%, transparent), transparent 42%), linear-gradient(315deg, color-mix(in oklab, var(--lavender-soft) 52%, transparent), transparent 48%);
 }
 
+.timer-ambient::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 35%, color-mix(in oklab, var(--blue) 22%, transparent), transparent 48%);
+  animation: timer-breathe 6s ease-in-out infinite alternate;
+}
+@keyframes timer-breathe { to { opacity: 0.45; transform: scale(1.08); } }
+
 /* Smooth-scroll baseline: momentum on iOS, no rubber-band chaining, and a hint
    to the compositor that the page scrolls. */
 html {

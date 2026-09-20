@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AdminPushPanel } from "@/components/admin/AdminPushPanel";
+import { ScheduledEmailPanel } from "@/components/admin/ScheduledEmailPanel";
 
 export const Route = createFileRoute("/_authenticated/admin/notifications")({
   ssr: false,
@@ -20,6 +21,7 @@ export const Route = createFileRoute("/_authenticated/admin/notifications")({
         <p className="mt-1 text-sm text-muted-foreground">Compose, target, schedule and review delivery.</p>
       </header>
       <AdminPushPanel />
+      <ScheduledEmailPanel />
     </div>
   ),
 });

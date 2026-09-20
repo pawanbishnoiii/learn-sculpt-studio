@@ -9,12 +9,14 @@ import { notifySelf } from "@/lib/notifications.functions";
 import {
   endBreak,
   fetchOpenBreak,
+  fetchSettings,
   fetchRunningSession,
   startBreak,
   stopSession,
   type Session,
 } from "@/lib/study";
 import { SlidingNumber } from "@/components/ui/sliding-number";
+import { GooeyLoader } from "@/components/ui/loader-10";
 
 const SNAPSHOT_KEY = "chronodeck.running-session";
 
@@ -70,11 +72,20 @@ function TimerPage() {
 
   const running = useQuery({ queryKey: ["running"], queryFn: fetchRunningSession, refetchInterval: 60_000 });
   const openBreak = useQuery({ queryKey: ["open-break"], queryFn: fetchOpenBreak });
+  const settings = useQuery({ queryKey: ["settings"], queryFn: fetchSettings });
+  const timerPrefs = settings.data;
 
   useEffect(() => {
     const t = setInterval(() => setTick((n) => n + 1), 1000);
     return () => clearInterval(t);
   }, []);
+
+  useEffect(() => {
+    if (!timerPrefs?.timer_keep_awake || !("wakeLock" in navigator)) return;
+    let lock: WakeLockSentinel | null = null;
+    void navigator.wakeLock.request("screen").then((value) => { lock = value; }).catch(() => {});
+    return () => { void lock?.release(); };
+  }, [timerPrefs?.timer_keep_awake]);
   void tick;
 
   useEffect(() => {
@@ -207,8 +218,7 @@ function TimerPage() {
     return (
       <div className="fixed inset-0 z-[70] grid place-items-center bg-foreground text-background">
         <div className="flex flex-col items-center gap-3">
-          <span className="size-8 animate-spin rounded-full border-2 border-white/20 border-t-white" />
-          <p className="font-mono text-[10px] tracking-[0.35em] text-white/40 uppercase">loading timer</p>
+          <GooeyLoader label="Loading timer" />
         </div>
       </div>
     );
@@ -216,7 +226,7 @@ function TimerPage() {
 
 
   return (
-    <div className={`fixed inset-0 z-[70] flex flex-col text-white transition-colors duration-300 ${onBreak ? "bg-[#151d30]" : "bg-[#0b1020]"}`}>
+    <div className={`fixed inset-0 z-[70] flex flex-col text-white transition-colors duration-300 ${timerPrefs?.timer_background_effects ? "timer-ambient" : ""} ${onBreak ? "bg-[#151d30]" : "bg-[#0b1020]"}`}>
       {/* Top bar — leave the timer, it keeps running */}
       <div className="flex shrink-0 items-center justify-between px-4 pt-[max(0.75rem,env(safe-area-inset-top))]">
         <button
@@ -257,8 +267,7 @@ function TimerPage() {
           <SlidingNumber value={focusSeconds % 60} padStart />s
         </span>
 
-        <p className="mt-8 text-base font-semibold text-white/90">{s.subject_name ?? "Study"}</p>
-        {s.topic ? <p className="mt-1.5 max-w-sm truncate text-sm text-white/50">{s.topic}</p> : null}
+        {timerPrefs?.timer_show_details !== false ? <><p className="mt-8 text-base font-semibold text-white/90">{s.subject_name ?? "Study"}</p>{s.topic ? <p className="mt-1.5 max-w-sm truncate text-sm text-white/50">{s.topic}</p> : null}</> : null}
       </div>
 
       {/* Controls — fixed to the bottom, aligned in one grid, never overflowing */}
