@@ -501,7 +501,7 @@ export function EmailDelivery() {
             <input
               value={v.from_name ?? ""}
               onChange={(e) => set({ from_name: e.target.value })}
-              placeholder="Chronodeck"
+              placeholder="Bnoy Study"
               className="input mt-1"
             />
           </div>

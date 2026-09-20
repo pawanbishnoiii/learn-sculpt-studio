@@ -2,21 +2,21 @@
  * Client platform detection — lets the admin console tell whether an account is
  * signing in from the Android app shell or a normal web browser.
  *
- * The Android wrapper is expected to expose `window.ChronodeckApp` (JS bridge)
- * or append `ChronodeckApp/<version>` to the WebView user-agent.
+ * The Android wrapper is expected to expose `window.BnoyStudyApp` (JS bridge)
+ * or append `BnoyStudyApp/<version>` to the WebView user-agent.
  */
 export type Platform = "android-app" | "android-web" | "ios" | "web";
 
 declare global {
   interface Window {
-    ChronodeckApp?: { version?: string };
+    BnoyStudyApp?: { version?: string };
   }
 }
 
 export function detectPlatform(): Platform {
   if (typeof window === "undefined") return "web";
   const ua = navigator.userAgent || "";
-  if (window.ChronodeckApp || /ChronodeckApp/i.test(ua)) return "android-app";
+  if (window.BnoyStudyApp || /BnoyStudyApp/i.test(ua)) return "android-app";
   if (/Android/i.test(ua)) return "android-web";
   if (/iPhone|iPad|iPod/i.test(ua)) return "ios";
   return "web";
@@ -37,7 +37,7 @@ export function platformLabel(p: Platform | string | null | undefined) {
 
 export function appVersion() {
   if (typeof window === "undefined") return null;
-  return window.ChronodeckApp?.version ?? null;
+  return window.BnoyStudyApp?.version ?? null;
 }
 
 /**

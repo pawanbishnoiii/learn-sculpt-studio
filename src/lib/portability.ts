@@ -119,7 +119,7 @@ export type ImportPreview = {
 export async function readImportZip(file: File): Promise<ImportPreview> {
   const zip = await JSZip.loadAsync(file);
   const entry = zip.file("data.json");
-  if (!entry) throw new Error("Ye Chronodeck export file nahi lag rahi");
+  if (!entry) throw new Error("Ye Bnoy Study export file nahi lag rahi");
   const manifest = JSON.parse(await entry.async("string")) as Record<string, unknown>;
   if (manifest["format"] !== "chronodeck-user-export") throw new Error("File format match nahi hua");
   const list = (key: string) => (Array.isArray(manifest[key]) ? (manifest[key] as Row[]) : []);

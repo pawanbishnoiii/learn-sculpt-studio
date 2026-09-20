@@ -21,13 +21,13 @@ import emptyCalendar from "@/assets/chronodeck-empty-calendar.png";
 export const Route = createFileRoute("/_authenticated/classes")({
   head: () => ({
     meta: [
-      { title: "Online classes — Chronodeck Study OS" },
+      { title: "Online classes — Bnoy Study OS" },
       {
         name: "description",
         content:
           "Manage your online classes by subject and chapter, and revise the notes you made on a spaced schedule.",
       },
-      { property: "og:title", content: "Online classes — Chronodeck Study OS" },
+      { property: "og:title", content: "Online classes — Bnoy Study OS" },
       {
         property: "og:description",
         content: "Track completed classes and revise class notes on a spaced schedule.",

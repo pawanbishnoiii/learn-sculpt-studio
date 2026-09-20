@@ -5,13 +5,13 @@ export const Route = createFileRoute("/")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "Chronodeck — Sign in to your AI Study OS" },
+      { title: "Bnoy Study — Sign in to your AI Study OS" },
       {
         name: "description",
         content:
-          "Sign in to Chronodeck to run your focus timer, weekly timetable, targets and AI study manager.",
+          "Sign in to Bnoy Study to run your focus timer, weekly timetable, targets and AI study manager.",
       },
-      { property: "og:title", content: "Chronodeck — AI Study OS" },
+      { property: "og:title", content: "Bnoy Study — AI Study OS" },
       {
         property: "og:description",
         content: "Sign in with Google to track study hours, classes, breaks and targets.",

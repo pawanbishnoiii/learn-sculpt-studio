@@ -53,12 +53,12 @@ export const Route = createFileRoute("/_authenticated/study")({
   }),
   head: () => ({
     meta: [
-      { title: "Study Mode — Chronodeck" },
+      { title: "Study Mode — Bnoy Study" },
       {
         name: "description",
         content: "Pick a subject, choose a chapter and start the distraction-free focus timer in three guided steps.",
       },
-      { property: "og:title", content: "Study Mode — Chronodeck" },
+      { property: "og:title", content: "Study Mode — Bnoy Study" },
       {
         property: "og:description",
         content: "Set up your study session in three steps and start the clean full-screen focus timer.",

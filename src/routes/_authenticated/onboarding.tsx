@@ -14,12 +14,12 @@ export const Route = createFileRoute("/_authenticated/onboarding")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "Set up your profile — Chronodeck" },
+      { title: "Set up your profile — Bnoy Study" },
       {
         name: "description",
         content: "Three quick steps: your details, your study rhythm and your subjects.",
       },
-      { property: "og:title", content: "Set up your profile — Chronodeck" },
+      { property: "og:title", content: "Set up your profile — Bnoy Study" },
       { property: "og:description", content: "A 60 second setup before your study dashboard opens." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -86,7 +86,7 @@ function OnboardingPage() {
     },
     onSuccess: async () => {
       await fetchMyProfile();
-      toast.success("Welcome to Chronodeck");
+      toast.success("Welcome to Bnoy Study");
       navigate({ to: "/today", replace: true });
     },
     onError: (e: Error) => toast.error(e.message),

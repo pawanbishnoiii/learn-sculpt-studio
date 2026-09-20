@@ -5,9 +5,9 @@ export const Route = createFileRoute("/_authenticated/admin/schedule")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "Schedule builder — Chronodeck Admin" },
+      { title: "Schedule builder — Bnoy Study Admin" },
       { name: "description", content: "Add timetable blocks and preview the daily, weekly and monthly study schedule." },
-      { property: "og:title", content: "Schedule builder — Chronodeck Admin" },
+      { property: "og:title", content: "Schedule builder — Bnoy Study Admin" },
       { property: "og:description", content: "Build subjects and timetable blocks with day, week and month views." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

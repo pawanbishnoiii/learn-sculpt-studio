@@ -1,4 +1,4 @@
-/* Chronodeck push service worker. Config arrives via the registration query string
+/* Bnoy Study push service worker. Config arrives via the registration query string
    because a service worker cannot read import.meta.env. */
 importScripts("https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js");
 importScripts("https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging-compat.js");
@@ -23,7 +23,7 @@ const firebaseConfig = Object.fromEntries(new URL(self.location).searchParams);
 const messaging = firebaseConfig.apiKey ? (firebase.initializeApp(firebaseConfig), firebase.messaging()) : null;
 
 messaging?.onBackgroundMessage((payload) => {
-  const title = payload.notification?.title || "Chronodeck";
+  const title = payload.notification?.title || "Bnoy Study";
   self.registration.showNotification(title, {
     body: payload.notification?.body || "",
     icon: "/favicon.ico",

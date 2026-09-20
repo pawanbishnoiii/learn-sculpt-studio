@@ -11,5 +11,5 @@ export function InstallAppButton() {
     return () => window.removeEventListener("beforeinstallprompt", receive);
   }, []);
   if (!prompt) return null;
-  return <button className="flex min-h-11 w-full items-center gap-3 rounded-xl px-3 text-left text-sm font-semibold hover:bg-secondary" onClick={async () => { await prompt.prompt(); const result = await prompt.userChoice; if (result.outcome === "accepted") setPrompt(null); }}><Download className="size-4" />Install Chronodeck</button>;
+  return <button className="flex min-h-11 w-full items-center gap-3 rounded-xl px-3 text-left text-sm font-semibold hover:bg-secondary" onClick={async () => { await prompt.prompt(); const result = await prompt.userChoice; if (result.outcome === "accepted") setPrompt(null); }}><Download className="size-4" />Install Bnoy Study</button>;
 }
