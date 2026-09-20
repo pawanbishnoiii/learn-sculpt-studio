@@ -39,6 +39,7 @@ import { StreakFlame } from "@/components/StreakFlame";
 import { InstallAppButton } from "@/components/InstallAppButton";
 import { useRealtimeSync } from "@/hooks/useRealtimeSync";
 import { OfflineStatus } from "@/components/OfflineStatus";
+import { GooeyLoader } from "@/components/ui/loader-10";
 
 
 const NAV = [
@@ -153,6 +154,10 @@ export function AppShell({ children }: { children: ReactNode }) {
   const initials =
     (profile.data?.first_name?.[0] ?? profile.data?.display_name?.[0] ?? "S") +
     (profile.data?.last_name?.[0] ?? "T");
+
+  if ((profile.isPending || settings.isPending || xp.isPending) && !profile.data) {
+    return <div className="grid min-h-screen place-items-center bg-background"><GooeyLoader label="Your study space taiyar ho raha hai" /></div>;
+  }
 
   return (
     <div className={`app-backdrop min-h-screen text-foreground ${hideNav ? "" : "lg:grid lg:grid-cols-[232px_minmax(0,1fr)]"}`}>
