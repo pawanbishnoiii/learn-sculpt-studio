@@ -48,8 +48,8 @@ export async function buildExportZip(): Promise<{ blob: Blob; summary: ExportSum
   const user = await currentUser();
 
   const manifest: Record<string, unknown> = {
-    format: "chronodeck-user-export",
-    version: 1,
+    format: "bnoy-study-user-export",
+    version: 2,
     exported_at: new Date().toISOString(),
     source_email: user.email ?? null,
   };
@@ -76,11 +76,12 @@ export async function buildExportZip(): Promise<{ blob: Blob; summary: ExportSum
   for (const table of SIMPLE_TABLES) manifest[table] = await readAll(table);
 
   const zip = new JSZip();
-  const folder = zip.folder("pdfs");
+  const folder = zip.folder("media");
   for (const note of notes) {
     try {
       const blob = await downloadNoteBlob(note.storage_path);
-      folder?.file(`${note.id}.pdf`, blob);
+      const extension = note.title.split(".").pop()?.replace(/[^a-z0-9]/gi, "") || "bin";
+      folder?.file(`${note.id}.${extension}`, blob);
     } catch {
       // A missing file should not break the whole export.
     }
@@ -243,10 +244,11 @@ export async function applyImport(preview: ImportPreview, onProgress?: (label: s
     }
   }
 
-  onProgress?.("PDF notes");
+  onProgress?.("Study media");
   let restored = 0;
   for (const row of list("chapter_notes")) {
-    const file = preview.zip.file(`pdfs/${String(row["id"])}.pdf`);
+    const id = String(row["id"]);
+    const file = preview.zip.file(new RegExp(`^(media/${id}\\.[^/]+|pdfs/${id}\\.pdf)$`, "i"))[0];
     if (!file) continue;
     const blob = await file.async("blob");
     try {
@@ -257,6 +259,7 @@ export async function applyImport(preview: ImportPreview, onProgress?: (label: s
         chapter_name: str(row["chapter_name"]),
         topic: str(row["topic"]),
         position: Number(row["position"]) || restored + 1,
+        mime_type: str(row["mime_type"]) ?? undefined,
       });
       restored += 1;
     } catch {
