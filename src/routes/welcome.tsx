@@ -7,7 +7,7 @@ import { Menu, X, CalendarDays, Clock3, History, Target, ArrowRight, Check } fro
 import { useRef, useState } from "react";
 import * as Accordion from "@radix-ui/react-accordion";
 import { supabase } from "@/integrations/supabase/client";
-import appLogo from "@/assets/chronodeck-logo.png";
+import appLogo from "@/assets/bnoy-b-logo.png.asset.json";
 import pathArt from "@/assets/chronodeck-learning-path.png";
 import { ActivityArtwork, type ActivityKind } from "@/components/study-ui";
 import { ShaderBackground } from "@/components/ui/frorest-green";
@@ -113,7 +113,7 @@ function WelcomePage() {
       <header className="sticky top-0 z-40 border-b border-border bg-background/95 px-4 backdrop-blur-sm">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between">
           <a href="#top" className="flex items-center gap-2.5 font-bold">
-            <img src={appLogo} width="36" height="36" alt="" className="size-9 rounded-xl" />
+            <img src={appLogo.url} width="36" height="36" alt="Bnoy Study" className="size-9 rounded-xl" />
             Bnoy Study
           </a>
           <nav aria-label="Main navigation" className="hidden items-center gap-7 md:flex">

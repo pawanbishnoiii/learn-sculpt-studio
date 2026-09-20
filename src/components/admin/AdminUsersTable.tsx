@@ -123,13 +123,13 @@ export function AdminUsersTable() {
       ) : rows.length === 0 ? (
         <p className="p-5 text-sm text-muted-foreground">No accounts match this search.</p>
       ) : (
-        <><div className="grid gap-3 p-3 md:hidden">
+        <><div className="grid gap-3 p-3 lg:hidden">
           {rows.map((u) => <button key={u.id} type="button" onClick={() => setSelected(u)} className="rounded-2xl border border-border bg-background p-4 text-left">
             <span className="flex items-center gap-3"><span className="grid size-10 shrink-0 place-items-center rounded-full bg-brand/15 text-xs font-bold">{(u.display_name ?? u.email ?? "?").slice(0,1).toUpperCase()}</span><span className="min-w-0"><span className="block truncate text-sm font-bold">{u.display_name ?? "Unnamed"}</span><span className="block truncate text-xs text-muted-foreground">{u.email ?? "no email"}</span></span></span>
             <span className="mt-3 grid grid-cols-3 gap-2 text-center text-xs"><span className="rounded-xl bg-secondary p-2">{fmtHM(u.total_minutes)}<small className="block text-muted-foreground">studied</small></span><span className="rounded-xl bg-secondary p-2">{u.session_count}<small className="block text-muted-foreground">sessions</small></span><span className="rounded-xl bg-secondary p-2">{relativeTime(u.last_seen_at)}<small className="block text-muted-foreground">seen</small></span></span>
           </button>)}
-        </div><div className="hidden overflow-x-auto md:block">
-          <table className="w-full min-w-[860px] text-sm">
+        </div><div className="hidden overflow-x-auto lg:block">
+          <table className="w-full min-w-[760px] text-sm">
             <thead className="sticky top-0 z-10 bg-panel/95 backdrop-blur">
               <tr className="border-b border-border">
                 {head("name", "Account")}
@@ -336,7 +336,7 @@ function UserDetailPanel({ user, onClose }: { user: AdminUser; onClose: () => vo
             <p className="mt-3 text-xs text-muted-foreground">No sign-ins recorded in the last 90 days.</p>
           ) : (
             <div className="mt-3 overflow-x-auto">
-              <table className="w-full min-w-[560px] text-left text-xs">
+              <table className="w-full min-w-[480px] text-left text-xs">
                 <thead>
                   <tr className="border-b border-border text-[10px] font-bold tracking-wide text-muted-foreground uppercase">
                     <th className="py-2 pr-3">When</th>

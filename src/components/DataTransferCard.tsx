@@ -1,9 +1,9 @@
 import { useRef, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { Download, Upload } from "lucide-react";
+import { BookOpen, Download, ShieldCheck, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { applyImport, buildExportZip, readImportZip, saveBlob, type ImportPreview } from "@/lib/portability";
+import { applyImport, buildExportZip, readImportZip, saveBlob, type ImportPreview, type TransferMode } from "@/lib/portability";
 
 /** Export everything you own to one file, or bring another export into this account. */
 export function DataTransferCard() {
@@ -11,12 +11,13 @@ export function DataTransferCard() {
   const fileRef = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState<string | null>(null);
   const [preview, setPreview] = useState<ImportPreview | null>(null);
+  const [mode, setMode] = useState<TransferMode>("full");
 
   const exportAll = async () => {
     setBusy("Export ban raha hai…");
     try {
-      const { blob, summary } = await buildExportZip();
-      saveBlob(`chronodeck-export-${new Date().toISOString().slice(0, 10)}.zip`, blob);
+      const { blob, summary } = await buildExportZip(mode);
+      saveBlob(`bnoy-study-${mode}-${new Date().toISOString().slice(0, 10)}.zip`, blob);
       toast.success(`Export ready — ${summary.subjects} subjects, ${summary.sessions} sessions, ${summary.notes} PDFs`);
     } catch (e) {
       toast.error((e as Error).message);
@@ -40,7 +41,8 @@ export function DataTransferCard() {
     if (!preview) return;
     try {
       const result = await applyImport(preview, (label) => setBusy(`Importing ${label}…`));
-      toast.success(`Import complete — ${result.subjects} subjects, ${result.sessions} sessions, ${result.notes} PDFs`);
+       if (result.failures.length) toast.warning(`Import hua, lekin ${result.failures.length} items skip hue`);
+       else toast.success(`Import complete — ${result.subjects} subjects, ${result.sessions} sessions, ${result.notes} files`);
       setPreview(null);
       void qc.invalidateQueries();
     } catch (e) {
@@ -58,9 +60,17 @@ export function DataTransferCard() {
         account me import kar sakta hai.
       </p>
 
-      <div className="mt-4 flex flex-wrap gap-3">
+      <div className="mt-4 grid gap-2 sm:grid-cols-2">
+        {([{"id":"full","label":"Full account","copy":"Profile, preferences aur complete study record","Icon":ShieldCheck},{"id":"study","label":"Study package","copy":"Subjects, history, classes aur media only","Icon":BookOpen}] as const).map(({id,label,copy,Icon}) => (
+          <button type="button" key={id} onClick={() => setMode(id)} className={`min-h-20 rounded-2xl border p-3 text-left transition ${mode === id ? "border-foreground bg-secondary" : "border-border bg-panel"}`}>
+            <span className="flex items-center gap-2 text-sm font-extrabold"><Icon className="size-4" />{label}</span>
+            <span className="mt-1 block text-[11px] text-muted-foreground">{copy}</span>
+          </button>
+        ))}
+      </div>
+      <div className="mt-3 flex flex-wrap gap-3">
         <Button className="gap-2" disabled={!!busy} onClick={() => void exportAll()}>
-          <Download className="size-4" /> Export my data
+          <Download className="size-4" /> Export {mode === "full" ? "full account" : "study package"}
         </Button>
         <Button variant="outline" className="gap-2" disabled={!!busy} onClick={() => fileRef.current?.click()}>
           <Upload className="size-4" /> Import a file
@@ -68,7 +78,7 @@ export function DataTransferCard() {
         <input
           ref={fileRef}
           type="file"
-          accept=".zip,application/zip"
+          accept=".zip,.json,application/zip,application/json"
           className="hidden"
           onChange={(e) => {
             const file = e.target.files?.[0];
@@ -84,7 +94,7 @@ export function DataTransferCard() {
         <div className="mt-4 rounded-2xl border border-border bg-panel p-4">
           <p className="text-sm font-bold">Import preview</p>
           <p className="mt-1 text-[11px] text-muted-foreground">
-            {preview.exportedAt ? `Exported ${new Date(preview.exportedAt).toLocaleDateString()} · ` : ""}
+             <span className="font-bold capitalize">{preview.mode} import</span> · {preview.exportedAt ? `Exported ${new Date(preview.exportedAt).toLocaleDateString()} · ` : ""}
             {preview.summary.subjects} subjects · {preview.summary.chapters} chapters · {preview.summary.sessions}{" "}
             sessions · {preview.summary.notes} PDFs
           </p>

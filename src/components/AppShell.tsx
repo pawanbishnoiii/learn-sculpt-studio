@@ -18,7 +18,7 @@ import { createPortal } from "react-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { clientContext } from "@/lib/platform";
 import { syncDeviceTokenOnStart } from "@/lib/push";
-import appLogo from "@/assets/chronodeck-logo.png";
+import appLogo from "@/assets/bnoy-b-logo.png.asset.json";
 
 import {
   fetchSessions,
@@ -39,6 +39,7 @@ import { StreakFlame } from "@/components/StreakFlame";
 import { InstallAppButton } from "@/components/InstallAppButton";
 import { useRealtimeSync } from "@/hooks/useRealtimeSync";
 import { OfflineStatus } from "@/components/OfflineStatus";
+import { GooeyLoader } from "@/components/ui/loader-10";
 
 
 const NAV = [
@@ -75,6 +76,10 @@ export function AppShell({ children }: { children: ReactNode }) {
   const xp = useQuery({ queryKey: ["xp"], queryFn: fetchXp });
 
   const dailyGoal = settings.data?.daily_goal_hours ?? 4;
+  const level = xp.data?.level ?? 1;
+  const totalXp = xp.data?.total_xp ?? 0;
+  const levelFloor = Math.max(0, (level - 1) * 500);
+  const levelPct = Math.min(100, Math.round(((totalXp - levelFloor) / 500) * 100));
   const all = useMemo(() => sessions.data ?? [], [sessions.data]);
   const todayPct = Math.min(
     100,
@@ -150,12 +155,16 @@ export function AppShell({ children }: { children: ReactNode }) {
     (profile.data?.first_name?.[0] ?? profile.data?.display_name?.[0] ?? "S") +
     (profile.data?.last_name?.[0] ?? "T");
 
+  if ((profile.isPending || settings.isPending || xp.isPending) && !profile.data) {
+    return <div className="grid min-h-screen place-items-center bg-background"><GooeyLoader label="Your study space taiyar ho raha hai" /></div>;
+  }
+
   return (
     <div className={`app-backdrop min-h-screen text-foreground ${hideNav ? "" : "lg:grid lg:grid-cols-[232px_minmax(0,1fr)]"}`}>
       {!hideNav ? (
         <aside className="sticky top-0 hidden h-screen flex-col border-r border-border bg-panel px-4 py-6 lg:flex">
           <Link to="/today" className="flex items-center gap-3 px-2">
-            <img src={appLogo} alt="Bnoy Study" width={1024} height={1024} className="size-11 rounded-2xl object-contain" />
+            <img src={appLogo.url} alt="Bnoy Study" width={1024} height={1024} className="size-11 rounded-2xl object-contain" />
             <span><span className="font-heading block text-lg font-extrabold">Bnoy Study</span><span className="text-xs text-muted-foreground">Study OS</span></span>
           </Link>
           <nav aria-label="Primary" className="mt-10 grid gap-2">
@@ -166,6 +175,8 @@ export function AppShell({ children }: { children: ReactNode }) {
             ))}
           </nav>
           <div className="mt-auto rounded-[24px] bg-lavender-soft p-4">
+            <div className="mb-3 flex items-center justify-between text-xs font-extrabold"><span>Level {level}</span><span className="num">{totalXp} XP</span></div>
+            <div className="mb-4 h-1.5 overflow-hidden rounded-full bg-panel/70"><div className="h-full rounded-full bg-lavender" style={{ width: `${levelPct}%` }} /></div>
             <p className="text-sm font-bold">Today’s progress</p>
             <div className="mt-3 h-2 overflow-hidden rounded-full bg-panel"><div className="h-full rounded-full bg-blue" style={{ width: `${todayPct}%` }} /></div>
             <p className="mt-2 text-xs text-muted-foreground">{todayPct}% of your daily goal</p>
@@ -180,7 +191,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4">
         <Link to="/today" className="flex min-w-0 items-center gap-3 lg:hidden">
           <img
-            src={appLogo}
+            src={appLogo.url}
              alt="Bnoy Study"
             width={1024}
             height={1024}

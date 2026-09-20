@@ -1,13 +1,14 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "framer-motion";
-import { Eye, EyeOff, Loader2, Sparkles } from "lucide-react";
+import { Eye, EyeOff, Sparkles } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 import { GoogleOneTap } from "@/components/GoogleOneTap";
 import authStudent from "@/assets/chronodeck-auth-student.png";
-import appLogo from "@/assets/chronodeck-logo.png";
+import appLogo from "@/assets/bnoy-b-logo.png.asset.json";
+import { GooeyLoader } from "@/components/ui/loader-10";
 
 function GoogleMark() {
   return (
@@ -157,7 +158,7 @@ export function AuthScreen() {
       <header className="relative z-10 flex items-center justify-between px-5 pt-[calc(1rem+env(safe-area-inset-top))] md:absolute md:inset-x-0 md:top-0 md:px-10">
         <div className="flex items-center gap-2.5">
           <img
-            src={appLogo}
+            src={appLogo.url}
              alt="Bnoy Study"
             width={1024}
             height={1024}
@@ -375,7 +376,7 @@ export function AuthScreen() {
                       disabled={busy}
                       className="flex h-14 w-full items-center justify-center gap-2 rounded-full bg-foreground text-[15px] font-bold text-background disabled:opacity-60"
                     >
-                      {busy ? <Loader2 className="size-4 animate-spin" /> : null}
+                      {busy ? <GooeyLoader label="" className="scale-50" /> : null}
                       {mode === "signin"
                         ? "Sign in with Email"
                         : mode === "signup"

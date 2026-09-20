@@ -133,7 +133,7 @@ function ClassesPage() {
   const due = (revisions.data ?? []).filter((r) => r.revisions_done < r.target_revisions);
 
   return (
-    <div className="mx-auto w-full max-w-3xl space-y-5 px-4 pb-28 pt-4 sm:px-6">
+    <div className="mx-auto w-full max-w-6xl space-y-5 px-4 pb-28 pt-4 sm:px-6">
       <PageHeader
         title="Online classes"
         description="Mark a class complete and its notes go into the revision ladder."
@@ -144,7 +144,7 @@ function ClassesPage() {
         }
       />
 
-      {/* Notes revision queue */}
+      <div className="grid gap-5 lg:grid-cols-2">
       <section className="surface-card p-5">
         <div className="flex items-center gap-3">
           <span className="grid size-10 place-items-center rounded-2xl bg-[var(--lavender-soft)]">
@@ -255,6 +255,7 @@ function ClassesPage() {
           </ul>
         )}
       </section>
+      </div>
 
       {/* Chapter PDFs — upload, order, preview and download notes per chapter */}
       <ChapterNotesPanel />

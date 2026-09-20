@@ -74,7 +74,7 @@ export async function uploadNote(input: {
     contentType: mime,
     upsert: false,
   });
-  if (up.error) throw up.error;
+  if (up.error) throw new Error(`${input.file.name}: ${up.error.message}`);
 
   const { error } = await supabase.from("chapter_notes").insert({
     user_id: user,
@@ -144,9 +144,10 @@ export async function downloadNoteBlob(path: string): Promise<Blob> {
 }
 
 export async function deleteNote(note: ChapterNote) {
+  const removed = await supabase.storage.from(BUCKET).remove([note.storage_path]);
+  if (removed.error) throw new Error(`File storage se nahi hati: ${removed.error.message}`);
   const { error } = await supabase.from("chapter_notes").delete().eq("id", note.id);
   if (error) throw error;
-  await supabase.storage.from(BUCKET).remove([note.storage_path]);
 }
 
 /** Swap two notes so the chapter sequence can be reordered. */

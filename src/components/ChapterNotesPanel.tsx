@@ -1,7 +1,7 @@
 import { useMemo, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { ArrowDown, ArrowUp, Download, Eye, FileImage, FileText, Film, Trash2, Upload } from "lucide-react";
+import { ArrowDown, ArrowUp, Download, Eye, FileText, FolderOpen, Trash2, Upload } from "lucide-react";
 import {
   deleteNote,
   fetchNotes,
@@ -34,6 +34,8 @@ export function ChapterNotesPanel() {
   const [topic, setTopic] = useState("");
   const [filter, setFilter] = useState<MediaFilter>("all");
   const [preview, setPreview] = useState<{ note: ChapterNote; url: string } | null>(null);
+  const [dragging, setDragging] = useState(false);
+  const [uploadStatus, setUploadStatus] = useState({ done: 0, total: 0 });
 
   const subjects = useQuery({ queryKey: ["subjects"], queryFn: fetchSubjects });
   const notes = useQuery({ queryKey: ["chapter-notes"], queryFn: fetchNotes });
@@ -48,6 +50,7 @@ export function ChapterNotesPanel() {
 
   const upload = useMutation({
     mutationFn: async (files: FileList) => {
+      setUploadStatus({ done: 0, total: files.length });
       const current = (notes.data ?? []).filter(
         (n) => (n.subject_id ?? "") === subjectId && (n.chapter_name ?? "") === chapter,
       );
@@ -59,8 +62,10 @@ export function ChapterNotesPanel() {
           await uploadNote({ file, subject_id: subjectId || null, chapter_name: chapter || null, topic: topic.trim() || null, existingCount: count });
           count += 1;
           uploaded += 1;
-        } catch {
-          failed.push(file.name);
+        } catch (error) {
+          failed.push(`${file.name} — ${error instanceof Error ? error.message : "upload failed"}`);
+        } finally {
+          setUploadStatus((value) => ({ ...value, done: value.done + 1 }));
         }
       }
       return { uploaded, failed };
@@ -68,7 +73,7 @@ export function ChapterNotesPanel() {
     onSuccess: ({ uploaded, failed }) => {
       void refresh();
       if (uploaded) toast.success(`${uploaded} file upload ho gayi`);
-      if (failed.length) toast.error(`${failed.length} file upload nahi hui: ${failed.join(", ")}`);
+      if (failed.length) toast.error(`${failed.length} file upload nahi hui`, { description: failed.join("\n") });
     },
     onError: (e: Error) => toast.error(e.message),
   });
@@ -170,14 +175,17 @@ export function ChapterNotesPanel() {
           e.target.value = "";
         }}
       />
-      <Button
-        className="mt-3 gap-2"
-        disabled={upload.isPending || !chapter}
-        onClick={() => fileRef.current?.click()}
+      <div
+        onDragEnter={(event) => { event.preventDefault(); setDragging(true); }}
+        onDragOver={(event) => event.preventDefault()}
+        onDragLeave={() => setDragging(false)}
+        onDrop={(event) => { event.preventDefault(); setDragging(false); if (chapter && event.dataTransfer.files.length) upload.mutate(event.dataTransfer.files); }}
+        className={`mt-4 grid min-h-36 place-items-center rounded-2xl border border-dashed p-5 text-center transition ${dragging ? "border-blue bg-blue-soft" : "border-border bg-secondary/35"}`}
       >
-        <Upload className="size-4" />
-        {upload.isPending ? "Uploading…" : "Upload files"}
-      </Button>
+        <div><FolderOpen className="mx-auto size-8 text-blue" /><p className="mt-2 text-sm font-extrabold">Drop chapter files here</p><p className="mt-1 text-[11px] text-muted-foreground">PDF, images, videos and office files · up to 50 MB each</p>
+          <Button className="mt-3 gap-2" disabled={upload.isPending || !chapter} onClick={() => fileRef.current?.click()}><Upload className="size-4" />{upload.isPending ? `${uploadStatus.done}/${uploadStatus.total} uploaded` : "Choose files"}</Button>
+        </div>
+      </div>
       {!chapter ? (
         <p className="mt-2 text-[11px] text-muted-foreground">Pehle chapter select karo, phir upload karo.</p>
       ) : null}
@@ -244,7 +252,7 @@ export function ChapterNotesPanel() {
                     <IconBtn label="Download file" onClick={() => void open(note, true)}>
                       <Download className="size-4" />
                     </IconBtn>
-                    <IconBtn label="Delete file" danger onClick={() => remove.mutate(note)}>
+                    <IconBtn label="Delete file" danger onClick={() => { if (window.confirm(`Delete ${note.title}?`)) remove.mutate(note); }}>
                       <Trash2 className="size-4" />
                     </IconBtn></div>
                   </li>
@@ -290,17 +298,19 @@ function IconBtn({
   danger?: boolean;
 }) {
   return (
-    <button
+    <Button
       type="button"
       aria-label={label}
       title={label}
       disabled={disabled}
       onClick={onClick}
-      className={`grid size-9 shrink-0 place-items-center rounded-full border border-border text-muted-foreground transition disabled:opacity-40 ${
+      variant="outline"
+      size="icon"
+      className={`size-9 min-h-9 shrink-0 text-muted-foreground ${
         danger ? "hover:text-destructive" : "hover:text-foreground"
       }`}
     >
       {children}
-    </button>
+    </Button>
   );
 }

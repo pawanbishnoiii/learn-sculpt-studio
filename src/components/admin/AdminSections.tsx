@@ -168,7 +168,7 @@ export function UsageInsights() {
         {list.map((u) => (
           <li
             key={u.id}
-            className="flex items-center gap-3 rounded-2xl border border-border bg-background p-3"
+            className="flex flex-col gap-3 rounded-2xl border border-border bg-background p-3 sm:flex-row sm:items-center"
           >
             {u.avatar_url ? (
               <img src={u.avatar_url} alt="" className="size-10 shrink-0 rounded-full object-cover" />
@@ -181,7 +181,7 @@ export function UsageInsights() {
               <p className="truncate text-sm font-semibold">{u.display_name ?? "Unnamed"}</p>
               <p className="truncate text-[11px] text-muted-foreground">{u.email ?? "no email"}</p>
             </div>
-            <div className="shrink-0 text-right">
+            <div className="w-full text-left sm:w-auto sm:shrink-0 sm:text-right">
               <p className="font-mono text-[11px]">{relativeTime(u.last_seen_at)}</p>
               <p className="text-[10px] text-muted-foreground">
                 {fmtHM(u.total_minutes)} · {u.session_count} sessions
@@ -207,7 +207,7 @@ export function UsageInsights() {
                 <option value="moderator">moderator</option>
                 <option value="admin">admin</option>
               </select>
-              <div className="mt-1 flex justify-end gap-1">
+              <div className="mt-2 grid grid-cols-3 gap-1 sm:flex sm:justify-end">
                 <button
                   type="button"
                   onClick={() => setPreview({ id: u.id, name: u.display_name ?? u.email ?? "User" })}
