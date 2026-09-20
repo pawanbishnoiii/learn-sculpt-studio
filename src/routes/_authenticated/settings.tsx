@@ -8,12 +8,12 @@ import { fetchProfile, fetchSettings, fetchSubjects, saveProfile, saveSettings, 
 export const Route = createFileRoute("/_authenticated/settings")({
   head: () => ({
     meta: [
-      { title: "Settings — Chronodeck Study OS" },
+      { title: "Settings — Bnoy Study Study OS" },
       {
         name: "description",
         content: "Configure study goals, AI coach tone, auto-stop timer and weekly start day.",
       },
-      { property: "og:title", content: "Settings — Chronodeck Study OS" },
+      { property: "og:title", content: "Settings — Bnoy Study Study OS" },
       {
         property: "og:description",
         content: "Personalize your study goals, AI tone and timer preferences.",

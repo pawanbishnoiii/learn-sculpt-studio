@@ -5,10 +5,10 @@ export const Route = createFileRoute("/_authenticated/admin/settings")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "Platform settings — Chronodeck Admin" },
+      { title: "Platform settings — Bnoy Study Admin" },
       { name: "description", content: "Feature switches, default study goals and outgoing email configuration." },
-      { property: "og:title", content: "Platform settings — Chronodeck Admin" },
-      { property: "og:description", content: "Feature flags, default goals and email delivery for Chronodeck." },
+      { property: "og:title", content: "Platform settings — Bnoy Study Admin" },
+      { property: "og:description", content: "Feature flags, default goals and email delivery for Bnoy Study." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

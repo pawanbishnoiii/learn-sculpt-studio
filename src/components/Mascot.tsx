@@ -11,9 +11,9 @@ const SRC: Record<MascotState, string> = {
 };
 
 const ALT: Record<MascotState, string> = {
-  idle: "Chronodeck owl waiting for your next session",
-  celebrating: "Chronodeck owl celebrating your streak",
-  sleepy: "Chronodeck owl feeling sleepy — it is late",
+  idle: "Bnoy Study owl waiting for your next session",
+  celebrating: "Bnoy Study owl celebrating your streak",
+  sleepy: "Bnoy Study owl feeling sleepy — it is late",
 };
 
 /**

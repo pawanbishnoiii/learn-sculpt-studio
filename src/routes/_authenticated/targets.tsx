@@ -27,12 +27,12 @@ const EIGHT_WEEKS = new Date(Date.now() - 8 * 7 * 864e5).toISOString();
 export const Route = createFileRoute("/_authenticated/targets")({
   head: () => ({
     meta: [
-      { title: "Targets — Chronodeck Study OS" },
+      { title: "Targets — Bnoy Study Study OS" },
       {
         name: "description",
         content: "Set daily and weekly study targets so the AI coach can measure your progress.",
       },
-      { property: "og:title", content: "Targets — Chronodeck Study OS" },
+      { property: "og:title", content: "Targets — Bnoy Study Study OS" },
       {
         property: "og:description",
         content: "Daily and weekly study goals with AI-tracked progress.",

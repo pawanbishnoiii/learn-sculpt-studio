@@ -44,10 +44,10 @@ if (typeof window !== "undefined") gsap.registerPlugin(ScrollTrigger);
 export const Route = createFileRoute("/welcome")({
   head: () => ({
     meta: [
-      { title: "Chronodeck — Make every study session count" },
+      { title: "Bnoy Study — Make every study session count" },
       {
         name: "description",
-        content: "Plan focused study sessions and understand your progress with Chronodeck.",
+        content: "Plan focused study sessions and understand your progress with Bnoy Study.",
       },
     ],
   }),
@@ -114,7 +114,7 @@ function WelcomePage() {
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between">
           <a href="#top" className="flex items-center gap-2.5 font-bold">
             <img src={appLogo} width="36" height="36" alt="" className="size-9 rounded-xl" />
-            Chronodeck
+            Bnoy Study
           </a>
           <nav aria-label="Main navigation" className="hidden items-center gap-7 md:flex">
             {[
@@ -305,10 +305,10 @@ function WelcomePage() {
 
         <section id="about" data-reveal className="border-y border-border bg-panel px-5 py-16">
           <div className="mx-auto max-w-3xl">
-            <p className="text-sm font-semibold text-primary">About Chronodeck</p>
+            <p className="text-sm font-semibold text-primary">About Bnoy Study</p>
             <h2 className="mt-2 text-3xl font-bold">Built to make effort visible</h2>
             <p className="mt-4 text-base leading-7 text-muted-foreground">
-              Chronodeck helps students organise their time, maintain focus, and understand their
+              Bnoy Study helps students organise their time, maintain focus, and understand their
               study effort. It brings planning, timing, targets, and session history into one
               connected workspace.
             </p>
@@ -350,7 +350,7 @@ function WelcomePage() {
               ],
               [
                 "Can I use dark mode?",
-                "Yes. Chronodeck includes light and dark appearances from the account header.",
+                "Yes. Bnoy Study includes light and dark appearances from the account header.",
               ],
             ].map(([q = "", a = ""]) => (
               <Accordion.Item key={q} value={q}>
@@ -373,7 +373,7 @@ function WelcomePage() {
           <div className="mx-auto max-w-6xl rounded-3xl bg-[#172033] px-6 py-12 text-center text-white">
             <h2 className="text-3xl font-bold">Ready for a more focused study day?</h2>
             <p className="mx-auto mt-3 max-w-lg text-sm leading-6 text-white/65">
-              Start with one session. Chronodeck will keep the plan and progress around it
+              Start with one session. Bnoy Study will keep the plan and progress around it
               organised.
             </p>
             <Link
@@ -389,7 +389,7 @@ function WelcomePage() {
         <ShaderBackground className="absolute inset-0 -z-10 h-full w-full" />
         <div className="absolute inset-0 -z-10 bg-black/25" />
         <div className="mx-auto flex max-w-6xl flex-col gap-4 text-sm text-white/85 sm:flex-row sm:items-center sm:justify-between">
-          <p className="font-semibold text-white">© {new Date().getFullYear()} Chronodeck Study OS</p>
+          <p className="font-semibold text-white">© {new Date().getFullYear()} Bnoy Study Study OS</p>
           <div className="flex gap-5">
             <a href="#features">Features</a>
             <a href="#about">About</a>

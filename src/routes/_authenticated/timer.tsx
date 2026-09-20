@@ -45,12 +45,12 @@ export const Route = createFileRoute("/_authenticated/timer")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "Focus Timer — Chronodeck" },
+      { title: "Focus Timer — Bnoy Study" },
       {
         name: "description",
         content: "A clean, distraction-free focus timer with break logging and one-tap session saving.",
       },
-      { property: "og:title", content: "Focus Timer — Chronodeck" },
+      { property: "og:title", content: "Focus Timer — Bnoy Study" },
       { property: "og:description", content: "Clean full-screen study timer that keeps running in the background." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

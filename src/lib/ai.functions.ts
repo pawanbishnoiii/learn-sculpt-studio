@@ -55,7 +55,7 @@ async function callGateway(messages: Array<{ role: string; content: string }>) {
 }
 
 function systemPrompt(tone: string) {
-  return `You are the AI study manager inside Chronodeck, a personal study-time app.
+  return `You are the AI study manager inside Bnoy Study, a personal study-time app.
 You see the user's subjects, timetable, targets, settings and recent study sessions as JSON.
 Answer in the user's language (Hindi, Hinglish or English — match their message).
 Be concrete: reference real hours, subjects and gaps in their data. Keep replies under 130 words,

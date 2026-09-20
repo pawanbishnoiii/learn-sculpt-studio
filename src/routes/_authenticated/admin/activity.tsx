@@ -7,10 +7,10 @@ export const Route = createFileRoute("/_authenticated/admin/activity")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "Activity — Chronodeck Admin" },
+      { title: "Activity — Bnoy Study Admin" },
       { name: "description", content: "Sign-in, app-open and page-view history with user, path and platform filters." },
-      { property: "og:title", content: "Activity — Chronodeck Admin" },
-      { property: "og:description", content: "Review sign-ins, app opens and page views across Chronodeck." },
+      { property: "og:title", content: "Activity — Bnoy Study Admin" },
+      { property: "og:description", content: "Review sign-ins, app opens and page views across Bnoy Study." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

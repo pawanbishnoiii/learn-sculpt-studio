@@ -41,14 +41,14 @@ const FUNCTIONS = [
   ["touch_last_seen()", "profiles.last_seen_at ping"],
 ] as const;
 
-const PROMPT = `Build a production-ready native Android app (Kotlin + Jetpack Compose, min SDK 26) for "Chronodeck Study OS".
+const PROMPT = `Build a production-ready native Android app (Kotlin + Jetpack Compose, min SDK 26) for "Bnoy Study Study OS".
 
 BACKEND
 Supabase (Postgres + Auth + Realtime + Storage) via supabase-kt. Use only the anon/publishable key — never a service key.
 Auth: Google One Tap (Credential Manager -> signInWithIdToken) + email/password. On first login upsert "profiles",
 register the FCM token into "device_tokens" (platform = "android", device_label = model) and log an "app_events" row
 with event = "platform" and metadata { platform: "android-app", app_version, host } so the admin console can split
-web vs Android usage. Set the user-agent marker "ChronodeckApp/<versionName>" on any WebView.
+web vs Android usage. Set the user-agent marker "Bnoy StudyApp/<versionName>" on any WebView.
 
 SCREENS
 1. Home/Today — daily goal ring, today/week/month minutes, XP, level, streak (user_xp), running-session banner that
@@ -80,9 +80,9 @@ export const Route = createFileRoute("/_authenticated/admin/android")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "Android app — Chronodeck Admin" },
+      { title: "Android app — Bnoy Study Admin" },
       { name: "description", content: "Manage Android releases, force updates and the build prompt with full database reference." },
-      { property: "og:title", content: "Android app — Chronodeck Admin" },
+      { property: "og:title", content: "Android app — Bnoy Study Admin" },
       { property: "og:description", content: "Android release controls, install split and the app build prompt." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

@@ -20,13 +20,13 @@ import {
 export const Route = createFileRoute("/_authenticated/timetable")({
   head: () => ({
     meta: [
-      { title: "Timetable — Chronodeck Study OS" },
+      { title: "Timetable — Bnoy Study Study OS" },
       {
         name: "description",
         content:
           "Weekly calendar grid to plan reading blocks and online classes, reorder by drag-and-drop and start the study timer.",
       },
-      { property: "og:title", content: "Timetable — Chronodeck Study OS" },
+      { property: "og:title", content: "Timetable — Bnoy Study Study OS" },
       {
         property: "og:description",
         content:

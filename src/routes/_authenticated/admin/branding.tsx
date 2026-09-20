@@ -6,9 +6,9 @@ export const Route = createFileRoute("/_authenticated/admin/branding")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "Branding — Chronodeck Admin" },
-      { name: "description", content: "Upload the Chronodeck logo, favicon, banners and the shared avatar gallery." },
-      { property: "og:title", content: "Branding — Chronodeck Admin" },
+      { title: "Branding — Bnoy Study Admin" },
+      { name: "description", content: "Upload the Bnoy Study logo, favicon, banners and the shared avatar gallery." },
+      { property: "og:title", content: "Branding — Bnoy Study Admin" },
       { property: "og:description", content: "Manage logo, favicon, banners and avatar presets." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
