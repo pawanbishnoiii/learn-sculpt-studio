@@ -48,7 +48,7 @@ Supabase (Postgres + Auth + Realtime + Storage) via supabase-kt. Use only the an
 Auth: Google One Tap (Credential Manager -> signInWithIdToken) + email/password. On first login upsert "profiles",
 register the FCM token into "device_tokens" (platform = "android", device_label = model) and log an "app_events" row
 with event = "platform" and metadata { platform: "android-app", app_version, host } so the admin console can split
-web vs Android usage. Set the user-agent marker "Bnoy StudyApp/<versionName>" on any WebView.
+web vs Android usage. Set the user-agent marker "BnoyStudyApp/<versionName>" on any WebView.
 
 SCREENS
 1. Home/Today — daily goal ring, today/week/month minutes, XP, level, streak (user_xp), running-session banner that
