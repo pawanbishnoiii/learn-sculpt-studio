@@ -38,6 +38,7 @@ import { NotificationBell } from "@/components/NotificationBell";
 import { StreakFlame } from "@/components/StreakFlame";
 import { InstallAppButton } from "@/components/InstallAppButton";
 import { useRealtimeSync } from "@/hooks/useRealtimeSync";
+import { OfflineStatus } from "@/components/OfflineStatus";
 
 
 const NAV = [
@@ -171,6 +172,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           </div>
         </aside>
       ) : null}
+      <OfflineStatus />
       <div className="flex min-h-screen min-w-0 flex-col">
       {/* Opaque background instead of a large backdrop-blur: blurring a sticky
           layer forces a full-width GPU repaint on every scroll frame. */}

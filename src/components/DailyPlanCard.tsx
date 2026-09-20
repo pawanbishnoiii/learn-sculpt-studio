@@ -61,8 +61,11 @@ export function DailyPlanCard({ sessions, title = "Your plan", onStart }: { sess
   });
 
   const toggle = useMutation({
-    mutationFn: (v: { id: string; done: boolean }) => setPlanItemDone(v.id, v.done),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["plan", planDate] }),
+    mutationFn: (v: { id: string; done: boolean }) => savePlanDone(v.id, v.done),
+    onSuccess: (r) => {
+      void qc.invalidateQueries({ queryKey: ["plan", planDate] });
+      if (r.queued) toast.success("Offline save — reconnect par sync ho jayega");
+    },
     onError: (e: Error) => toast.error(e.message),
   });
 
