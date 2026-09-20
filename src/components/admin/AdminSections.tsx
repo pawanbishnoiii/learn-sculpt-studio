@@ -381,6 +381,16 @@ export function SiteSettings() {
         </div>
       </div>
 
+      <div className="mt-5 rounded-2xl border border-border p-4">
+        <h3 className="text-sm font-bold">Revision engine</h3>
+        <p className="mt-1 text-xs text-muted-foreground">Chapter aur online-class revisions ke global rules.</p>
+        <div className="mt-3 grid gap-3 sm:grid-cols-3">
+          <label className="text-xs text-muted-foreground">Minimum passes<input type="number" min={5} max={10} value={value.revision_min_passes} onChange={(e) => set({ revision_min_passes: Math.min(10, Math.max(5, Number(e.target.value))) })} className="input mt-1" /></label>
+          <label className="text-xs text-muted-foreground">Maximum passes<input type="number" min={5} max={10} value={value.revision_max_passes} onChange={(e) => set({ revision_max_passes: Math.min(10, Math.max(5, Number(e.target.value))) })} className="input mt-1" /></label>
+          <label className="text-xs text-muted-foreground">Intervals (days)<input value={value.revision_intervals.join(", ")} onChange={(e) => set({ revision_intervals: e.target.value.split(",").map(Number).filter((n) => Number.isFinite(n) && n > 0).slice(0, 10) })} className="input mt-1" /></label>
+        </div>
+      </div>
+
       <label className="mt-4 block text-xs text-muted-foreground">Maintenance note</label>
       <textarea
         value={value.maintenance_note ?? ""}
