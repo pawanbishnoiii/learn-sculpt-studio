@@ -24,12 +24,12 @@ export const Route = createFileRoute("/_authenticated/profile")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "Profile — Bnoy Study Study OS" },
+      { title: "Profile — Bnoy Study OS" },
       {
         name: "description",
         content: "Your Bnoy Study profile: Google identity, personal details and lifetime study stats.",
       },
-      { property: "og:title", content: "Profile — Bnoy Study Study OS" },
+      { property: "og:title", content: "Profile — Bnoy Study OS" },
       { property: "og:description", content: "Manage your details and see your study record." },
     ],
   }),

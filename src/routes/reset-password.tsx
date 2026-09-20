@@ -8,12 +8,12 @@ export const Route = createFileRoute("/reset-password")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "Reset password — Bnoy Study Study OS" },
+      { title: "Reset password — Bnoy Study OS" },
       {
         name: "description",
         content: "Set a new Bnoy Study password and get back to your timer, timetable and targets.",
       },
-      { property: "og:title", content: "Reset password — Bnoy Study Study OS" },
+      { property: "og:title", content: "Reset password — Bnoy Study OS" },
       { property: "og:description", content: "Choose a new password for your Bnoy Study study account." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

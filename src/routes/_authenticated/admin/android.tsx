@@ -41,7 +41,7 @@ const FUNCTIONS = [
   ["touch_last_seen()", "profiles.last_seen_at ping"],
 ] as const;
 
-const PROMPT = `Build a production-ready native Android app (Kotlin + Jetpack Compose, min SDK 26) for "Bnoy Study Study OS".
+const PROMPT = `Build a production-ready native Android app (Kotlin + Jetpack Compose, min SDK 26) for "Bnoy Study OS".
 
 BACKEND
 Supabase (Postgres + Auth + Realtime + Storage) via supabase-kt. Use only the anon/publishable key — never a service key.

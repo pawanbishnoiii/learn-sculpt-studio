@@ -29,13 +29,13 @@ export const Route = createFileRoute("/_authenticated/history")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "History — Bnoy Study Study OS" },
+      { title: "History — Bnoy Study OS" },
       {
         name: "description",
         content:
           "Every study session, topic, note and break you logged, grouped day by day — with edit and delete.",
       },
-      { property: "og:title", content: "History — Bnoy Study Study OS" },
+      { property: "og:title", content: "History — Bnoy Study OS" },
       {
         property: "og:description",
         content: "Browse, edit and delete your full study session and break history.",
