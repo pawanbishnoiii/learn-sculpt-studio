@@ -252,6 +252,7 @@ export async function applyImport(preview: ImportPreview, onProgress?: (label: s
     if (!file) continue;
     const blob = await file.async("blob");
     try {
+      const mimeType = str(row["mime_type"]);
       await restoreNote({
         blob,
         title: String(row["title"] ?? "notes.pdf"),
@@ -259,7 +260,7 @@ export async function applyImport(preview: ImportPreview, onProgress?: (label: s
         chapter_name: str(row["chapter_name"]),
         topic: str(row["topic"]),
         position: Number(row["position"]) || restored + 1,
-        mime_type: str(row["mime_type"]) ?? undefined,
+        ...(mimeType ? { mime_type: mimeType } : {}),
       });
       restored += 1;
     } catch {

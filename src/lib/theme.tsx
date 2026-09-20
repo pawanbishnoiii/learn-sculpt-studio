@@ -34,7 +34,7 @@ function apply(theme: Theme) {
 
 function applyBackground(style: BackgroundStyle) {
   if (typeof document === "undefined") return;
-  document.documentElement.dataset.background = style;
+  document.documentElement.dataset["background"] = style;
 }
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {

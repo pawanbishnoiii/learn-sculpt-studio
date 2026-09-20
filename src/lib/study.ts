@@ -869,10 +869,13 @@ export type AppSettings = {
   accent_color: string;
   favicon_url: string | null;
   logo_url: string | null;
+  revision_min_passes: number;
+  revision_max_passes: number;
+  revision_intervals: number[];
 };
 
 const APP_SETTINGS_COLS =
-  "site_name,tagline,support_email,banner_text,ai_enabled,manual_log_enabled,landing_enabled,maintenance_note,signup_enabled,google_auth_enabled,one_tap_enabled,email_auth_enabled,onboarding_require_subjects,default_daily_goal_hours,default_weekly_goal_hours,announcement_level,accent_color,favicon_url,logo_url";
+  "site_name,tagline,support_email,banner_text,ai_enabled,manual_log_enabled,landing_enabled,maintenance_note,signup_enabled,google_auth_enabled,one_tap_enabled,email_auth_enabled,onboarding_require_subjects,default_daily_goal_hours,default_weekly_goal_hours,announcement_level,accent_color,favicon_url,logo_url,revision_min_passes,revision_max_passes,revision_intervals";
 
 export async function fetchAppSettings(): Promise<AppSettings | null> {
   const { data, error } = await supabase
