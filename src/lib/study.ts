@@ -70,6 +70,11 @@ export type Settings = {
   ai_autopilot: boolean;
   week_starts_monday: boolean;
   widget_layout: unknown;
+  background_style: "clean" | "grid" | "colorful";
+  timer_background_effects: boolean;
+  timer_show_details: boolean;
+  timer_sounds_haptics: boolean;
+  timer_keep_awake: boolean;
 };
 
 export const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];

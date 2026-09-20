@@ -99,19 +99,10 @@ export async function deleteClass(id: string) {
 
 /** Record one notes-revision pass and schedule the next one. */
 export async function logNotesRevision(row: ClassNoteRevision, minutes: number) {
-  const ladder = [1, 3, 7, 15, 30, 45, 60, 90];
-  const stage = Math.min(row.review_stage + 1, ladder.length - 1);
-  const days = ladder[stage] ?? 90;
-  const next = new Date(Date.now() + days * 86_400_000).toISOString();
-  const { error } = await supabase
-    .from("class_note_revision_state")
-    .update({
-      review_stage: stage,
-      revisions_done: row.revisions_done + 1,
-      total_minutes: row.total_minutes + minutes,
-      last_revised_at: new Date().toISOString(),
-      next_review_at: next,
-    })
-    .eq("id", row.id);
+  const { error } = await supabase.rpc("complete_my_revision", {
+    p_state_id: row.id,
+    p_kind: "class",
+    p_minutes: minutes,
+  });
   if (error) throw error;
 }
