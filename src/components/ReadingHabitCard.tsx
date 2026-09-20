@@ -7,7 +7,6 @@ import {
   DEFAULT_READING_GOALS,
   fetchReadingGoals,
   fetchReadingLogs,
-  logReading,
   readingStatus,
   saveReadingGoals,
   undoReading,

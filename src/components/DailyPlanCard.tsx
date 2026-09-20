@@ -10,7 +10,6 @@ import {
   localDateKey,
   planItemMinutes,
   planItemStatus,
-  setPlanItemDone,
   setPlanItemState,
   visiblePlanItems,
   type PlanItemState,
@@ -18,6 +17,7 @@ import {
   type PlanItem,
 } from "@/lib/plan";
 import { fmtHM, startOfToday, type Session } from "@/lib/study";
+import { savePlanDone } from "@/lib/offline-actions";
 import { ActivityArtwork } from "@/components/study-ui";
 import owlIdle from "@/assets/owl-idle.png";
 
