@@ -21,7 +21,13 @@ const SIMPLE_TABLES = [
   "online_classes",
   "chapter_learning_state",
   "test_attempts",
+  "daily_study_plan_items",
+  "class_note_revision_state",
+  "user_xp",
 ] as const;
+
+export type TransferMode = "full" | "study";
+const VALID_FORMATS = new Set(["bnoy-study-user-export", "chronodeck-user-export"]);
 
 async function currentUser() {
   const { data } = await supabase.auth.getUser();
@@ -44,18 +50,21 @@ export type ExportSummary = {
 };
 
 /** Build the ZIP and hand it back with a short summary for the UI. */
-export async function buildExportZip(): Promise<{ blob: Blob; summary: ExportSummary }> {
+export async function buildExportZip(mode: TransferMode = "full"): Promise<{ blob: Blob; summary: ExportSummary }> {
   const user = await currentUser();
 
   const manifest: Record<string, unknown> = {
     format: "bnoy-study-user-export",
     version: 2,
+    transfer_mode: mode,
     exported_at: new Date().toISOString(),
     source_email: user.email ?? null,
   };
 
-  const profile = await readAll("profiles");
-  manifest["profile"] = profile[0] ?? null;
+  if (mode === "full") {
+    const profile = await readAll("profiles");
+    manifest["profile"] = profile[0] ?? null;
+  }
 
   const subjects = await readAll("subjects");
   const chapters = await readAll("chapters");
@@ -73,7 +82,10 @@ export async function buildExportZip(): Promise<{ blob: Blob; summary: ExportSum
   manifest["session_outcomes"] = outcomes;
   manifest["chapter_notes"] = notes;
 
-  for (const table of SIMPLE_TABLES) manifest[table] = await readAll(table);
+  for (const table of SIMPLE_TABLES) {
+    if (mode === "study" && ["user_settings", "reading_goals", "user_xp"].includes(table)) continue;
+    manifest[table] = await readAll(table);
+  }
 
   const zip = new JSZip();
   const folder = zip.folder("media");
@@ -114,6 +126,7 @@ export type ImportPreview = {
   manifest: Record<string, unknown>;
   summary: ExportSummary;
   exportedAt: string | null;
+  mode: TransferMode;
 };
 
 /** Read the uploaded ZIP and describe what it would add, before writing. */
@@ -122,12 +135,15 @@ export async function readImportZip(file: File): Promise<ImportPreview> {
   const entry = zip.file("data.json");
   if (!entry) throw new Error("Ye Bnoy Study export file nahi lag rahi");
   const manifest = JSON.parse(await entry.async("string")) as Record<string, unknown>;
-  if (manifest["format"] !== "chronodeck-user-export") throw new Error("File format match nahi hua");
+  if (!VALID_FORMATS.has(String(manifest["format"] ?? ""))) throw new Error("Ye valid Bnoy Study export nahi hai");
+  const version = Number(manifest["version"] ?? 1);
+  if (!Number.isFinite(version) || version < 1 || version > 2) throw new Error("Is export version ko app support nahi karti");
   const list = (key: string) => (Array.isArray(manifest[key]) ? (manifest[key] as Row[]) : []);
   return {
     zip,
     manifest,
     exportedAt: typeof manifest["exported_at"] === "string" ? manifest["exported_at"] : null,
+    mode: manifest["transfer_mode"] === "study" ? "study" : "full",
     summary: {
       subjects: list("subjects").length,
       chapters: list("chapters").length,
@@ -171,6 +187,16 @@ export async function applyImport(preview: ImportPreview, onProgress?: (label: s
   const uid = user.id;
   const list = (key: string) => (Array.isArray(preview.manifest[key]) ? (preview.manifest[key] as Row[]) : []);
   const str = (value: unknown) => (typeof value === "string" ? value : null);
+  const failures: string[] = [];
+
+  if (preview.mode === "full" && preview.manifest["profile"] && typeof preview.manifest["profile"] === "object") {
+    onProgress?.("Profile and preferences");
+    const row = preview.manifest["profile"] as Row;
+    const allowed = ["first_name", "last_name", "display_name", "bio", "phone", "gender", "age", "timezone", "avatar_url", "avg_study_hours"];
+    const patch = Object.fromEntries(allowed.filter((key) => key in row).map((key) => [key, row[key]]));
+    const { error } = await supabase.from("profiles").update(patch).eq("id", uid);
+    if (error) failures.push(`Profile: ${error.message}`);
+  }
 
   onProgress?.("Subjects");
   const existingSubjects = await readAll("subjects");
@@ -237,9 +263,11 @@ export async function applyImport(preview: ImportPreview, onProgress?: (label: s
       if ("subject_id" in row) extra["subject_id"] = subjectMap.get(String(row["subject_id"])) ?? null;
       if ("chapter_id" in row) extra["chapter_id"] = chapterMap.get(String(row["chapter_id"])) ?? null;
       if (table === "user_settings" || table === "reading_goals") {
-        await supabase.from(table).upsert(strip(row, uid, extra) as never, { onConflict: "user_id" });
+        const { error } = await supabase.from(table).upsert(strip(row, uid, extra) as never, { onConflict: "user_id" });
+        if (error) failures.push(`${table}: ${error.message}`);
       } else {
-        await supabase.from(table as never).insert(strip(row, uid, extra) as never);
+        const { error } = await supabase.from(table as never).insert(strip(row, uid, extra) as never);
+        if (error) failures.push(`${table}: ${error.message}`);
       }
     }
   }
@@ -263,10 +291,10 @@ export async function applyImport(preview: ImportPreview, onProgress?: (label: s
         ...(mimeType ? { mime_type: mimeType } : {}),
       });
       restored += 1;
-    } catch {
-      // keep importing the rest
+    } catch (error) {
+      failures.push(`${String(row["title"] ?? "Media")}: ${error instanceof Error ? error.message : "restore failed"}`);
     }
   }
 
-  return { subjects: subjectMap.size, chapters: chapterMap.size, sessions: sessionMap.size, notes: restored };
+  return { subjects: subjectMap.size, chapters: chapterMap.size, sessions: sessionMap.size, notes: restored, failures };
 }
