@@ -31,7 +31,7 @@ function SettingsPage() {
   const settings = useQuery({ queryKey: ["settings"], queryFn: fetchSettings });
   const profile = useQuery({ queryKey: ["profile"], queryFn: fetchProfile });
   const subjects = useQuery({ queryKey: ["subjects"], queryFn: fetchSubjects });
-  const { backgroundStyle, setBackgroundStyle } = useTheme();
+  const { backgroundStyle, setBackgroundStyle, theme, setTheme, accentStyle, setAccentStyle } = useTheme();
 
   const [draft, setDraft] = useState<Partial<Settings>>({});
   const [name, setName] = useState("");
@@ -43,6 +43,14 @@ function SettingsPage() {
   useEffect(() => {
     if (profile.data?.display_name) setName(profile.data.display_name);
   }, [profile.data]);
+
+  useEffect(() => {
+    if (profile.data?.gender !== "female" || draft.gender_palette_suggested || !settings.data) return;
+    setAccentStyle("rose");
+    setBackgroundStyle("rose");
+    setDraft((value) => ({ ...value, accent_style: "rose", background_style: "rose", gender_palette_suggested: true }));
+    toast.info("Rose palette suggest ki gayi hai — aap koi bhi style choose kar sakte ho.");
+  }, [profile.data?.gender, settings.data, draft.gender_palette_suggested, setAccentStyle, setBackgroundStyle]);
 
   const saveM = useMutation({
     mutationFn: async () => {
@@ -58,6 +66,9 @@ function SettingsPage() {
         timer_show_details: Boolean(draft.timer_show_details),
         timer_sounds_haptics: Boolean(draft.timer_sounds_haptics),
         timer_keep_awake: Boolean(draft.timer_keep_awake),
+        theme_mode: theme,
+        accent_style: accentStyle,
+        gender_palette_suggested: Boolean(draft.gender_palette_suggested),
       });
       if (name.trim()) await saveProfile({ display_name: name.trim() });
     },
@@ -110,10 +121,18 @@ function SettingsPage() {
         <div className="glass-panel p-5">
           <h3 className="text-base font-bold tracking-tight">Appearance</h3>
           <p className="mt-1 text-xs text-muted-foreground">App background ka style choose karo.</p>
-          <div className="mt-3 grid grid-cols-3 gap-2">
-            {(["clean", "grid", "colorful"] as const).map((style) => (
+          <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
+            {(["clean", "grid", "colorful", "bloom", "focus", "rose"] as const).map((style) => (
               <button key={style} type="button" onClick={() => { setDraft({ ...draft, background_style: style }); setBackgroundStyle(style); }} className={`h-12 rounded-xl border text-xs font-bold capitalize ${((draft.background_style ?? backgroundStyle) === style) ? "border-brand bg-brand text-brand-foreground" : "border-border bg-background"}`}>{style}</button>
             ))}
+          </div>
+          <p className="eyebrow mt-5 mb-2">Mode</p>
+          <div className="grid grid-cols-2 gap-2">
+            {(["light", "dark"] as const).map((value) => <button key={value} type="button" onClick={() => setTheme(value)} className={`h-11 rounded-xl border text-xs font-bold capitalize ${theme === value ? "border-brand bg-brand text-brand-foreground" : "border-border bg-background"}`}>{value}</button>)}
+          </div>
+          <p className="eyebrow mt-5 mb-2">Accent</p>
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+            {(["classic", "sky", "flame", "rose"] as const).map((value) => <button key={value} type="button" onClick={() => { setAccentStyle(value); setDraft({ ...draft, accent_style: value }); }} className={`h-11 rounded-xl border text-xs font-bold capitalize ${accentStyle === value ? "border-brand bg-brand text-brand-foreground" : "border-border bg-background"}`}>{value}</button>)}
           </div>
         </div>
 

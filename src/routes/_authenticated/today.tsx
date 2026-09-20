@@ -30,6 +30,7 @@ import { StreakFlame } from "@/components/StreakFlame";
 import { ReadingHabitCard } from "@/components/ReadingHabitCard";
 import { DailyPlanCard } from "@/components/DailyPlanCard";
 import { TodayStudyAnalytics } from "@/components/TodayStudyAnalytics";
+import { LevelProgressCard } from "@/components/LevelProgressCard";
 import { studyStreak } from "@/lib/streak";
 
 import {
@@ -396,6 +397,8 @@ function TodayPage() {
           sessions={all}
           onStart={(item) => navigate({ to: "/study", search: { plan: item.id } })}
         />
+
+        <LevelProgressCard level={xp.data?.level ?? 1} totalXp={xp.data?.total_xp ?? 0} dailyGoal={dailyGoal} />
 
         {/* Analytics calendar */}
         <Reveal className="glass-panel today-analytics overflow-hidden p-4 sm:p-5">
