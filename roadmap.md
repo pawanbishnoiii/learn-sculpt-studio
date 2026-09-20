@@ -1,5 +1,15 @@
 # Roadmap
 
+## Active request — 20 Sep experience upgrade
+- [ ] Fix Classes media upload and rebuild the subject/chapter media workspace
+- [ ] Fix Bnoy/legacy import compatibility and add Full + Study package transfer modes
+- [ ] Apply uploaded B logo and uploaded Rive level/reward animations
+- [ ] Add meaningful post-login/network Gooey Loader states
+- [ ] Expand user-controlled themes/backgrounds with editable female palette suggestion
+- [ ] Surface XP/levels and gently scale suggested daily goals
+- [ ] Upgrade task motivation, student UI, and all admin responsive layouts
+- [ ] Verify auth, imports, uploads, themes, progression, offline sync, and responsive screens
+
 ## Active request
 - [x] Rename core product surfaces to Bnoy Study
 - [ ] Add export history with manage and download actions
