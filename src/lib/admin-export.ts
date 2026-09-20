@@ -2,11 +2,21 @@ import {
   exportUser,
   userDetail,
   importUser,
+  adminRefreshUserPlan,
+  adminSaveRevisionSettings,
 } from "@/lib/admin.functions";
 
 /** Everything stored for one account, as a plain JSON object. */
 export async function exportUserData(userId: string): Promise<Record<string, unknown>> {
   return exportUser({ data: { userId } });
+}
+
+export async function refreshUserPlan(userId: string, date = new Date().toISOString().slice(0, 10)) {
+  return adminRefreshUserPlan({ data: { userId, date } });
+}
+
+export async function saveUserRevisionSettings(userId: string, input: { minPasses: number | null; maxPasses: number | null; intervals: number[] | null; dayMode: "all" | "odd" | "even" | null }) {
+  return adminSaveRevisionSettings({ data: { userId, ...input } });
 }
 
 /** A compact profile + activity preview for the admin user drawer. */
