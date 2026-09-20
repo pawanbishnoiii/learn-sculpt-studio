@@ -7,7 +7,6 @@ import historyArt from "@/assets/owl-sleepy.png";
 import { ListSkeleton } from "@/components/ui/skeletons";
 import {
   createManualBreak,
-  createManualSession,
   deleteBreak,
   deleteSession,
   fetchAppSettings,
@@ -24,6 +23,7 @@ import {
   type Subject,
   fmtHM,
 } from "@/lib/study";
+import { saveStudyLog } from "@/lib/offline-actions";
 
 export const Route = createFileRoute("/_authenticated/history")({
   ssr: false,
@@ -172,7 +172,7 @@ function HistoryPage() {
         });
       } else {
         const subj = (subjects.data ?? []).find((s) => s.id === input.subject_id);
-        await createManualSession({
+        await saveStudyLog({
           subject_id: subj?.id ?? null,
           subject_name: subj?.name ?? (input.subject_name.trim() || "Study"),
           topic: input.topic.trim() || null,

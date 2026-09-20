@@ -10,10 +10,17 @@
 - [ ] Verify and refine Liquid Morph Floating Menu
 - [ ] Add resilient past-session login behavior
 - [x] Connect admin users table and per-user management/import/export
-- [ ] Add offline study queue and reconnect sync
+- [x] Add offline study queue and reconnect sync
 - [ ] Upgrade Classes to subject/chapter folders and media uploads/previews
 - [ ] Verify a@a.a streak, lifeline, daily plan, and restored data
 - [ ] Add admin notifications, scheduled email, and plan/targets/timetable controls
 - [ ] Add revision/syllabus coverage suggestion engine and daily cron refresh
 - [ ] Add /doc product documentation page
 - [ ] Verify mobile and desktop production flows
+
+## Next up (requested 20 Sep)
+- [ ] Classes media library: subject > chapter > PDF upload with inline preview
+- [ ] Admin: scheduled emails, per-user import/export buttons, daily plan cron upgrade
+- [ ] Mobile responsive pass: admin dashboard, Users page, Classes page
+- [ ] Today upgrade + revision engine: admin-managed min/max revisions per chapter (5-10),
+      odd/even day subject rotation, 1/3/7/15/30 ladder applied to chapters and online classes

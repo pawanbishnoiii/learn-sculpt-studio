@@ -7,11 +7,11 @@ import {
   DEFAULT_READING_GOALS,
   fetchReadingGoals,
   fetchReadingLogs,
-  logReading,
   readingStatus,
   saveReadingGoals,
   undoReading,
 } from "@/lib/study";
+import { saveReadingLog } from "@/lib/offline-actions";
 
 const STORAGE_KEY = "chronodeck:newspaper-timer";
 
@@ -67,10 +67,14 @@ export function ReadingHabitCard() {
   };
 
   const addM = useMutation({
-    mutationFn: (minutes: number) => logReading("newspaper", minutes),
-    onSuccess: (_d, minutes) => {
+    mutationFn: (minutes: number) => saveReadingLog("newspaper", minutes),
+    onSuccess: (r, minutes) => {
       refresh();
-      toast.success(`${minutes} min newspaper reading added`);
+      toast.success(
+        r.queued
+          ? `${minutes} min offline save — reconnect par sync hoga`
+          : `${minutes} min newspaper reading added`,
+      );
     },
     onError: (e: Error) => toast.error(e.message),
   });

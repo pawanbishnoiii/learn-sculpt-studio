@@ -10,7 +10,6 @@ import {
   localDateKey,
   planItemMinutes,
   planItemStatus,
-  setPlanItemDone,
   setPlanItemState,
   visiblePlanItems,
   type PlanItemState,
@@ -18,6 +17,7 @@ import {
   type PlanItem,
 } from "@/lib/plan";
 import { fmtHM, startOfToday, type Session } from "@/lib/study";
+import { savePlanDone } from "@/lib/offline-actions";
 import { ActivityArtwork } from "@/components/study-ui";
 import owlIdle from "@/assets/owl-idle.png";
 
@@ -61,8 +61,11 @@ export function DailyPlanCard({ sessions, title = "Your plan", onStart }: { sess
   });
 
   const toggle = useMutation({
-    mutationFn: (v: { id: string; done: boolean }) => setPlanItemDone(v.id, v.done),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["plan", planDate] }),
+    mutationFn: (v: { id: string; done: boolean }) => savePlanDone(v.id, v.done),
+    onSuccess: (r) => {
+      void qc.invalidateQueries({ queryKey: ["plan", planDate] });
+      if (r.queued) toast.success("Offline save — reconnect par sync ho jayega");
+    },
     onError: (e: Error) => toast.error(e.message),
   });
 
