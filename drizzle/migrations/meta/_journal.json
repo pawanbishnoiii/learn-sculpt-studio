@@ -1,0 +1,13 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1789904847738,
+      "tag": "0000_secure_chapter_media_storage",
+      "breakpoints": true
+    }
+  ]
+}
