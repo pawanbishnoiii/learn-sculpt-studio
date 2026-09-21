@@ -143,15 +143,20 @@ export function ChapterNotesPanel() {
           </select>
         </label>
         <label className="block text-xs font-bold text-muted-foreground">
-          Chapter
-          <select className={`mt-1 ${inputCls}`} value={chapter} onChange={(e) => setChapter(e.target.value)}>
-            <option value="">Choose a chapter</option>
+          Chapter / folder
+          {/* Free text with suggestions: users without saved chapters can still upload. */}
+          <input
+            className={`mt-1 ${inputCls}`}
+            list="chapter-suggestions"
+            value={chapter}
+            onChange={(e) => setChapter(e.target.value)}
+            placeholder="General"
+          />
+          <datalist id="chapter-suggestions">
             {chapters.map((c) => (
-              <option key={c} value={c}>
-                {c}
-              </option>
+              <option key={c} value={c} />
             ))}
-          </select>
+          </datalist>
         </label>
         <label className="block text-xs font-bold text-muted-foreground">
           Topic (optional)
