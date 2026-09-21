@@ -8,7 +8,6 @@ import { lovable } from "@/integrations/lovable/index";
 import { GoogleOneTap } from "@/components/GoogleOneTap";
 import authStudent from "@/assets/chronodeck-auth-student.png";
 import appLogo from "@/assets/bnoy-b-logo.png.asset.json";
-import { GooeyLoader } from "@/components/ui/loader-10";
 
 function GoogleMark() {
   return (
@@ -376,7 +375,9 @@ export function AuthScreen() {
                       disabled={busy}
                       className="flex h-14 w-full items-center justify-center gap-2 rounded-full bg-foreground text-[15px] font-bold text-background disabled:opacity-60"
                     >
-                      {busy ? <GooeyLoader label="" className="scale-50" /> : null}
+                      {busy ? (
+                        <span className="size-4 animate-spin rounded-full border-2 border-background/40 border-t-background" aria-hidden />
+                      ) : null}
                       {mode === "signin"
                         ? "Sign in with Email"
                         : mode === "signup"
