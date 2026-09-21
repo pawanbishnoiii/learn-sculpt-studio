@@ -15,7 +15,7 @@ import {
 import { fetchSubjects } from "@/lib/study";
 import { Button } from "@/components/ui/button";
 import { ResponsiveSheet } from "@/components/study-ui";
-import { GooeyLoader } from "@/components/ui/loader-10";
+import { ListSkeleton } from "@/components/ui/skeletons";
 
 const inputCls =
   "h-11 w-full rounded-xl border border-border bg-background px-3 text-sm outline-none focus:border-brand/60";
@@ -199,7 +199,7 @@ export function ChapterNotesPanel() {
       </div>
 
       {notes.isLoading ? (
-        <GooeyLoader className="mt-8" label="Loading media" />
+        <div className="mt-5"><ListSkeleton rows={3} /></div>
       ) : groups.length === 0 ? (
         <p className="mt-5 text-sm text-muted-foreground">Abhi koi file nahi. Upar se pehli file upload karo.</p>
       ) : (

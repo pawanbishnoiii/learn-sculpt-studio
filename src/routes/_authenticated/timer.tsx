@@ -16,7 +16,7 @@ import {
   type Session,
 } from "@/lib/study";
 import { SlidingNumber } from "@/components/ui/sliding-number";
-import { GooeyLoader } from "@/components/ui/loader-10";
+import { Skeleton } from "@/components/ui/skeletons";
 
 const SNAPSHOT_KEY = "chronodeck.running-session";
 
@@ -217,8 +217,10 @@ function TimerPage() {
   if (!s) {
     return (
       <div className="fixed inset-0 z-[70] grid place-items-center bg-foreground text-background">
-        <div className="flex flex-col items-center gap-3">
-          <GooeyLoader label="Loading timer" />
+        <div className="flex w-full max-w-sm flex-col items-center gap-4 px-6">
+          <Skeleton className="size-48 rounded-full bg-white/10" />
+          <Skeleton className="h-4 w-40 rounded-full bg-white/10" />
+          <Skeleton className="h-12 w-full rounded-full bg-white/10" />
         </div>
       </div>
     );

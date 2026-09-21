@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import { isAdmin } from "@/lib/study";
 import { DashboardSidebar, type DashboardNavGroup } from "@/components/ui/dashboard-sidebar";
-import { GooeyLoader } from "@/components/ui/gooey-loader";
+import { PageSkeleton } from "@/components/ui/skeletons";
 
 const GROUPS: DashboardNavGroup[] = [
   { label: "Workspace", items: [
@@ -43,7 +43,7 @@ function AdminLayout() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   if (admin.isLoading) {
-    return <GooeyLoader label="Checking admin access" className="min-h-[70svh]" />;
+    return <PageSkeleton />;
   }
 
   if (!admin.data) {
