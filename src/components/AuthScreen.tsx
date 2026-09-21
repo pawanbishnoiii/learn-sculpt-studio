@@ -8,7 +8,6 @@ import { lovable } from "@/integrations/lovable/index";
 import { GoogleOneTap } from "@/components/GoogleOneTap";
 import authStudent from "@/assets/chronodeck-auth-student.png";
 import appLogo from "@/assets/bnoy-b-logo.png.asset.json";
-import { GooeyLoader } from "@/components/ui/loader-10";
 
 function GoogleMark() {
   return (
@@ -80,13 +79,30 @@ export function AuthScreen() {
     return () => sub.subscription.unsubscribe();
   }, [navigate]);
 
+  /**
+   * Outside the Lovable preview/hosting (for example a Vercel deployment) the
+   * Lovable OAuth broker is not available, so fall back to Supabase's own
+   * redirect flow instead of telling the user Google is blocked.
+   */
+  async function googleDirect() {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+        queryParams: { prompt: "select_account" },
+      },
+    });
+    return !error;
+  }
+
   async function google() {
     setBusy(true);
     try {
-      const result = await lovable.auth.signInWithOAuth("google", {
-        redirect_uri: window.location.origin,
-      });
+      const result = await lovable.auth
+        .signInWithOAuth("google", { redirect_uri: window.location.origin })
+        .catch(() => ({ error: true, redirected: false }) as { error: unknown; redirected: boolean });
       if (result.error) {
+        if (await googleDirect()) return;
         googleBlocked();
         setBusy(false);
         return;
@@ -376,7 +392,9 @@ export function AuthScreen() {
                       disabled={busy}
                       className="flex h-14 w-full items-center justify-center gap-2 rounded-full bg-foreground text-[15px] font-bold text-background disabled:opacity-60"
                     >
-                      {busy ? <GooeyLoader label="" className="scale-50" /> : null}
+                      {busy ? (
+                        <span className="size-4 animate-spin rounded-full border-2 border-background/40 border-t-background" aria-hidden />
+                      ) : null}
                       {mode === "signin"
                         ? "Sign in with Email"
                         : mode === "signup"

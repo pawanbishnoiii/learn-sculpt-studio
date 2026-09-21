@@ -25,6 +25,7 @@ import { Route as AuthenticatedTargetsRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedTimerRouteImport } from './routes/_authenticated/timer'
 import { Route as AuthenticatedTimetableRouteImport } from './routes/_authenticated/timetable'
 import { Route as AuthenticatedTodayRouteImport } from './routes/_authenticated/today'
+import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
 import { Route as AuthenticatedAdminActivityRouteImport } from './routes/_authenticated/admin/activity'
 import { Route as AuthenticatedAdminAndroidRouteImport } from './routes/_authenticated/admin/android'
@@ -115,6 +116,11 @@ const AuthenticatedTodayRoute = AuthenticatedTodayRouteImport.update({
   path: '/today',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthCallbackRoute = AuthCallbackRouteImport.update({
+  id: '/callback',
+  path: '/callback',
+  getParentRoute: () => AuthRoute,
+} as any)
 const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -174,7 +180,7 @@ const ApiPublicCronRoute = ApiPublicCronRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/auth': typeof AuthRoute
+  '/auth': typeof AuthRouteWithChildren
   '/reset-password': typeof ResetPasswordRoute
   '/welcome': typeof WelcomeRoute
   '/admin': typeof AuthenticatedAdminRouteRouteWithChildren
@@ -188,6 +194,7 @@ export interface FileRoutesByFullPath {
   '/timer': typeof AuthenticatedTimerRoute
   '/timetable': typeof AuthenticatedTimetableRoute
   '/today': typeof AuthenticatedTodayRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/admin/activity': typeof AuthenticatedAdminActivityRoute
   '/admin/android': typeof AuthenticatedAdminAndroidRoute
   '/admin/branding': typeof AuthenticatedAdminBrandingRoute
@@ -201,7 +208,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/auth': typeof AuthRoute
+  '/auth': typeof AuthRouteWithChildren
   '/reset-password': typeof ResetPasswordRoute
   '/welcome': typeof WelcomeRoute
   '/classes': typeof AuthenticatedClassesRoute
@@ -214,6 +221,7 @@ export interface FileRoutesByTo {
   '/timer': typeof AuthenticatedTimerRoute
   '/timetable': typeof AuthenticatedTimetableRoute
   '/today': typeof AuthenticatedTodayRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/admin/activity': typeof AuthenticatedAdminActivityRoute
   '/admin/android': typeof AuthenticatedAdminAndroidRoute
   '/admin/branding': typeof AuthenticatedAdminBrandingRoute
@@ -229,7 +237,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
-  '/auth': typeof AuthRoute
+  '/auth': typeof AuthRouteWithChildren
   '/reset-password': typeof ResetPasswordRoute
   '/welcome': typeof WelcomeRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteRouteWithChildren
@@ -243,6 +251,7 @@ export interface FileRoutesById {
   '/_authenticated/timer': typeof AuthenticatedTimerRoute
   '/_authenticated/timetable': typeof AuthenticatedTimetableRoute
   '/_authenticated/today': typeof AuthenticatedTodayRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/_authenticated/admin/activity': typeof AuthenticatedAdminActivityRoute
   '/_authenticated/admin/android': typeof AuthenticatedAdminAndroidRoute
   '/_authenticated/admin/branding': typeof AuthenticatedAdminBrandingRoute
@@ -272,6 +281,7 @@ export interface FileRouteTypes {
     | '/timer'
     | '/timetable'
     | '/today'
+    | '/auth/callback'
     | '/admin/activity'
     | '/admin/android'
     | '/admin/branding'
@@ -298,6 +308,7 @@ export interface FileRouteTypes {
     | '/timer'
     | '/timetable'
     | '/today'
+    | '/auth/callback'
     | '/admin/activity'
     | '/admin/android'
     | '/admin/branding'
@@ -326,6 +337,7 @@ export interface FileRouteTypes {
     | '/_authenticated/timer'
     | '/_authenticated/timetable'
     | '/_authenticated/today'
+    | '/auth/callback'
     | '/_authenticated/admin/activity'
     | '/_authenticated/admin/android'
     | '/_authenticated/admin/branding'
@@ -341,7 +353,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
-  AuthRoute: typeof AuthRoute
+  AuthRoute: typeof AuthRouteWithChildren
   ResetPasswordRoute: typeof ResetPasswordRoute
   WelcomeRoute: typeof WelcomeRoute
   ApiPublicCronRoute: typeof ApiPublicCronRoute
@@ -460,6 +472,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/today'
       preLoaderRoute: typeof AuthenticatedTodayRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/auth/callback': {
+      id: '/auth/callback'
+      path: '/callback'
+      fullPath: '/auth/callback'
+      preLoaderRoute: typeof AuthCallbackRouteImport
+      parentRoute: typeof AuthRoute
     }
     '/_authenticated/admin/': {
       id: '/_authenticated/admin/'
@@ -595,10 +614,20 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
+interface AuthRouteChildren {
+  AuthCallbackRoute: typeof AuthCallbackRoute
+}
+
+const AuthRouteChildren: AuthRouteChildren = {
+  AuthCallbackRoute: AuthCallbackRoute,
+}
+
+const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
-  AuthRoute: AuthRoute,
+  AuthRoute: AuthRouteWithChildren,
   ResetPasswordRoute: ResetPasswordRoute,
   WelcomeRoute: WelcomeRoute,
   ApiPublicCronRoute: ApiPublicCronRoute,
