@@ -18,6 +18,13 @@ import error404 from "@/assets/error-404-upload.json.asset.json";
 import appCss from "../styles.css?url";
 import experienceCss from "../experience.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { useSessionKeeper } from "@/hooks/useSessionKeeper";
+
+/** Mounted once so session refresh + auth-driven cache resets live in one place. */
+function SessionKeeper() {
+  useSessionKeeper();
+  return null;
+}
 
 function NotFoundComponent() {
   return (
@@ -157,6 +164,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
         {/* Page-level transitions live inside AppShell so the fixed bottom dock never unmounts. */}
+        <SessionKeeper />
         <DynamicBranding />
         <Outlet />
         <Toaster position="top-center" richColors />
