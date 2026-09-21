@@ -79,13 +79,30 @@ export function AuthScreen() {
     return () => sub.subscription.unsubscribe();
   }, [navigate]);
 
+  /**
+   * Outside the Lovable preview/hosting (for example a Vercel deployment) the
+   * Lovable OAuth broker is not available, so fall back to Supabase's own
+   * redirect flow instead of telling the user Google is blocked.
+   */
+  async function googleDirect() {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+        queryParams: { prompt: "select_account" },
+      },
+    });
+    return !error;
+  }
+
   async function google() {
     setBusy(true);
     try {
-      const result = await lovable.auth.signInWithOAuth("google", {
-        redirect_uri: window.location.origin,
-      });
+      const result = await lovable.auth
+        .signInWithOAuth("google", { redirect_uri: window.location.origin })
+        .catch(() => ({ error: true, redirected: false }) as { error: unknown; redirected: boolean });
       if (result.error) {
+        if (await googleDirect()) return;
         googleBlocked();
         setBusy(false);
         return;
