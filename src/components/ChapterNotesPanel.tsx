@@ -184,16 +184,18 @@ export function ChapterNotesPanel() {
         onDragEnter={(event) => { event.preventDefault(); setDragging(true); }}
         onDragOver={(event) => event.preventDefault()}
         onDragLeave={() => setDragging(false)}
-        onDrop={(event) => { event.preventDefault(); setDragging(false); if (chapter && event.dataTransfer.files.length) upload.mutate(event.dataTransfer.files); }}
+        onDrop={(event) => { event.preventDefault(); setDragging(false); if (event.dataTransfer.files.length) upload.mutate(event.dataTransfer.files); }}
         className={`mt-4 grid min-h-36 place-items-center rounded-2xl border border-dashed p-5 text-center transition ${dragging ? "border-blue bg-blue-soft" : "border-border bg-secondary/35"}`}
       >
         <div><FolderOpen className="mx-auto size-8 text-blue" /><p className="mt-2 text-sm font-extrabold">Drop chapter files here</p><p className="mt-1 text-[11px] text-muted-foreground">PDF, images, videos and office files · up to 50 MB each</p>
-          <Button className="mt-3 gap-2" disabled={upload.isPending || !chapter} onClick={() => fileRef.current?.click()}><Upload className="size-4" />{upload.isPending ? `${uploadStatus.done}/${uploadStatus.total} uploaded` : "Choose files"}</Button>
+          <Button className="mt-3 gap-2" disabled={upload.isPending} onClick={() => fileRef.current?.click()}><Upload className="size-4" />{upload.isPending ? `${uploadStatus.done}/${uploadStatus.total} uploaded` : "Choose files"}</Button>
         </div>
       </div>
-      {!chapter ? (
-        <p className="mt-2 text-[11px] text-muted-foreground">Pehle chapter select karo, phir upload karo.</p>
-      ) : null}
+      <p className="mt-2 text-[11px] text-muted-foreground">
+        {chapter
+          ? `Files "${chapter}" folder me jayengi.`
+          : "Chapter khaali chhoda to files General folder me jayengi."}
+      </p>
 
       <div className="mt-5 flex gap-2 overflow-x-auto pb-1" aria-label="Filter media">
         {(["all", "pdf", "image", "video", "document"] as const).map((kind) => (
