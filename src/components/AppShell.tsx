@@ -39,7 +39,7 @@ import { StreakFlame } from "@/components/StreakFlame";
 import { InstallAppButton } from "@/components/InstallAppButton";
 import { useRealtimeSync } from "@/hooks/useRealtimeSync";
 import { OfflineStatus } from "@/components/OfflineStatus";
-import { GooeyLoader } from "@/components/ui/loader-10";
+import { PageSkeleton, Skeleton } from "@/components/ui/skeletons";
 
 
 const NAV = [
@@ -156,7 +156,21 @@ export function AppShell({ children }: { children: ReactNode }) {
     (profile.data?.last_name?.[0] ?? "T");
 
   if ((profile.isPending || settings.isPending || xp.isPending) && !profile.data) {
-    return <div className="grid min-h-screen place-items-center bg-background"><GooeyLoader label="Your study space taiyar ho raha hai" /></div>;
+    return (
+      <div className="app-backdrop min-h-screen lg:grid lg:grid-cols-[232px_minmax(0,1fr)]">
+        <aside className="hidden h-screen flex-col gap-3 border-r border-border bg-panel px-4 py-6 lg:flex">
+          <Skeleton className="h-11 w-40" />
+          <div className="mt-6 grid gap-2">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <Skeleton key={i} className="h-12 w-full" />
+            ))}
+          </div>
+        </aside>
+        <div className="mx-auto w-full max-w-6xl">
+          <PageSkeleton />
+        </div>
+      </div>
+    );
   }
 
   return (
