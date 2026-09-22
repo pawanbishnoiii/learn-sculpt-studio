@@ -224,11 +224,21 @@ export function AuthScreen() {
         <motion.button
           type="button"
           whileTap={{ scale: 0.96 }}
+          onClick={google}
+          disabled={busy}
+          className="flex h-15 w-full items-center justify-center gap-2.5 rounded-full border border-border bg-panel py-4 text-[15px] font-bold text-foreground shadow-xl disabled:opacity-60"
+        >
+          <GoogleMark />
+          Continue with Google
+        </motion.button>
+        <motion.button
+          type="button"
+          whileTap={{ scale: 0.96 }}
           onClick={() => {
             setMode("signup");
             setSheet(true);
           }}
-          className="flex h-15 w-full items-center justify-center gap-2 rounded-full bg-foreground py-4 text-[15px] font-bold text-background shadow-xl"
+          className="mt-2.5 flex h-13 w-full items-center justify-center gap-2 rounded-full bg-foreground py-4 text-[15px] font-bold text-background shadow-lg"
         >
           <Sparkles className="size-4" />
           Get Started
