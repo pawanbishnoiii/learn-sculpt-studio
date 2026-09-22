@@ -3,7 +3,7 @@
 https://github.com/pawanbishnoiii/bs20 ye project ki main repo se  complete clone kro and database setup karo  and "bs555_260917.backup" es file me sara data hai old and esme a@a.a email vala user hai uska sara old history and data add karo and usi email se login working banao database me and today page me "Analytics" ye section ka ui acha hai and Questions jesa ya test jesa esme nahi hoga esme by deflat day seclated hoga and esme study start kab hi hai day me first timme and exit last reading / online class kab ki hai and kitna time me kitna output nikala hai and clay-fonts find kro and use karo and  today page ki image send ki hai dekho and esko batter banao and today page me 
 
 
-Draggable Widget Grid ( ye aik type ka dashobard ke componets hai esko desktop , mobile screen frendly banao and sab working hoge real time me "pasted-2026-09-17T17-15-43-526Z.txt" es componet ko copy karo and use kro and app me bottom nav menu hai   ( HomeTimetableStudyTargetsHistory ) ye phone screen me show hota hai esko upgrade kro eski jgha new componet use kro "Liquid Morph Floating Menu" (  Copy-paste this component to /components/ui folder:
+Draggable Widget Grid ( ye aik type ka dashobard ke componets hai esko desktop , mobile screen frendly banao and  (  Copy-paste this component to /components/ui folder:
 
 ```tsx
 
